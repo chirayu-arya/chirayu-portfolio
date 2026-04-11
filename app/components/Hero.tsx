@@ -26,6 +26,7 @@ export default function Hero() {
   // Intro state: spline starts fullscreen, fades to 20% after 3.5s
   // Falls back after 6s max in case iframe onLoad never fires
   const [introDone, setIntroD] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [headlineHovered, setHeadlineHovered] = useState(false);
@@ -37,6 +38,7 @@ export default function Hero() {
 
   useEffect(() => {
     // Fallback: guarantee text appears even if iframe onLoad never fires
+    setIsMobile(window.innerWidth < 768);
     const fallback = setTimeout(() => setIntroD(true), 4500);
     return () => {
       clearTimeout(fallback);
@@ -48,7 +50,7 @@ export default function Hero() {
     <section
       ref={ref}
       className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-black"
-      style={{ willChange: "transform" }}
+      style={{ isolation: "isolate" }}
     >
       {/* ── Gradient blobs — z:1 ── */}
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
@@ -60,7 +62,7 @@ export default function Hero() {
             background: "radial-gradient(ellipse, rgba(139,92,246,0.38) 0%, transparent 68%)",
             filter: "blur(80px)",
           }}
-          animate={{ scale: [1, 1.07, 1], x: [0, 18, 0] }}
+          animate={isMobile ? {} : { scale: [1, 1.07, 1], x: [0, 18, 0] }}
           transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
@@ -71,7 +73,7 @@ export default function Hero() {
             background: "radial-gradient(ellipse, rgba(37,99,235,0.35) 0%, transparent 68%)",
             filter: "blur(80px)",
           }}
-          animate={{ scale: [1, 1.1, 1], y: [0, 24, 0] }}
+          animate={isMobile ? {} : { scale: [1, 1.1, 1], y: [0, 24, 0] }}
           transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
         <motion.div
@@ -82,7 +84,7 @@ export default function Hero() {
             background: "radial-gradient(ellipse, rgba(219,39,119,0.3) 0%, transparent 68%)",
             filter: "blur(80px)",
           }}
-          animate={{ scale: [1, 1.08, 1], x: [0, -20, 0] }}
+          animate={isMobile ? {} : { scale: [1, 1.08, 1], x: [0, -20, 0] }}
           transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 5 }}
         />
         <motion.div
@@ -93,7 +95,7 @@ export default function Hero() {
             background: "radial-gradient(ellipse, rgba(20,184,166,0.25) 0%, transparent 68%)",
             filter: "blur(70px)",
           }}
-          animate={{ scale: [1, 1.06, 1] }}
+          animate={isMobile ? {} : { scale: [1, 1.06, 1] }}
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 3 }}
         />
         <div
@@ -111,11 +113,24 @@ export default function Hero() {
         className="absolute inset-0 pointer-events-none"
         animate={{ opacity: introDone ? 0.2 : 1 }}
         transition={{ duration: 1.2, ease: "easeInOut" }}
-        style={{ zIndex: introDone ? 3 : 20 }}
+        style={{
+          zIndex: introDone ? 3 : 20,
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden" as "hidden",
+        }}
       >
         <iframe
           src="https://my.spline.design/sentientcopycopy-acxzGqKYwXGxcJSUoNyFjUmZ-QSE/"
-          style={{ width: "100%", height: "100%", border: "none", pointerEvents: "none", willChange: "opacity" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            border: "none",
+            pointerEvents: "none",
+            transform: "translateZ(0)",
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+          }}
           onLoad={triggerIntro}
           allowFullScreen
         />
