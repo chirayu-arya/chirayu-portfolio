@@ -139,9 +139,7 @@ export default function Hero() {
             className="text-base sm:text-lg leading-relaxed mb-10 max-w-xs"
             style={{ color: "rgba(245,245,247,0.5)" }}
           >
-            Brands, campaigns, and photographs —
-            <br />
-            done with care.
+            One creative. Three disciplines.
           </motion.p>
 
           {/* CTAs */}
