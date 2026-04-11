@@ -1,21 +1,22 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import { useEffect, useState } from "react";
 
-export default function CustomCursor() {
-  const mouseX = useMotionValue(-100);
-  const mouseY = useMotionValue(-100);
-  const [visible, setVisible] = useState(false);
+// Figma-style cursor arrow path (hot-point at 0,0)
+const PATH = "M0 0 L0 19 L5 15.8 L9 23.5 L11.5 22.4 L7.5 15 L14 15 Z";
+const W = 15;
+const H = 25;
 
-  // Spring for the liquid trailing feel
-  const x = useSpring(mouseX, { stiffness: 280, damping: 22, mass: 0.6 });
-  const y = useSpring(mouseY, { stiffness: 280, damping: 22, mass: 0.6 });
+export default function CustomCursor() {
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
+      x.set(e.clientX);
+      y.set(e.clientY);
       if (!visible) setVisible(true);
     };
     const onLeave = () => setVisible(false);
@@ -29,7 +30,7 @@ export default function CustomCursor() {
       document.documentElement.removeEventListener("mouseleave", onLeave);
       document.documentElement.removeEventListener("mouseenter", onEnter);
     };
-  }, [mouseX, mouseY, visible]);
+  }, [x, y, visible]);
 
   return (
     <motion.div
@@ -40,31 +41,39 @@ export default function CustomCursor() {
         zIndex: 99999,
         pointerEvents: "none",
         opacity: visible ? 1 : 0,
-        // Offset so the tip of the arrow aligns with the actual hot-point
-        translateX: 0,
-        translateY: 0,
       }}
-      transition={{ opacity: { duration: 0.2 } }}
+      animate={{ opacity: visible ? 1 : 0 }}
+      transition={{ duration: 0.15 }}
     >
-      {/*
-        Arrow cursor shape via clip-path.
-        Hot-point is top-left (0,0).
-        Width: 22px  Height: 30px
-      */}
+      {/* Glass fill — clip-path matches the cursor shape */}
       <div
         style={{
-          width: 22,
-          height: 30,
-          clipPath:
-            "polygon(0% 0%, 0% 73%, 28% 57%, 52% 96%, 67% 88%, 43% 48%, 70% 48%)",
-          backdropFilter: "blur(32px) saturate(2.2) brightness(1.15)",
-          WebkitBackdropFilter: "blur(32px) saturate(2.2) brightness(1.15)",
+          position: "absolute",
+          width: W,
+          height: H,
+          clipPath: `path('${PATH}')`,
+          backdropFilter: "blur(28px) saturate(2.2) brightness(1.15)",
+          WebkitBackdropFilter: "blur(28px) saturate(2.2) brightness(1.15)",
           background:
-            "linear-gradient(140deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.06) 100%), rgba(18,18,20,0.32)",
-          boxShadow:
-            "inset 0 0.5px 0 rgba(255,255,255,0.35), inset 0 -0.5px 0 rgba(0,0,0,0.18), 0 4px 18px rgba(0,0,0,0.35)",
+            "linear-gradient(145deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.05) 100%), rgba(14,14,18,0.3)",
+          boxShadow: "inset 0 0.5px 0 rgba(255,255,255,0.3)",
         }}
       />
+      {/* SVG outline for crispness */}
+      <svg
+        width={W}
+        height={H}
+        viewBox={`0 0 ${W} ${H}`}
+        fill="none"
+        style={{ position: "absolute", top: 0, left: 0 }}
+      >
+        <path
+          d={PATH}
+          stroke="rgba(255,255,255,0.28)"
+          strokeWidth="0.75"
+          strokeLinejoin="round"
+        />
+      </svg>
     </motion.div>
   );
 }
