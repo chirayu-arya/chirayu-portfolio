@@ -48,6 +48,7 @@ export default function Hero() {
     <section
       ref={ref}
       className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-black"
+      style={{ willChange: "transform" }}
     >
       {/* ── Gradient blobs — z:1 ── */}
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
@@ -107,14 +108,14 @@ export default function Hero() {
 
       {/* ── Spline — desktop only (lg+), too heavy for mobile ── */}
       <motion.div
-        className="absolute inset-0 pointer-events-none hidden lg:block"
+        className="absolute inset-0 pointer-events-none"
         animate={{ opacity: introDone ? 0.2 : 1 }}
         transition={{ duration: 1.2, ease: "easeInOut" }}
         style={{ zIndex: introDone ? 3 : 20 }}
       >
         <iframe
           src="https://my.spline.design/sentientcopycopy-acxzGqKYwXGxcJSUoNyFjUmZ-QSE/"
-          style={{ width: "100%", height: "100%", border: "none", pointerEvents: "none" }}
+          style={{ width: "100%", height: "100%", border: "none", pointerEvents: "none", willChange: "opacity" }}
           onLoad={triggerIntro}
           allowFullScreen
         />
