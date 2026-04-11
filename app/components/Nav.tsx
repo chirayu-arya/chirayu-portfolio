@@ -41,13 +41,13 @@ export default function Nav() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-        className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-[18px]"
+        className="pointer-events-auto flex items-center gap-1 px-2 py-1.5 rounded-full"
         style={glassStyle}
       >
         {/* Left: nav links */}
         <a
           href="/"
-          className="px-4 py-2 rounded-xl text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
+          className="px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
           style={{ "&:hover": { background: "rgba(255,255,255,0.07)" } } as React.CSSProperties}
           onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
           onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
@@ -62,7 +62,7 @@ export default function Nav() {
           onMouseLeave={() => setWorkOpen(false)}
         >
           <button
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
             onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
             onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
           >
@@ -103,7 +103,7 @@ export default function Nav() {
                     initial={{ opacity: 0, x: -6 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.03, duration: 0.2 }}
-                    className="block px-4 py-2.5 mx-1 rounded-xl text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer"
+                    className="block px-4 py-2.5 mx-1 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer"
                     onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
                     onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
                   >
@@ -121,7 +121,7 @@ export default function Nav() {
         {/* Right: Get in touch */}
         <a
           href="#contact"
-          className="px-5 py-2 rounded-xl text-sm font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
+          className="px-5 py-2 rounded-full text-sm font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
           style={{
             background: "rgba(255,255,255,0.92)",
             color: "#000",
