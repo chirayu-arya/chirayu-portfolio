@@ -3,10 +3,10 @@
 import { motion, useMotionValue } from "framer-motion";
 import { useEffect, useState } from "react";
 
-// Clean arrow cursor — no tail (hot-point at 0,0)
-const PATH = "M0 0 L0 20 L6 16.5 L15 8 Z";
-const W = 16;
-const H = 21;
+// Arrow cursor pointing upper-left, no tail (hot-point at tip 0,0)
+const PATH = "M0 0 L0 22 L6 17 L18 8 Z";
+const W = 20;
+const H = 24;
 
 export default function CustomCursor() {
   const x = useMotionValue(-100);
@@ -51,7 +51,7 @@ export default function CustomCursor() {
           position: "absolute",
           width: W,
           height: H,
-          clipPath: `path('${PATH}')`,
+          clipPath: `polygon(0px 0px, 0px 22px, 6px 17px, 18px 8px)`,
           backdropFilter: "blur(28px) saturate(2.2) brightness(1.15)",
           WebkitBackdropFilter: "blur(28px) saturate(2.2) brightness(1.15)",
           background:
