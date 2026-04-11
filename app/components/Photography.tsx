@@ -130,7 +130,7 @@ export default function Photography() {
     <section
       id="virtual-photography"
       className="overflow-hidden"
-      style={{ background: "#000", paddingTop: "9rem", paddingBottom: "6rem" }}
+      style={{ background: "#000", paddingTop: "9rem", paddingBottom: "0" }}
     >
       {/* Header */}
       <div ref={headerRef} className="max-w-6xl mx-auto px-8 mb-20">

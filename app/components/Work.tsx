@@ -174,7 +174,7 @@ export default function Work() {
   const inView = useInView(ref, { once: true, margin: "-5%" });
 
   return (
-    <section id="work" className="py-36 px-8" style={{ background: "#000" }}>
+    <section id="work" className="pt-36 pb-0 px-8" style={{ background: "#000" }}>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div ref={ref} className="mb-20">

@@ -35,7 +35,7 @@ export default function About() {
   const disciplineInView = useInView(disciplineRef, { once: true, margin: "-8%" });
 
   return (
-    <section id="about" className="py-36 px-8" style={{ background: "#0a0a0a" }}>
+    <section id="about" className="pt-36 pb-0 px-8" style={{ background: "#0a0a0a" }}>
       <div className="max-w-6xl mx-auto">
 
         {/* Top: label */}
