@@ -12,7 +12,7 @@ const projects = [
       "Full visual identity system for a tech startup. Logo, type system, color palette, and brand guidelines.",
     tags: ["Branding", "Logo", "Guidelines"],
     bg: "#0a0a0a",
-    accent: "#B8E207",
+    accent: "#ffffff",
   },
   {
     index: "02",
@@ -22,7 +22,7 @@ const projects = [
       "Multi-channel launch campaign for a consumer product. Strategy, creative direction, and performance analytics.",
     tags: ["Strategy", "Creative", "Paid Media"],
     bg: "#0c0c0e",
-    accent: "#B8E207",
+    accent: "#ffffff",
   },
   {
     index: "03",
@@ -32,7 +32,7 @@ const projects = [
       "Editorial portrait series exploring light, texture, and character. Shot on medium format film.",
     tags: ["Editorial", "Portrait", "Film"],
     bg: "#0a0a0a",
-    accent: "#B8E207",
+    accent: "#ffffff",
   },
   {
     index: "04",
@@ -42,7 +42,7 @@ const projects = [
       "End-to-end design and marketing for a DTC brand launch. Packaging, digital ads, landing page.",
     tags: ["Packaging", "Digital", "DTC"],
     bg: "#0c0c0e",
-    accent: "#B8E207",
+    accent: "#ffffff",
   },
 ];
 
@@ -145,8 +145,8 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
           transition={{ duration: 0.18 }}
           onMouseEnter={e => {
             const el = e.currentTarget as HTMLElement;
-            el.style.borderColor = "#B8E207";
-            el.style.color = "#B8E207";
+            el.style.borderColor = "rgba(255,255,255,0.4)";
+            el.style.color = "#f5f5f7";
           }}
           onMouseLeave={e => {
             const el = e.currentTarget as HTMLElement;
@@ -183,7 +183,7 @@ export default function Work() {
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6 }}
             className="text-xs tracking-[0.22em] uppercase font-medium mb-5"
-            style={{ color: "#B8E207" }}
+            style={{ color: "#86868b" }}
           >
             Selected Work
           </motion.p>

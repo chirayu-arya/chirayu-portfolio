@@ -25,7 +25,7 @@ export default function Contact() {
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5 }}
             className="text-xs tracking-[0.22em] uppercase font-medium mb-8"
-            style={{ color: "#B8E207" }}
+            style={{ color: "#86868b" }}
           >
             Let's talk
           </motion.p>

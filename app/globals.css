@@ -3,8 +3,6 @@
 @theme {
   --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", sans-serif;
 
-  --color-brand: #B8E207;
-
   --color-surface-0: #000000;
   --color-surface-1: #0a0a0a;
   --color-surface-2: #1d1d1f;
@@ -33,7 +31,7 @@ body {
 }
 
 ::selection {
-  background-color: var(--color-brand);
+  background-color: #fff;
   color: #000;
 }
 

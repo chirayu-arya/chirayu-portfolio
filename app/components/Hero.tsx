@@ -21,7 +21,7 @@ function Marquee() {
             style={{ color: "#515154" }}
           >
             {item}
-            <span className="ml-12 text-[#B8E207]">*</span>
+            <span className="ml-12" style={{ color: "#515154" }}>*</span>
           </span>
         ))}
       </motion.div>
@@ -71,8 +71,8 @@ export default function Hero() {
             {/* Available badge */}
             <motion.div variants={line} className="flex items-center gap-2.5 mb-14">
               <span
-                className="w-1.5 h-1.5 rounded-full bg-[#B8E207]"
-                style={{ boxShadow: "0 0 6px #B8E207" }}
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: "#f5f5f7" }}
               />
               <span
                 className="text-xs tracking-[0.22em] uppercase font-medium"

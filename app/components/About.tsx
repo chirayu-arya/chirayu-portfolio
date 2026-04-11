@@ -45,7 +45,7 @@ export default function About() {
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6 }}
             className="text-xs tracking-[0.22em] uppercase font-medium mb-16"
-            style={{ color: "#B8E207" }}
+            style={{ color: "#86868b" }}
           >
             About
           </motion.p>
@@ -99,7 +99,7 @@ export default function About() {
                 <div key={stat.label}>
                   <div
                     className="text-4xl font-bold tracking-tight"
-                    style={{ color: "#B8E207" }}
+                    style={{ color: "#f5f5f7" }}
                   >
                     {stat.value}
                   </div>
