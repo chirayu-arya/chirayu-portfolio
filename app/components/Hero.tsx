@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useScroll, useTransform, type Variants } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, type Variants, AnimatePresence } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 
 const container: Variants = {
   hidden: {},
@@ -21,142 +21,210 @@ export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scrollOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  // Intro state: spline starts fullscreen, fades to 20% after 3.5s
+  // Falls back after 6s max in case iframe onLoad never fires
+  const [introDone, setIntroD] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [headlineHovered, setHeadlineHovered] = useState(false);
+
+  const triggerIntro = () => {
+    if (timerRef.current) return; // already scheduled
+    timerRef.current = setTimeout(() => setIntroD(true), 3500);
+  };
+
+  useEffect(() => {
+    // Fallback: guarantee text appears even if iframe onLoad never fires
+    const fallback = setTimeout(() => setIntroD(true), 4500);
+    return () => {
+      clearTimeout(fallback);
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   return (
     <section
       ref={ref}
       className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-black"
     >
-      {/* ── Colorful background ── */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Purple — top left */}
+      {/* ── Gradient blobs — z:1 ── */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
         <motion.div
           className="absolute rounded-full"
           style={{
-            width: "65vw",
-            height: "65vw",
-            top: "-20%",
-            left: "-20%",
-            background:
-              "radial-gradient(ellipse, rgba(139,92,246,0.65) 0%, transparent 68%)",
-            filter: "blur(90px)",
+            width: "70vmax", height: "70vmax",
+            top: "-20vmax", left: "-20vmax",
+            background: "radial-gradient(ellipse, rgba(139,92,246,0.38) 0%, transparent 68%)",
+            filter: "blur(80px)",
           }}
           animate={{ scale: [1, 1.07, 1], x: [0, 18, 0] }}
           transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
         />
-        {/* Blue — top right */}
         <motion.div
           className="absolute rounded-full"
           style={{
-            width: "55vw",
-            height: "55vw",
-            top: "-10%",
-            right: "-15%",
-            background:
-              "radial-gradient(ellipse, rgba(37,99,235,0.6) 0%, transparent 68%)",
+            width: "65vmax", height: "65vmax",
+            top: "-15vmax", right: "-15vmax",
+            background: "radial-gradient(ellipse, rgba(37,99,235,0.35) 0%, transparent 68%)",
             filter: "blur(80px)",
           }}
-          animate={{ scale: [1, 1.1, 1], y: [0, 28, 0] }}
+          animate={{ scale: [1, 1.1, 1], y: [0, 24, 0] }}
           transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
-        {/* Pink — bottom center */}
         <motion.div
           className="absolute rounded-full"
           style={{
-            width: "50vw",
-            height: "50vw",
-            bottom: "-5%",
-            left: "25%",
-            background:
-              "radial-gradient(ellipse, rgba(219,39,119,0.5) 0%, transparent 68%)",
+            width: "65vmax", height: "65vmax",
+            bottom: "-15vmax", left: "50%", marginLeft: "-32.5vmax",
+            background: "radial-gradient(ellipse, rgba(219,39,119,0.3) 0%, transparent 68%)",
             filter: "blur(80px)",
           }}
-          animate={{ scale: [1, 1.08, 1], x: [0, -22, 0] }}
+          animate={{ scale: [1, 1.08, 1], x: [0, -20, 0] }}
           transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 5 }}
         />
-        {/* Teal — bottom left */}
         <motion.div
           className="absolute rounded-full"
           style={{
-            width: "35vw",
-            height: "35vw",
-            bottom: "0%",
-            left: "-8%",
-            background:
-              "radial-gradient(ellipse, rgba(20,184,166,0.38) 0%, transparent 68%)",
+            width: "50vmax", height: "50vmax",
+            bottom: "-10vmax", left: "-10vmax",
+            background: "radial-gradient(ellipse, rgba(20,184,166,0.25) 0%, transparent 68%)",
             filter: "blur(70px)",
           }}
           animate={{ scale: [1, 1.06, 1] }}
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 3 }}
         />
-
-        {/* Dark centre scrim — keeps text legible */}
         <div
           className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 100%)",
-          }}
+          style={{ background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,0,0,0.2) 0%, transparent 100%)" }}
         />
-        {/* Edge vignette */}
         <div
           className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 110% 110% at 50% 50%, transparent 35%, rgba(0,0,0,0.6) 100%)",
-          }}
+          style={{ background: "radial-gradient(ellipse 140% 140% at 50% 50%, transparent 45%, rgba(0,0,0,0.4) 100%)" }}
         />
       </div>
 
-      {/* ── Content — fully centred ── */}
+      {/* ── Spline — intro: fullscreen z:20, settled: z:3 at 20% opacity ── */}
       <motion.div
-        style={{ y, opacity }}
-        className="relative z-10 flex flex-col items-center text-center px-6 pt-28 pb-24"
+        className="absolute inset-0 pointer-events-none"
+        animate={{
+          opacity: introDone ? 0.2 : 1,
+          zIndex: introDone ? 3 : 20,
+        }}
+        transition={{ duration: 1.2, ease: "easeInOut" }}
+        style={{ zIndex: introDone ? 3 : 20 }}
+      >
+        <iframe
+          src="https://my.spline.design/sentientcopycopy-acxzGqKYwXGxcJSUoNyFjUmZ-QSE/"
+          style={{ width: "100%", height: "100%", border: "none", pointerEvents: "none" }}
+          onLoad={triggerIntro}
+          allowFullScreen
+        />
+      </motion.div>
+
+      {/* ── Content — hidden during intro, fades in after ── */}
+      <motion.div
+        animate={{ opacity: introDone ? 1 : 0 }}
+        transition={{ duration: 1.0, ease: "easeInOut" }}
+        className="relative flex flex-col items-center text-center px-6 pt-28 pb-24"
+        style={{ zIndex: 10, y, opacity: scrollOpacity } as React.CSSProperties}
       >
         <motion.div
           variants={container}
           initial="hidden"
-          animate="show"
+          animate={introDone ? "show" : "hidden"}
           className="flex flex-col items-center"
         >
-          {/* Name — single line, responsive font */}
-          <motion.h1
+          <motion.div
             variants={fadeUp}
-            className="font-black tracking-[-0.04em] whitespace-nowrap mb-7"
-            style={{
-              fontSize: "clamp(2.6rem, 9.2vw, 9rem)",
-              lineHeight: 1.05,
-              color: "#f5f5f7",
-            }}
+            className="relative inline-block mb-7"
+            onMouseEnter={() => setHeadlineHovered(true)}
+            onMouseLeave={() => setHeadlineHovered(false)}
+            onTouchStart={() => setHeadlineHovered(true)}
+            onTouchEnd={() => setTimeout(() => setHeadlineHovered(false), 1800)}
           >
-            Chirayu Arya
-          </motion.h1>
+            <h1
+              className="font-semibold tracking-[-0.03em] whitespace-nowrap cursor-default"
+              style={{
+                fontSize: "clamp(2.8rem, 6.5vw, 6.5rem)",
+                lineHeight: 1.05,
+                color: "#f5f5f7",
+                textShadow: "0 2px 40px rgba(0,0,0,0.8), 0 1px 8px rgba(0,0,0,0.6)",
+              }}
+            >
+              Hi! I am Chirayu.
+            </h1>
 
-          {/* Tagline */}
+            {/* Glass bubble — top right of headline */}
+            <AnimatePresence>
+              {headlineHovered && (
+                <div
+                  className="absolute pointer-events-none"
+                  style={{ bottom: "calc(100% + 16px)", left: 0, right: 0, display: "flex", justifyContent: "center" }}
+                >
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <div
+                    className="flex items-center justify-center rounded-full"
+                    style={{
+                      width: "5rem",
+                      height: "5rem",
+                      background: "rgba(255,255,255,0.1)",
+                      border: "1px solid rgba(255,255,255,0.18)",
+                      backdropFilter: "blur(24px)",
+                      WebkitBackdropFilter: "blur(24px)",
+                      boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
+                    }}
+                  >
+                    <motion.span
+                      animate={{ rotate: [0, 25, -10, 25, 0] }}
+                      transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
+                      style={{ fontSize: "2.2rem", display: "inline-block", transformOrigin: "70% 70%" }}
+                    >
+                      👋
+                    </motion.span>
+                  </div>
+                </motion.div>
+                </div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+
           <motion.p
             variants={fadeUp}
             className="text-base sm:text-lg leading-relaxed mb-10 max-w-xs"
-            style={{ color: "rgba(245,245,247,0.5)" }}
+            style={{ color: "rgba(245,245,247,0.5)", textShadow: "0 2px 20px rgba(0,0,0,0.7)" }}
           >
             One creative. Three disciplines.
           </motion.p>
 
-          {/* CTAs */}
           <motion.div variants={fadeUp} className="flex items-center justify-center gap-3">
             <a
               href="#work"
-              className="px-7 py-3 rounded-full text-sm font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-80 whitespace-nowrap"
+              className="px-7 py-3 rounded-full text-sm font-semibold cursor-pointer whitespace-nowrap transition-all duration-300"
               style={{ background: "#f5f5f7", color: "#000" }}
+              onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.35)")}
+              onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
             >
               View work
             </a>
             <a
               href="#contact"
-              className="px-7 py-3 rounded-full text-sm font-medium cursor-pointer whitespace-nowrap transition-colors duration-200"
+              className="px-7 py-3 rounded-full text-sm font-medium cursor-pointer whitespace-nowrap transition-all duration-300"
               style={{ border: "1px solid rgba(255,255,255,0.2)", color: "rgba(245,245,247,0.55)" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "#f5f5f7")}
-              onMouseLeave={e => (e.currentTarget.style.color = "rgba(245,245,247,0.55)")}
+              onMouseEnter={e => {
+                e.currentTarget.style.color = "#f5f5f7";
+                e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.15)";
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.color = "rgba(245,245,247,0.55)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
             >
               Get in touch
             </a>
@@ -164,10 +232,10 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Bottom fade into next section */}
+      {/* Bottom fade */}
       <div
         className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, transparent, #000)" }}
+        style={{ zIndex: 21, background: "linear-gradient(to bottom, transparent, #000)" }}
       />
     </section>
   );
