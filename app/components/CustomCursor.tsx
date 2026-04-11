@@ -3,10 +3,10 @@
 import { motion, useMotionValue } from "framer-motion";
 import { useEffect, useState } from "react";
 
-// Figma-style cursor arrow path (hot-point at 0,0)
-const PATH = "M0 0 L0 19 L5 15.8 L9 23.5 L11.5 22.4 L7.5 15 L14 15 Z";
-const W = 15;
-const H = 25;
+// Clean arrow cursor — no tail (hot-point at 0,0)
+const PATH = "M0 0 L0 20 L6 16.5 L15 8 Z";
+const W = 16;
+const H = 21;
 
 export default function CustomCursor() {
   const x = useMotionValue(-100);
