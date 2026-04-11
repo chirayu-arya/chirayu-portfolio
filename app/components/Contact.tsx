@@ -12,62 +12,74 @@ const socials = [
 
 export default function Contact() {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-10%" });
+  const inView = useInView(ref, { once: true, margin: "-8%" });
 
   return (
-    <section id="contact" className="py-32 px-8">
-      <div className="max-w-7xl mx-auto">
+    <section id="contact" className="py-36 px-8" style={{ background: "#000" }}>
+      <div className="max-w-6xl mx-auto">
+
         {/* Big CTA */}
-        <div ref={ref} className="text-center mb-24">
-          <motion.span
+        <div ref={ref} className="text-center mb-28">
+          <motion.p
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5 }}
-            className="text-xs tracking-[0.25em] uppercase text-[--color-brand] mb-6 block"
+            className="text-xs tracking-[0.22em] uppercase font-medium mb-8"
+            style={{ color: "#B8E207" }}
           >
             Let's talk
-          </motion.span>
+          </motion.p>
+
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[clamp(3rem,8vw,7rem)] font-bold leading-[0.9] tracking-tight mb-10"
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+            className="font-bold tracking-tight leading-[0.9] mb-12"
+            style={{ fontSize: "clamp(3rem, 9vw, 8.5rem)", color: "#f5f5f7" }}
           >
             Have a project
             <br />
-            <span className="text-[--color-text-secondary]">in mind?</span>
+            <span style={{ color: "#86868b" }}>in mind?</span>
           </motion.h2>
 
-          <motion.a
-            href="mailto:hello@chirayuarya.com"
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="inline-block px-10 py-4 bg-[--color-brand] text-black font-semibold rounded-full text-lg cursor-pointer"
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
           >
-            hello@chirayuarya.com
-          </motion.a>
+            <motion.a
+              href="mailto:hello@chirayuarya.com"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.18 }}
+              className="inline-block px-10 py-4 rounded-full text-base font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
+              style={{ background: "#f5f5f7", color: "#000" }}
+            >
+              hello@chirayuarya.com
+            </motion.a>
+          </motion.div>
         </div>
 
-        {/* Footer row */}
+        {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-[--color-surface-2] pt-10"
+          className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-10"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
         >
-          <span className="text-sm text-[--color-text-muted]">
-            © {new Date().getFullYear()} Chirayu Arya. All rights reserved.
+          <span className="text-sm" style={{ color: "#515154" }}>
+            © {new Date().getFullYear()} Chirayu Arya
           </span>
-
-          <div className="flex items-center gap-6">
-            {socials.map((s) => (
+          <div className="flex items-center gap-7">
+            {socials.map(s => (
               <a
                 key={s.label}
                 href={s.href}
-                className="text-sm text-[--color-text-secondary] hover:text-[--color-text-primary] transition-colors cursor-pointer"
+                className="text-sm transition-colors duration-200 cursor-pointer"
+                style={{ color: "#515154" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#f5f5f7")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#515154")}
               >
                 {s.label}
               </a>
