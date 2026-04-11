@@ -13,8 +13,9 @@
   --color-text-muted: #515154;
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
+  cursor: none !important;
 }
 
 html {
