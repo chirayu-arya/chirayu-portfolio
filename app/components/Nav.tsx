@@ -13,23 +13,23 @@ const workCategories = [
 ];
 
 const glassStyle = {
-  backdropFilter: "blur(40px) saturate(1.8) brightness(1.05)",
-  WebkitBackdropFilter: "blur(40px) saturate(1.8) brightness(1.05)",
+  backdropFilter: "blur(64px) saturate(2.2) brightness(1.08)",
+  WebkitBackdropFilter: "blur(64px) saturate(2.2) brightness(1.08)",
   background:
-    "linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%), rgba(22,22,24,0.65)",
-  border: "1px solid rgba(255,255,255,0.11)",
+    "linear-gradient(135deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.01) 100%), rgba(12,12,14,0.28)",
+  border: "1px solid rgba(255,255,255,0.09)",
   boxShadow:
-    "inset 0 0.5px 0 rgba(255,255,255,0.18), inset 0 -0.5px 0 rgba(0,0,0,0.2), 0 12px 48px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.25)",
+    "inset 0 0.5px 0 rgba(255,255,255,0.15), inset 0 -0.5px 0 rgba(0,0,0,0.15), 0 16px 56px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.2)",
 };
 
 const dropdownGlassStyle = {
-  backdropFilter: "blur(48px) saturate(1.9) brightness(1.05)",
-  WebkitBackdropFilter: "blur(48px) saturate(1.9) brightness(1.05)",
+  backdropFilter: "blur(72px) saturate(2.4) brightness(1.08)",
+  WebkitBackdropFilter: "blur(72px) saturate(2.4) brightness(1.08)",
   background:
-    "linear-gradient(160deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%), rgba(20,20,22,0.78)",
-  border: "1px solid rgba(255,255,255,0.10)",
+    "linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%), rgba(10,10,12,0.35)",
+  border: "1px solid rgba(255,255,255,0.08)",
   boxShadow:
-    "inset 0 0.5px 0 rgba(255,255,255,0.16), 0 16px 56px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.3)",
+    "inset 0 0.5px 0 rgba(255,255,255,0.13), 0 20px 60px rgba(0,0,0,0.45), 0 4px 14px rgba(0,0,0,0.25)",
 };
 
 export default function Nav() {

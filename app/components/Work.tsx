@@ -185,7 +185,7 @@ export default function Work() {
             className="text-xs tracking-[0.22em] uppercase font-medium mb-5"
             style={{ color: "#86868b" }}
           >
-            Selected Work
+            At a Glance
           </motion.p>
           <div className="flex items-end justify-between gap-8">
             <motion.h2
