@@ -127,8 +127,8 @@ export default function Hero() {
       <motion.div
         animate={{ opacity: introDone ? 1 : 0 }}
         transition={{ duration: 1.0, ease: "easeInOut" }}
+        style={{ y, zIndex: 10 }}
         className="relative flex flex-col items-center text-center px-6 pt-28 pb-24"
-        style={{ zIndex: 10, y, opacity: scrollOpacity } as React.CSSProperties}
       >
         <motion.div
           variants={container}
