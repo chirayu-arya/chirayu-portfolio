@@ -105,13 +105,10 @@ export default function Hero() {
         />
       </div>
 
-      {/* ── Spline — intro: fullscreen z:20, settled: z:3 at 20% opacity ── */}
+      {/* ── Spline — desktop only (lg+), too heavy for mobile ── */}
       <motion.div
-        className="absolute inset-0 pointer-events-none"
-        animate={{
-          opacity: introDone ? 0.2 : 1,
-          zIndex: introDone ? 3 : 20,
-        }}
+        className="absolute inset-0 pointer-events-none hidden lg:block"
+        animate={{ opacity: introDone ? 0.2 : 1 }}
         transition={{ duration: 1.2, ease: "easeInOut" }}
         style={{ zIndex: introDone ? 3 : 20 }}
       >
@@ -206,20 +203,30 @@ export default function Hero() {
           <motion.div variants={fadeUp} className="flex items-center justify-center gap-3">
             <a
               href="#work"
-              className="px-7 py-3 rounded-full text-sm font-semibold cursor-pointer whitespace-nowrap transition-all duration-300"
-              style={{ background: "#f5f5f7", color: "#000" }}
-              onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.35)")}
+              className="px-7 py-3 rounded-full text-sm font-semibold cursor-pointer whitespace-nowrap"
+              style={{
+                background: "#f5f5f7",
+                color: "#000",
+                transition: "box-shadow 0.3s ease",
+                boxShadow: "none",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.4)")}
               onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
             >
               View work
             </a>
             <a
               href="#contact"
-              className="px-7 py-3 rounded-full text-sm font-medium cursor-pointer whitespace-nowrap transition-all duration-300"
-              style={{ border: "1px solid rgba(255,255,255,0.2)", color: "rgba(245,245,247,0.55)" }}
+              className="px-7 py-3 rounded-full text-sm font-medium cursor-pointer whitespace-nowrap"
+              style={{
+                border: "1px solid rgba(255,255,255,0.2)",
+                color: "rgba(245,245,247,0.55)",
+                transition: "box-shadow 0.3s ease, color 0.3s ease",
+                boxShadow: "none",
+              }}
               onMouseEnter={e => {
                 e.currentTarget.style.color = "#f5f5f7";
-                e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.15)";
+                e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.2)";
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.color = "rgba(245,245,247,0.55)";
