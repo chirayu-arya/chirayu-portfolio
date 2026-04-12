@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Chirayu Arya — Designer, Marketer & Photographer",
+  title: "Chirayu Arya ®",
   description:
     "Portfolio of Chirayu Arya. Designer, marketer, and photographer crafting visual stories and brand experiences.",
   icons: {
