@@ -58,7 +58,7 @@ export default function Nav() {
 
         {/* About Me */}
         <a
-          href="#about"
+          href="/about"
           className="px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
           onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
           onMouseLeave={e => (e.currentTarget.style.background = "transparent")}

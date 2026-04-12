@@ -3,24 +3,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-const disciplines = [
-  {
-    label: "Design",
-    description:
-      "Brand identity, visual systems, and UI that make people stop scrolling.",
-  },
-  {
-    label: "Marketing",
-    description:
-      "Strategy-first campaigns that connect the right idea to the right audience.",
-  },
-  {
-    label: "Photography",
-    description:
-      "Editorial, product, and portrait work that finds the moment before it happens.",
-  },
-];
-
 const stats = [
   { value: "5+", label: "Years" },
   { value: "40+", label: "Projects" },
@@ -47,12 +29,12 @@ export default function About() {
             className="text-xs tracking-[0.22em] uppercase font-medium mb-16"
             style={{ color: "#86868b" }}
           >
-            About
+            About Me
           </motion.p>
         </div>
 
         {/* Bio block */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 mb-28">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 mb-12">
           <div className="lg:col-span-7">
             <motion.h2
               initial={{ opacity: 0, y: 28 }}
@@ -139,47 +121,28 @@ export default function About() {
           </motion.div>
         </div>
 
-        {/* Disciplines */}
-        <div ref={disciplineRef}>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={disciplineInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.5 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-8"
-            style={{ color: "#86868b" }}
+        {/* Learn More button */}
+        <motion.div
+          ref={disciplineRef}
+          initial={{ opacity: 0, y: 16 }}
+          animate={disciplineInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+          className="flex justify-center pb-20"
+        >
+          <a
+            href="/about"
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-full text-sm font-semibold cursor-pointer"
+            style={{
+              background: "#f5f5f7",
+              color: "#000",
+              transition: "opacity 0.2s ease",
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+            onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
           >
-            Disciplines
-          </motion.p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {disciplines.map((d, i) => (
-              <motion.div
-                key={d.label}
-                initial={{ opacity: 0, y: 24 }}
-                animate={disciplineInView ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.7,
-                  ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-                  delay: i * 0.1,
-                }}
-                className="rounded-3xl p-8"
-                style={{
-                  background: "#0a0a0a",
-                  border: "1px solid rgba(255,255,255,0.05)",
-                }}
-              >
-                <div
-                  className="text-lg font-semibold mb-3 tracking-tight"
-                  style={{ color: "#f5f5f7" }}
-                >
-                  {d.label}
-                </div>
-                <p className="text-sm leading-relaxed" style={{ color: "#f5f5f7" }}>
-                  {d.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+            Learn More
+          </a>
+        </motion.div>
 
       </div>
     </section>
