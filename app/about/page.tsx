@@ -21,30 +21,77 @@ const interests = [
 
 const logos = ["Logo 1", "Logo 2", "Logo 3", "Logo 4", "Logo 5", "Logo 6", "Logo 7", "Logo 8"];
 
+const TAG = {
+  construction:    { label: "Construction",         color: "#FCD34D", bg: "rgba(252,211,77,0.1)",   border: "rgba(252,211,77,0.28)"  },
+  cryptoWeb3:      { label: "Crypto & Web3",         color: "#A78BFA", bg: "rgba(167,139,250,0.1)", border: "rgba(167,139,250,0.28)" },
+  insurance:       { label: "Insurance",             color: "#60A5FA", bg: "rgba(96,165,250,0.1)",  border: "rgba(96,165,250,0.28)"  },
+  hrTech:          { label: "HR Tech",               color: "#FB923C", bg: "rgba(251,146,60,0.1)",  border: "rgba(251,146,60,0.28)"  },
+  govtInitiative:  { label: "Government Initiative", color: "#34D399", bg: "rgba(52,211,153,0.1)",  border: "rgba(52,211,153,0.28)"  },
+};
+
 const experience = [
   {
-    role: "Role Placeholder",
-    company: "Company Name",
-    dates: "2024 - Present",
-    description: "Placeholder: Describe your responsibilities, key projects, and the impact you made in this role.",
+    role: "Marketing Manager",
+    company: "SiteMarker",
+    dates: "Jan 2026 - Present  |  Charleston, USA",
+    description: "Building and scaling marketing systems for a SaaS construction tech platform. Connecting product, sales, and marketing through full-funnel strategies, UX improvements, and structured processes that turn demand into measurable growth.",
+    tag: TAG.construction,
   },
   {
-    role: "Role Placeholder",
-    company: "Company Name",
-    dates: "2022 - 2024",
-    description: "Placeholder: Describe your responsibilities, key projects, and the impact you made in this role.",
+    role: "Marketing Manager",
+    company: "Enso Homes",
+    dates: "May 2025 - Jan 2026  |  Austin, USA",
+    description: "Worked closely with founders to shape the brand and growth engine of a wellness-focused homebuilding company. From website experience to paid ads and SEO, focused on making the product more compelling, leading to meaningful increases in leads and engagement.",
+    tag: TAG.construction,
   },
   {
-    role: "Role Placeholder",
-    company: "Company Name",
-    dates: "2020 - 2022",
-    description: "Placeholder: Describe your responsibilities, key projects, and the impact you made in this role.",
+    role: "Marketing Lead",
+    company: "Scalis",
+    dates: "Feb 2024 - Apr 2025  |  Miami / Durham, USA",
+    description: "Built Apex, a student newsletter supporting 200K+ students, through content, campaigns, and community. Evolved from consulting on growth to leading marketing, expanding audience and turning content into a strong distribution channel. Helped build a $1.47M sales pipeline in under 6 months.",
+    tag: TAG.hrTech,
   },
   {
-    role: "Role Placeholder",
-    company: "Company Name",
-    dates: "2019 - 2020",
-    description: "Placeholder: Describe your responsibilities, key projects, and the impact you made in this role.",
+    role: "Marketing Manager",
+    company: "Gain Ventures",
+    dates: "Jun 2023 - Jan 2024  |  Durham, USA",
+    description: "Led marketing and growth across paid channels and outbound for clients. Worked on UI/UX design for ICAREUM, creating wireframes and interactive components while collaborating with engineering and product teams to make complex, emerging tech feel intuitive.",
+    tag: TAG.cryptoWeb3,
+  },
+  {
+    role: "Research Assistant",
+    company: "Duke University",
+    dates: "2023  |  Durham, USA",
+    description: "Researched innovation and crypto ventures under Prof. Campbell Harvey, collaborating on blockchain applications in emerging technologies and exploring how new technologies translate into real-world use cases.",
+    tag: TAG.cryptoWeb3,
+  },
+  {
+    role: "Product Marketing Analyst Intern",
+    company: "NatureServe",
+    dates: "Jan 2023 - Apr 2023  |  Durham, USA",
+    description: "Conducted market research and worked on positioning for a SaaS product. Focused on customer segments, demand analysis, and competitive landscape to help shape go-to-market strategy.",
+    tag: TAG.govtInitiative,
+  },
+  {
+    role: "Marketing Manager",
+    company: "MGA Insurance",
+    dates: "Sep 2021 - Mar 2022  |  New Delhi, India",
+    description: "Led campaigns, managed a small team, and improved customer targeting and visibility. Built campaigns, tracked performance, and refined strategy based on data.",
+    tag: TAG.insurance,
+  },
+  {
+    role: "Social Media Manager",
+    company: "Matchain",
+    dates: "Jul 2021 - Mar 2022  |  Lisbon, Portugal (Remote)",
+    description: "Worked on global launch campaigns in the Web3 space. Helped position the product, simplify complex ideas, and create content that made blockchain more accessible to a wider audience.",
+    tag: TAG.cryptoWeb3,
+  },
+  {
+    role: "Marketing Lead",
+    company: "AIESEC",
+    dates: "2020 - 2021  |  India & Malaysia",
+    description: "Early leadership and marketing roles managing communications, leading small teams, and working on recruitment and partnerships. Where I first learned how to build and lead from scratch.",
+    tag: TAG.govtInitiative,
   },
 ];
 
@@ -77,10 +124,12 @@ function SectionHeader({ label }: { label: string }) {
   );
 }
 
+type Tag = { label: string; color: string; bg: string; border: string };
+
 function ExpCard({
-  role, company, dates, description, inView, delay, lastRow,
+  role, company, dates, description, inView, delay, lastRow, tag,
 }: {
-  role: string; company: string; dates: string; description: string; inView: boolean; delay: number; lastRow?: boolean;
+  role: string; company: string; dates: string; description: string; inView: boolean; delay: number; lastRow?: boolean; tag?: Tag;
 }) {
   return (
     <motion.div
@@ -90,7 +139,17 @@ function ExpCard({
       className="py-8"
       style={lastRow ? undefined : { borderBottom: "1px solid rgba(255,255,255,0.08)" }}
     >
-      <p className="text-base font-semibold mb-1" style={{ color: "#f5f5f7" }}>{role}</p>
+      <div className="flex items-start justify-between gap-3 mb-1">
+        <p className="text-base font-semibold" style={{ color: "#f5f5f7" }}>{role}</p>
+        {tag && (
+          <span
+            className="flex-shrink-0 text-xs font-medium px-2.5 py-1 rounded-full"
+            style={{ color: tag.color, background: tag.bg, border: `1px solid ${tag.border}` }}
+          >
+            {tag.label}
+          </span>
+        )}
+      </div>
       <p className="text-sm mb-0.5" style={{ color: "#86868b" }}>{company}</p>
       <p className="text-xs mb-5" style={{ color: "#515154" }}>{dates}</p>
       <p className="text-sm leading-relaxed" style={{ color: "#a1a1a6" }}>{description}</p>
@@ -307,7 +366,7 @@ export default function AboutPage() {
           <SectionHeader label="Experience" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16">
             {experience.map((item, i) => (
-              <ExpCard key={i} {...item} inView={expInView} delay={i * 0.1} lastRow={i >= experience.length - 2} />
+              <ExpCard key={i} {...item} inView={expInView} delay={i * 0.1} lastRow={i >= experience.length - 2} tag={item.tag} />
             ))}
           </div>
         </div>
