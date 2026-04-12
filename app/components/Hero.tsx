@@ -30,6 +30,7 @@ export default function Hero() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [headlineHovered, setHeadlineHovered] = useState(false);
+  const [revealPos, setRevealPos] = useState<{ x: number; y: number } | null>(null);
 
   const triggerIntro = () => {
     if (timerRef.current) return; // already scheduled
@@ -149,24 +150,72 @@ export default function Hero() {
           animate={introDone ? "show" : "hidden"}
           className="flex flex-col items-center"
         >
-          {/* Memoji — above headline */}
-          <motion.img
+          {/* Memoji — above headline, with cursor reveal effect */}
+          <motion.div
             variants={fadeUp}
-            src="/Memoji 1.png"
-            alt="Chirayu memoji"
-            className="mb-6"
-            onMouseEnter={() => setHeadlineHovered(true)}
-            onMouseLeave={() => setHeadlineHovered(false)}
-            onTouchStart={() => setHeadlineHovered(true)}
-            onTouchEnd={() => setTimeout(() => setHeadlineHovered(false), 1800)}
+            className="relative mb-6"
             style={{
-              height: "clamp(5rem, 12vw, 11rem)",
-              width: "auto",
-              display: "block",
+              display: "inline-block",
+              cursor: "none",
+              height: "clamp(8rem, 18vw, 16rem)",
+              width: "clamp(8rem, 18vw, 16rem)",
               filter: "drop-shadow(0 4px 32px rgba(0,0,0,0.5))",
-              cursor: "default",
             }}
-          />
+            onMouseEnter={() => setHeadlineHovered(true)}
+            onMouseLeave={() => { setHeadlineHovered(false); setRevealPos(null); }}
+            onMouseMove={e => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              setRevealPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+            }}
+            onTouchStart={e => {
+              setHeadlineHovered(true);
+              const touch = e.touches[0];
+              const rect = e.currentTarget.getBoundingClientRect();
+              setRevealPos({ x: touch.clientX - rect.left, y: touch.clientY - rect.top });
+            }}
+            onTouchMove={e => {
+              const touch = e.touches[0];
+              const rect = e.currentTarget.getBoundingClientRect();
+              setRevealPos({ x: touch.clientX - rect.left, y: touch.clientY - rect.top });
+            }}
+            onTouchEnd={() => {
+              setTimeout(() => { setHeadlineHovered(false); setRevealPos(null); }, 1800);
+            }}
+          >
+            {/* Reveal image — behind, fills container */}
+            <img
+              src="/Chirayu Reveal.png"
+              alt=""
+              aria-hidden
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                borderRadius: "1rem",
+              }}
+            />
+
+            {/* Memoji — on top, fully covers container, transparent in spotlight */}
+            <img
+              src="/Memoji 3.png"
+              alt="Chirayu memoji"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                WebkitMaskImage: revealPos
+                  ? `radial-gradient(circle at ${revealPos.x}px ${revealPos.y}px, transparent 0px, transparent 89px, black 90px)`
+                  : undefined,
+                maskImage: revealPos
+                  ? `radial-gradient(circle at ${revealPos.x}px ${revealPos.y}px, transparent 0px, transparent 89px, black 90px)`
+                  : undefined,
+              }}
+            />
+          </motion.div>
 
           {/* Headline — bubble appears top-right on hover of image or headline */}
           <motion.div
@@ -230,7 +279,7 @@ export default function Hero() {
             className="text-base sm:text-lg leading-relaxed mb-10 max-w-2xl"
             style={{ color: "#f5f5f7", textShadow: "0 2px 20px rgba(0,0,0,0.7)" }}
           >
-            Working at the intersection of art &amp; technology, I believe Steve Jobs was really onto something. Great design is never just functional or just beautiful. It has to be both. And that&apos;s the only way I know how to work.
+            <span className="hidden sm:inline">Working at the intersection of art &amp; technology, I believe Steve Jobs was really onto something. </span>Great design is never just functional or just beautiful. It has to be both. And that&apos;s the only way I know how to work.
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex items-center justify-center gap-3">
