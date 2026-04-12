@@ -40,43 +40,59 @@ const LinkedInIcon = () => (
   </svg>
 );
 
-const WorkDropdownContent = ({ onClose }: { onClose?: () => void }) => (
-  <div className="flex gap-1">
-    <div className="flex flex-col min-w-[160px]">
-      {workCol1.map((item, i) => (
-        <motion.a
-          key={item.label}
-          href={item.href}
-          initial={{ opacity: 0, x: -6 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: i * 0.03, duration: 0.2 }}
-          className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
-          onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-          onClick={onClose}
-        >
-          {item.label}
-        </motion.a>
-      ))}
+const WorkDropdownContent = ({ onClose, showGetInTouch }: { onClose?: () => void; showGetInTouch?: boolean }) => (
+  <div className="flex flex-col gap-1">
+    <div className="flex gap-1">
+      <div className="flex flex-col min-w-[160px]">
+        {workCol1.map((item, i) => (
+          <motion.a
+            key={item.label}
+            href={item.href}
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.03, duration: 0.2 }}
+            className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            onClick={onClose}
+          >
+            {item.label}
+          </motion.a>
+        ))}
+      </div>
+      <div className="w-px self-stretch mx-1" style={{ background: "rgba(255,255,255,0.08)" }} />
+      <div className="flex flex-col min-w-[160px]">
+        {workCol2.map((item, i) => (
+          <motion.a
+            key={item.label}
+            href={item.href}
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.03 + 0.05, duration: 0.2 }}
+            className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            onClick={onClose}
+          >
+            {item.label}
+          </motion.a>
+        ))}
+        {showGetInTouch && (
+          <motion.a
+            href="#contact"
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.12, duration: 0.2 }}
+            className="inline-block px-4 py-2 rounded-full text-sm font-semibold cursor-pointer whitespace-nowrap mx-2 my-0.5"
+            style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
+            onClick={onClose}
+          >
+            Get In Touch
+          </motion.a>
+        )}
+      </div>
     </div>
-    <div className="w-px self-stretch mx-1" style={{ background: "rgba(255,255,255,0.08)" }} />
-    <div className="flex flex-col min-w-[160px]">
-      {workCol2.map((item, i) => (
-        <motion.a
-          key={item.label}
-          href={item.href}
-          initial={{ opacity: 0, x: -6 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: i * 0.03 + 0.05, duration: 0.2 }}
-          className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
-          onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-          onClick={onClose}
-        >
-          {item.label}
-        </motion.a>
-      ))}
-    </div>
+
   </div>
 );
 
@@ -219,22 +235,24 @@ export default function Nav() {
             >
               <motion.div
                 animate={menuOpen ? "open" : "closed"}
-                className="flex flex-col gap-[5px] items-center justify-center w-4"
+                className="relative w-4"
+                style={{ height: 12 }}
               >
                 <motion.span
-                  variants={{ open: { rotate: 45, y: 7 }, closed: { rotate: 0, y: 0 } }}
+                  variants={{ open: { rotate: 45, y: 5.5 }, closed: { rotate: 0, y: 0 } }}
                   transition={{ duration: 0.22 }}
-                  className="block h-px w-4 bg-white/65 rounded-full"
+                  className="absolute top-0 left-0 right-0 h-px bg-white/65 rounded-full"
                 />
                 <motion.span
                   variants={{ open: { opacity: 0 }, closed: { opacity: 1 } }}
                   transition={{ duration: 0.22 }}
-                  className="block h-px w-4 bg-white/65 rounded-full"
+                  className="absolute left-0 right-0 h-px bg-white/65 rounded-full"
+                  style={{ top: 6 }}
                 />
                 <motion.span
-                  variants={{ open: { rotate: -45, y: -7 }, closed: { rotate: 0, y: 0 } }}
+                  variants={{ open: { rotate: -45, y: -5.5 }, closed: { rotate: 0, y: 0 } }}
                   transition={{ duration: 0.22 }}
-                  className="block h-px w-4 bg-white/65 rounded-full"
+                  className="absolute bottom-0 left-0 right-0 h-px bg-white/65 rounded-full"
                 />
               </motion.div>
             </button>
@@ -252,7 +270,7 @@ export default function Nav() {
               className="mt-2 rounded-2xl p-2"
               style={dropdownGlassStyle}
             >
-              <WorkDropdownContent onClose={() => setMenuOpen(false)} />
+              <WorkDropdownContent onClose={() => setMenuOpen(false)} showGetInTouch />
             </motion.div>
           )}
         </AnimatePresence>
