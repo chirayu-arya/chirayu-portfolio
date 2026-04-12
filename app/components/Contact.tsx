@@ -39,7 +39,7 @@ export default function Contact() {
           >
             Have a project
             <br />
-            <span style={{ color: "#86868b" }}>in mind?</span>
+            <span style={{ color: "#f5f5f7" }}>in mind?</span>
           </motion.h2>
 
           <motion.div
@@ -68,7 +68,7 @@ export default function Contact() {
           className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-10"
           style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
         >
-          <span className="text-sm" style={{ color: "#515154" }}>
+          <span className="text-sm" style={{ color: "#f5f5f7" }}>
             © {new Date().getFullYear()} Chirayu Arya
           </span>
           <div className="flex items-center gap-7">
@@ -77,9 +77,9 @@ export default function Contact() {
                 key={s.label}
                 href={s.href}
                 className="text-sm transition-colors duration-200 cursor-pointer"
-                style={{ color: "#515154" }}
+                style={{ color: "#f5f5f7" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#f5f5f7")}
-                onMouseLeave={e => (e.currentTarget.style.color = "#515154")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#f5f5f7")}
               >
                 {s.label}
               </a>

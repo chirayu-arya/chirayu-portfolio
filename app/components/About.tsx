@@ -63,7 +63,7 @@ export default function About() {
             >
               A creative with
               <br />
-              <span style={{ color: "#86868b" }}>a strategic mind.</span>
+              <span style={{ color: "#f5f5f7" }}>a strategic mind.</span>
             </motion.h2>
 
             <motion.div
@@ -71,7 +71,7 @@ export default function About() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.15 }}
               className="space-y-5 text-base leading-relaxed"
-              style={{ color: "#86868b" }}
+              style={{ color: "#f5f5f7" }}
             >
               <p>
                 I sit at the intersection of design, marketing, and photography.
@@ -103,7 +103,7 @@ export default function About() {
                   >
                     {stat.value}
                   </div>
-                  <div className="text-xs mt-1" style={{ color: "#515154" }}>
+                  <div className="text-xs mt-1" style={{ color: "#f5f5f7" }}>
                     {stat.label}
                   </div>
                 </div>
@@ -131,7 +131,7 @@ export default function About() {
               />
               <div
                 className="absolute inset-0 flex items-center justify-center text-sm"
-                style={{ color: "#515154" }}
+                style={{ color: "#f5f5f7" }}
               >
                 Portrait photo
               </div>
@@ -146,7 +146,7 @@ export default function About() {
             animate={disciplineInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5 }}
             className="text-xs tracking-[0.22em] uppercase font-medium mb-8"
-            style={{ color: "#515154" }}
+            style={{ color: "#86868b" }}
           >
             Disciplines
           </motion.p>
@@ -173,7 +173,7 @@ export default function About() {
                 >
                   {d.label}
                 </div>
-                <p className="text-sm leading-relaxed" style={{ color: "#86868b" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "#f5f5f7" }}>
                   {d.description}
                 </p>
               </motion.div>

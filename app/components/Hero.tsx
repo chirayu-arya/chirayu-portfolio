@@ -211,7 +211,7 @@ export default function Hero() {
           <motion.p
             variants={fadeUp}
             className="text-base sm:text-lg leading-relaxed mb-10 max-w-xs"
-            style={{ color: "rgba(245,245,247,0.5)", textShadow: "0 2px 20px rgba(0,0,0,0.7)" }}
+            style={{ color: "#f5f5f7", textShadow: "0 2px 20px rgba(0,0,0,0.7)" }}
           >
             One creative. Three disciplines.
           </motion.p>
@@ -236,7 +236,7 @@ export default function Hero() {
               className="px-7 py-3 rounded-full text-sm font-medium cursor-pointer whitespace-nowrap"
               style={{
                 border: "1px solid rgba(255,255,255,0.2)",
-                color: "rgba(245,245,247,0.55)",
+                color: "#f5f5f7",
                 transition: "box-shadow 0.3s ease, color 0.3s ease",
                 boxShadow: "none",
               }}
@@ -245,12 +245,20 @@ export default function Hero() {
                 e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.2)";
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.color = "rgba(245,245,247,0.55)";
+                e.currentTarget.style.color = "#f5f5f7";
                 e.currentTarget.style.boxShadow = "none";
               }}
             >
               Get in touch
             </a>
+          </motion.div>
+          <motion.div
+            variants={fadeUp}
+            className="absolute bottom-0 left-0 right-0 flex justify-center pb-8 pointer-events-none"
+          >
+            <p className="text-sm font-bold tracking-wide" style={{ color: "#f5f5f7" }}>
+              🚧 Marketing @ SiteMarker &nbsp;|&nbsp; 📍 Charleston, South Carolina
+            </p>
           </motion.div>
         </motion.div>
       </motion.div>

@@ -83,7 +83,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
             style={{
               background: "rgba(255,255,255,0.06)",
               border: "1px solid rgba(255,255,255,0.08)",
-              color: "#86868b",
+              color: "#f5f5f7",
             }}
           >
             {project.category}
@@ -116,7 +116,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
           >
             {project.title}
           </h3>
-          <p className="text-sm leading-relaxed max-w-xs" style={{ color: "#86868b" }}>
+          <p className="text-sm leading-relaxed max-w-xs" style={{ color: "#f5f5f7" }}>
             {project.description}
           </p>
           <div className="flex flex-wrap gap-1.5 mt-3">
@@ -126,7 +126,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
                 className="text-xs px-2.5 py-1 rounded-full"
                 style={{
                   background: "rgba(255,255,255,0.05)",
-                  color: "#515154",
+                  color: "#f5f5f7",
                 }}
               >
                 {tag}
@@ -139,7 +139,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
           className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200"
           style={{
             border: "1px solid rgba(255,255,255,0.1)",
-            color: "#515154",
+            color: "#f5f5f7",
           }}
           whileHover={{ rotate: 45 }}
           transition={{ duration: 0.18 }}
@@ -197,7 +197,7 @@ export default function Work() {
             >
               Projects that speak
               <br />
-              <span style={{ color: "#86868b" }}>for themselves.</span>
+              <span style={{ color: "#f5f5f7" }}>for themselves.</span>
             </motion.h2>
             <motion.a
               initial={{ opacity: 0 }}
@@ -205,9 +205,9 @@ export default function Work() {
               transition={{ duration: 0.5, delay: 0.25 }}
               href="#"
               className="text-sm cursor-pointer whitespace-nowrap transition-colors duration-200 hidden sm:block"
-              style={{ color: "#86868b" }}
+              style={{ color: "#f5f5f7" }}
               onMouseEnter={e => (e.currentTarget.style.color = "#f5f5f7")}
-              onMouseLeave={e => (e.currentTarget.style.color = "#86868b")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#f5f5f7")}
             >
               All work →
             </motion.a>
