@@ -197,7 +197,7 @@ export default function Hero() {
                     <motion.span
                       animate={{ rotate: [0, 25, -10, 25, 0] }}
                       transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
-                      style={{ fontSize: "2.2rem", display: "inline-block", transformOrigin: "70% 70%" }}
+                      style={{ fontSize: "2rem", display: "flex", alignItems: "center", justifyContent: "center", transformOrigin: "70% 70%", lineHeight: 1 }}
                     >
                       👋
                     </motion.span>
