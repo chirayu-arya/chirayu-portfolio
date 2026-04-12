@@ -149,6 +149,26 @@ export default function Hero() {
           animate={introDone ? "show" : "hidden"}
           className="flex flex-col items-center"
         >
+          {/* Memoji — above headline */}
+          <motion.img
+            variants={fadeUp}
+            src="/Memoji 1.png"
+            alt="Chirayu memoji"
+            className="mb-6"
+            onMouseEnter={() => setHeadlineHovered(true)}
+            onMouseLeave={() => setHeadlineHovered(false)}
+            onTouchStart={() => setHeadlineHovered(true)}
+            onTouchEnd={() => setTimeout(() => setHeadlineHovered(false), 1800)}
+            style={{
+              height: "clamp(5rem, 12vw, 11rem)",
+              width: "auto",
+              display: "block",
+              filter: "drop-shadow(0 4px 32px rgba(0,0,0,0.5))",
+              cursor: "default",
+            }}
+          />
+
+          {/* Headline — bubble appears top-right on hover of image or headline */}
           <motion.div
             variants={fadeUp}
             className="relative inline-block mb-7"
@@ -172,15 +192,13 @@ export default function Hero() {
             {/* Glass bubble — top right of headline */}
             <AnimatePresence>
               {headlineHovered && (
-                <div
-                  className="absolute pointer-events-none"
-                  style={{ bottom: "calc(100% + 16px)", left: 0, right: 0, display: "flex", justifyContent: "center" }}
-                >
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
+                  exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute pointer-events-none"
+                  style={{ bottom: "calc(100% - 20px)", right: "-2.5rem" }}
                 >
                   <div
                     className="flex items-center justify-center rounded-full"
@@ -203,17 +221,16 @@ export default function Hero() {
                     </motion.span>
                   </div>
                 </motion.div>
-                </div>
               )}
             </AnimatePresence>
           </motion.div>
 
           <motion.p
             variants={fadeUp}
-            className="text-base sm:text-lg leading-relaxed mb-10 max-w-lg"
+            className="text-base sm:text-lg leading-relaxed mb-10 max-w-2xl"
             style={{ color: "#f5f5f7", textShadow: "0 2px 20px rgba(0,0,0,0.7)" }}
           >
-            I grew up thinking Steve Jobs was onto something, that great work is never just functional or just beautiful. It has to be both. That&apos;s the only way I know how to work.
+            Working at the intersection of art &amp; technology, I believe Steve Jobs was really onto something. Great design is never just functional or just beautiful. It has to be both. And that&apos;s the only way I know how to work.
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex items-center justify-center gap-3">

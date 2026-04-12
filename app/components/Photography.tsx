@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const polaroids = [
   { id: 1,  src: "https://picsum.photos/seed/vp01/600/600", rotation: -14, left: "0%",   top: "2%",   fromX: -900, z: 2, w: "22vw", delay: 0     },
@@ -24,6 +24,8 @@ function Polaroid({
   p: (typeof polaroids)[0];
   inView: boolean;
 }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
     <motion.div
       initial={{ x: p.fromX, opacity: 0, rotate: p.rotation }}
@@ -39,6 +41,8 @@ function Polaroid({
         zIndex: 50,
         transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] },
       }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
       style={{
         position: "absolute",
         left: p.left,
@@ -53,7 +57,10 @@ function Polaroid({
         style={{
           background: "#fff",
           padding: "10px 10px 44px 10px",
-          filter: "drop-shadow(0 8px 28px rgba(0,0,0,0.45))",
+          filter: hovered
+            ? "drop-shadow(0 0 28px rgba(200,180,255,0.55)) drop-shadow(0 8px 28px rgba(0,0,0,0.45))"
+            : "drop-shadow(0 8px 28px rgba(0,0,0,0.45))",
+          transition: "filter 0.3s ease",
         }}
       >
         <img
@@ -130,10 +137,63 @@ export default function Photography() {
     <section
       id="virtual-photography"
       className="overflow-hidden"
-      style={{ background: "#000", paddingTop: "9rem", paddingBottom: "0" }}
+      style={{ background: "#000", paddingTop: "9rem", paddingBottom: "0", position: "relative", isolation: "isolate" }}
     >
+      {/* Gradient blobs */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+        {/* Top-left — pink, toned down */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: "55vmax", height: "55vmax",
+            top: "-10vmax", left: "-15vmax",
+            background: "radial-gradient(ellipse, rgba(244,114,182,0.3) 0%, transparent 68%)",
+            filter: "blur(80px)",
+          }}
+        />
+        {/* Bottom-right — amber, unchanged */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: "45vmax", height: "45vmax",
+            bottom: "0", right: "-10vmax",
+            background: "radial-gradient(ellipse, rgba(251,146,60,0.52) 0%, transparent 68%)",
+            filter: "blur(80px)",
+          }}
+        />
+        {/* Center — purple */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: "50vmax", height: "50vmax",
+            top: "25%", left: "25%",
+            background: "radial-gradient(ellipse, rgba(139,92,246,0.55) 0%, transparent 60%)",
+            filter: "blur(60px)",
+          }}
+        />
+        {/* Top-right — sky blue */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: "40vmax", height: "40vmax",
+            top: "5%", right: "0%",
+            background: "radial-gradient(ellipse, rgba(56,189,248,0.52) 0%, transparent 60%)",
+            filter: "blur(60px)",
+          }}
+        />
+        {/* Bottom-center — yellow */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: "42vmax", height: "42vmax",
+            bottom: "5%", left: "25%",
+            background: "radial-gradient(ellipse, rgba(251,191,36,0.5) 0%, transparent 60%)",
+            filter: "blur(60px)",
+          }}
+        />
+      </div>
       {/* Header */}
-      <div ref={headerRef} className="max-w-6xl mx-auto px-8 mb-20">
+      <div ref={headerRef} className="relative max-w-6xl mx-auto px-8 mb-20" style={{ zIndex: 1 }}>
         <motion.p
           initial={{ opacity: 0 }}
           animate={headerInView ? { opacity: 1 } : {}}
@@ -161,7 +221,7 @@ export default function Photography() {
       <div
         ref={mobileRef}
         className="md:hidden grid grid-cols-2 gap-6 px-6"
-        style={{ paddingBottom: "2rem" }}
+        style={{ paddingBottom: "2rem", position: "relative", zIndex: 1 }}
       >
         {polaroids.map((p, i) => (
           <MobilePolaroid
@@ -180,16 +240,46 @@ export default function Photography() {
         className="hidden md:block"
         style={{
           position: "relative",
-          height: "62vw",
+          height: "54vw",
           maxWidth: 1500,
           margin: "0 auto",
           padding: "0 40px",
+          zIndex: 1,
         }}
       >
         {polaroids.map((p) => (
           <Polaroid key={p.id} p={p} inView={inView} />
         ))}
       </div>
+
+      {/* Exhibition Mode button */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.4 }}
+        className="flex justify-center pb-20 relative"
+        style={{ zIndex: 1 }}
+      >
+        <a
+          href="/exhibition"
+          className="inline-flex items-center gap-2 px-8 py-3 rounded-full text-sm font-semibold cursor-pointer"
+          style={{
+            background: "#f5f5f7",
+            color: "#000",
+            transition: "opacity 0.2s ease",
+          }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+          onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+          Exhibition Mode
+        </a>
+      </motion.div>
     </section>
   );
 }

@@ -4,14 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
 const workCol1 = [
-  { label: "Explore", href: "#work" },
-  { label: "Brand & Marketing", href: "#brand-marketing" },
-  { label: "UI / UX", href: "#ui-ux" },
+  { label: "Branding & Marketing", href: "#brand-marketing" },
+  { label: "UI & UX", href: "#ui-ux" },
+  { label: "Photography", href: "#photography" },
 ];
 
 const workCol2 = [
   { label: "Illustrations", href: "#illustrations" },
-  { label: "Photography", href: "#photography" },
   { label: "Virtual Photography", href: "#virtual-photography" },
 ];
 
@@ -167,7 +166,7 @@ export default function Nav() {
           className="px-5 py-2 rounded-full text-sm font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
           style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
         >
-          Get in touch
+          Get In Touch
         </a>
       </motion.nav>
     </div>

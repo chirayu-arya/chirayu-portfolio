@@ -35,7 +35,7 @@ export default function About() {
   const disciplineInView = useInView(disciplineRef, { once: true, margin: "-8%" });
 
   return (
-    <section id="about" className="pt-36 pb-0 px-8" style={{ background: "#0a0a0a" }}>
+    <section id="about" className="pt-36 pb-0 px-8" style={{ background: "#000" }}>
       <div className="max-w-6xl mx-auto">
 
         {/* Top: label */}
@@ -120,7 +120,7 @@ export default function About() {
           >
             <div
               className="w-full aspect-[3/4] rounded-3xl overflow-hidden relative"
-              style={{ background: "#1d1d1f", border: "1px solid rgba(255,255,255,0.05)" }}
+              style={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.05)" }}
             >
               <div
                 className="absolute inset-0 opacity-25"
@@ -163,7 +163,7 @@ export default function About() {
                 }}
                 className="rounded-3xl p-8"
                 style={{
-                  background: "#1d1d1f",
+                  background: "#0a0a0a",
                   border: "1px solid rgba(255,255,255,0.05)",
                 }}
               >
