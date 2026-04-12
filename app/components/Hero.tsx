@@ -210,10 +210,10 @@ export default function Hero() {
 
           <motion.p
             variants={fadeUp}
-            className="text-base sm:text-lg leading-relaxed mb-10 max-w-xs"
+            className="text-base sm:text-lg leading-relaxed mb-10 max-w-lg"
             style={{ color: "#f5f5f7", textShadow: "0 2px 20px rgba(0,0,0,0.7)" }}
           >
-            One creative. Three disciplines.
+            I grew up thinking Steve Jobs was onto something, that great work is never just functional or just beautiful. It has to be both. That&apos;s the only way I know how to work.
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex items-center justify-center gap-3">
@@ -252,15 +252,20 @@ export default function Hero() {
               Get in touch
             </a>
           </motion.div>
-          <motion.div
-            variants={fadeUp}
-            className="absolute bottom-0 left-0 right-0 flex justify-center pb-8 pointer-events-none"
-          >
-            <p className="text-sm font-bold tracking-wide" style={{ color: "#f5f5f7" }}>
-              🚧 Marketing @ SiteMarker &nbsp;|&nbsp; 📍 Charleston, South Carolina
-            </p>
-          </motion.div>
         </motion.div>
+      </motion.div>
+
+      {/* Hero footer line — pinned to bottom of section */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={introDone ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
+        className="absolute bottom-0 left-0 right-0 flex justify-center pb-8 pointer-events-none"
+        style={{ zIndex: 22 }}
+      >
+        <p className="text-sm font-bold tracking-wide" style={{ color: "#f5f5f7" }}>
+          🚧 Marketing @ SiteMarker &nbsp;|&nbsp; 📍 Charleston, South Carolina
+        </p>
       </motion.div>
 
       {/* Bottom fade */}
