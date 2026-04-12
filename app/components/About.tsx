@@ -63,13 +63,14 @@ export default function About() {
         </div>
 
         {/* Bio block */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 mb-12">
-          <div className="lg:col-span-7">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-16 lg:gap-x-24 gap-y-8 lg:gap-y-0 mb-12">
+          {/* Headline */}
+          <div className="order-1 lg:col-start-1 lg:col-span-7 lg:row-start-1">
             <motion.h2
               initial={{ opacity: 0, y: 28 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-              className="font-bold tracking-tight leading-tight mb-10"
+              className="font-bold tracking-tight leading-tight mb-0 lg:mb-10"
               style={{ fontSize: "clamp(2rem, 4.5vw, 3.5rem)", color: "#f5f5f7" }}
             >
               A{" "}
@@ -87,7 +88,37 @@ export default function About() {
                 strategic
               </span>{" "}mind.
             </motion.h2>
+          </div>
 
+          {/* Portrait placeholder — order-2 on mobile, right column spanning both rows on desktop */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
+            className="order-2 lg:col-start-8 lg:col-span-5 lg:row-start-1 lg:row-span-2"
+          >
+            <div
+              className="w-full aspect-[3/4] rounded-3xl overflow-hidden relative"
+              style={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.05)" }}
+            >
+              <div
+                className="absolute inset-0 opacity-25"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+                  backgroundSize: "180px 180px",
+                }}
+              />
+              <div
+                className="absolute inset-0 flex items-center justify-center text-sm"
+                style={{ color: "#f5f5f7" }}
+              >
+                Portrait photo
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Bio + pills + stats */}
+          <div className="order-3 lg:col-start-1 lg:col-span-7 lg:row-start-2">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -135,13 +166,13 @@ export default function About() {
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="flex gap-10 mt-12 pt-10"
-              style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+              className="flex gap-4 sm:gap-10 mt-12 pt-10"
+              style={{ borderTop: "1px solid rgba(255,255,255,0.18)" }}
             >
               {stats.map(stat => (
                 <div key={stat.label}>
                   <div
-                    className="text-4xl font-bold tracking-tight"
+                    className="text-2xl sm:text-4xl font-bold tracking-tight"
                     style={{ color: "#f5f5f7" }}
                   >
                     {stat.value}
@@ -153,33 +184,6 @@ export default function About() {
               ))}
             </motion.div>
           </div>
-
-          {/* Portrait placeholder */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
-            className="lg:col-span-5"
-          >
-            <div
-              className="w-full aspect-[3/4] rounded-3xl overflow-hidden relative"
-              style={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.05)" }}
-            >
-              <div
-                className="absolute inset-0 opacity-25"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-                  backgroundSize: "180px 180px",
-                }}
-              />
-              <div
-                className="absolute inset-0 flex items-center justify-center text-sm"
-                style={{ color: "#f5f5f7" }}
-              >
-                Portrait photo
-              </div>
-            </div>
-          </motion.div>
         </div>
 
         {/* Learn More button */}
