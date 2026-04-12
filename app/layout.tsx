@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "Chirayu Arya — Designer, Marketer & Photographer",
   description:
     "Portfolio of Chirayu Arya. Designer, marketer, and photographer crafting visual stories and brand experiences.",
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
     title: "Chirayu Arya",
     description: "Designer, Marketer & Photographer",
