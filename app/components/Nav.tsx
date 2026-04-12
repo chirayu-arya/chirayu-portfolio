@@ -126,7 +126,7 @@ export default function Nav() {
             onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
             onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
           >
-            About Me
+            About
           </a>
 
           {/* Work dropdown */}
