@@ -142,7 +142,7 @@ export default function Hero() {
         animate={{ opacity: introDone ? 1 : 0 }}
         transition={{ duration: 1.0, ease: "easeInOut" }}
         style={{ y, zIndex: 10 }}
-        className="relative flex flex-col items-center text-center px-6 pt-28 pb-24"
+        className="relative flex flex-col items-center text-center px-6 pt-20 sm:pt-28 pb-24"
       >
         <motion.div
           variants={container}
@@ -157,8 +157,8 @@ export default function Hero() {
             style={{
               display: "inline-block",
               cursor: "none",
-              height: "clamp(8rem, 18vw, 16rem)",
-              width: "clamp(8rem, 18vw, 16rem)",
+              height: isMobile ? "11rem" : "clamp(8rem, 18vw, 16rem)",
+              width: isMobile ? "11rem" : "clamp(8rem, 18vw, 16rem)",
               filter: "drop-shadow(0 4px 32px rgba(0,0,0,0.5))",
             }}
             onMouseEnter={() => setHeadlineHovered(true)}
@@ -252,8 +252,8 @@ export default function Hero() {
                   <div
                     className="flex items-center justify-center rounded-full"
                     style={{
-                      width: "5rem",
-                      height: "5rem",
+                      width: "clamp(3.6rem, 8vw, 5rem)",
+                      height: "clamp(3.6rem, 8vw, 5rem)",
                       background: "rgba(255,255,255,0.1)",
                       border: "1px solid rgba(255,255,255,0.18)",
                       backdropFilter: "blur(24px)",
@@ -264,7 +264,7 @@ export default function Hero() {
                     <motion.span
                       animate={{ rotate: [0, 25, -10, 25, 0] }}
                       transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
-                      style={{ fontSize: "2rem", display: "flex", alignItems: "center", justifyContent: "center", transformOrigin: "70% 70%", lineHeight: 1 }}
+                      style={{ fontSize: "clamp(1.5rem, 3.5vw, 2rem)", display: "flex", alignItems: "center", justifyContent: "center", transformOrigin: "70% 70%", lineHeight: 1 }}
                     >
                       👋
                     </motion.span>

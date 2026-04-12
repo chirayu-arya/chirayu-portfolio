@@ -34,141 +34,229 @@ const dropdownGlassStyle = {
     "inset 0 0.5px 0 rgba(255,255,255,0.13), 0 20px 60px rgba(0,0,0,0.45), 0 4px 14px rgba(0,0,0,0.25)",
 };
 
+const LinkedInIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.65)" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+  </svg>
+);
+
+const WorkDropdownContent = ({ onClose }: { onClose?: () => void }) => (
+  <div className="flex gap-1">
+    <div className="flex flex-col min-w-[160px]">
+      {workCol1.map((item, i) => (
+        <motion.a
+          key={item.label}
+          href={item.href}
+          initial={{ opacity: 0, x: -6 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: i * 0.03, duration: 0.2 }}
+          className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
+          onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+          onClick={onClose}
+        >
+          {item.label}
+        </motion.a>
+      ))}
+    </div>
+    <div className="w-px self-stretch mx-1" style={{ background: "rgba(255,255,255,0.08)" }} />
+    <div className="flex flex-col min-w-[160px]">
+      {workCol2.map((item, i) => (
+        <motion.a
+          key={item.label}
+          href={item.href}
+          initial={{ opacity: 0, x: -6 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: i * 0.03 + 0.05, duration: 0.2 }}
+          className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
+          onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+          onClick={onClose}
+        >
+          {item.label}
+        </motion.a>
+      ))}
+    </div>
+  </div>
+);
+
 export default function Nav() {
   const [workOpen, setWorkOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="fixed top-5 inset-x-0 z-50 flex justify-center pointer-events-none px-4">
-      <motion.nav
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-        className="pointer-events-auto flex items-center gap-2.5 px-2 py-1.5 rounded-full"
-        style={glassStyle}
-      >
-        {/* Home */}
-        <a
-          href="/"
-          className="px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
-          onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+    <>
+      {/* ── Desktop nav (md+) ── */}
+      <div className="hidden md:flex fixed top-5 inset-x-0 z-50 justify-center pointer-events-none px-4">
+        <motion.nav
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+          className="pointer-events-auto flex items-center gap-2.5 px-2 py-1.5 rounded-full"
+          style={glassStyle}
         >
-          Home
-        </a>
-
-        {/* About Me */}
-        <a
-          href="/about"
-          className="px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
-          onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-        >
-          About Me
-        </a>
-
-        {/* Work dropdown */}
-        <div
-          className="relative"
-          onMouseEnter={() => setWorkOpen(true)}
-          onMouseLeave={() => setWorkOpen(false)}
-        >
-          <button
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
+          <a
+            href="/"
+            className="px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
             onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
             onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
           >
-            Work
-            <motion.svg
-              animate={{ rotate: workOpen ? 180 : 0 }}
-              transition={{ duration: 0.22, ease: "easeInOut" }}
-              width="11" height="11" viewBox="0 0 11 11" fill="none"
-              className="opacity-50"
+            Home
+          </a>
+
+          <a
+            href="/about"
+            className="px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+          >
+            About Me
+          </a>
+
+          {/* Work dropdown */}
+          <div className="relative" onMouseEnter={() => setWorkOpen(true)} onMouseLeave={() => setWorkOpen(false)}>
+            <button
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
             >
-              <path d="M2 3.5L5.5 7L9 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </motion.svg>
-          </button>
-
-          <AnimatePresence>
-            {workOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                className="absolute top-full left-0 mt-2 rounded-2xl p-2 overflow-hidden"
-                style={dropdownGlassStyle}
+              Work
+              <motion.svg
+                animate={{ rotate: workOpen ? 180 : 0 }}
+                transition={{ duration: 0.22, ease: "easeInOut" }}
+                width="11" height="11" viewBox="0 0 11 11" fill="none"
+                className="opacity-50"
               >
-                <div className="flex gap-1">
-                  {/* Column 1 */}
-                  <div className="flex flex-col min-w-[160px]">
-                    {workCol1.map((item, i) => (
-                      <motion.a
-                        key={item.label}
-                        href={item.href}
-                        initial={{ opacity: 0, x: -6 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.03, duration: 0.2 }}
-                        className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
-                        onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                      >
-                        {item.label}
-                      </motion.a>
-                    ))}
-                  </div>
+                <path d="M2 3.5L5.5 7L9 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </motion.svg>
+            </button>
 
-                  {/* Divider */}
-                  <div className="w-px self-stretch mx-1" style={{ background: "rgba(255,255,255,0.08)" }} />
+            <AnimatePresence>
+              {workOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                  className="absolute top-full left-0 mt-2 rounded-2xl p-2 overflow-hidden"
+                  style={dropdownGlassStyle}
+                >
+                  <WorkDropdownContent />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-                  {/* Column 2 */}
-                  <div className="flex flex-col min-w-[160px]">
-                    {workCol2.map((item, i) => (
-                      <motion.a
-                        key={item.label}
-                        href={item.href}
-                        initial={{ opacity: 0, x: -6 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.03 + 0.05, duration: 0.2 }}
-                        className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
-                        onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                      >
-                        {item.label}
-                      </motion.a>
-                    ))}
-                  </div>
-                </div>
+          <div className="w-px h-4 mx-1" style={{ background: "rgba(255,255,255,0.1)" }} />
+
+          <a
+            href="https://www.linkedin.com/in/chirayuarya/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center w-9 h-9 rounded-full cursor-pointer transition-colors duration-200"
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+          >
+            <LinkedInIcon />
+          </a>
+
+          <a
+            href="#contact"
+            className="px-5 py-2 rounded-full text-sm font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
+            style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
+          >
+            Get In Touch
+          </a>
+        </motion.nav>
+      </div>
+
+      {/* ── Mobile nav (< md) ── */}
+      <div className="md:hidden fixed top-5 inset-x-0 z-50 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+          className="flex items-center justify-between px-3 py-1.5 rounded-full"
+          style={glassStyle}
+        >
+          {/* Left: Home + About */}
+          <div className="flex items-center gap-1">
+            <a
+              href="/"
+              className="px-3 py-2 rounded-full text-sm font-medium text-white/65 cursor-pointer"
+              onTouchStart={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+              onTouchEnd={e => (e.currentTarget.style.background = "transparent")}
+            >
+              Home
+            </a>
+            <a
+              href="/about"
+              className="px-3 py-2 rounded-full text-sm font-medium text-white/65 cursor-pointer"
+              onTouchStart={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+              onTouchEnd={e => (e.currentTarget.style.background = "transparent")}
+            >
+              About
+            </a>
+          </div>
+
+          {/* Right: LinkedIn + Hamburger */}
+          <div className="flex items-center gap-1">
+            <a
+              href="https://www.linkedin.com/in/chirayuarya/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-9 h-9 rounded-full cursor-pointer"
+              onTouchStart={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+              onTouchEnd={e => (e.currentTarget.style.background = "transparent")}
+            >
+              <LinkedInIcon />
+            </a>
+
+            <button
+              className="flex items-center justify-center w-9 h-9 rounded-full cursor-pointer text-white/65"
+              style={{ background: menuOpen ? "rgba(255,255,255,0.07)" : "transparent" }}
+              onClick={() => setMenuOpen(o => !o)}
+            >
+              <motion.div
+                animate={menuOpen ? "open" : "closed"}
+                className="flex flex-col gap-[5px] items-center justify-center w-4"
+              >
+                <motion.span
+                  variants={{ open: { rotate: 45, y: 7 }, closed: { rotate: 0, y: 0 } }}
+                  transition={{ duration: 0.22 }}
+                  className="block h-px w-4 bg-white/65 rounded-full"
+                />
+                <motion.span
+                  variants={{ open: { opacity: 0 }, closed: { opacity: 1 } }}
+                  transition={{ duration: 0.22 }}
+                  className="block h-px w-4 bg-white/65 rounded-full"
+                />
+                <motion.span
+                  variants={{ open: { rotate: -45, y: -7 }, closed: { rotate: 0, y: 0 } }}
+                  transition={{ duration: 0.22 }}
+                  className="block h-px w-4 bg-white/65 rounded-full"
+                />
               </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+            </button>
+          </div>
+        </motion.div>
 
-        {/* Separator */}
-        <div className="w-px h-4 mx-1" style={{ background: "rgba(255,255,255,0.1)" }} />
-
-        {/* LinkedIn */}
-        <a
-          href="https://www.linkedin.com/in/chirayuarya/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center w-9 h-9 rounded-full cursor-pointer transition-colors duration-200"
-          onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.65)" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-          </svg>
-        </a>
-
-        {/* Get in touch */}
-        <a
-          href="#contact"
-          className="px-5 py-2 rounded-full text-sm font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
-          style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
-        >
-          Get In Touch
-        </a>
-      </motion.nav>
-    </div>
+        {/* Hamburger dropdown */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 8, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.96 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+              className="mt-2 rounded-2xl p-2"
+              style={dropdownGlassStyle}
+            >
+              <WorkDropdownContent onClose={() => setMenuOpen(false)} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </>
   );
 }
