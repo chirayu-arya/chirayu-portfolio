@@ -3,10 +3,39 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
+const techStack = [
+  {
+    category: "Design",
+    tools: [
+      { name: "Figma", color: "#F24E1E" },
+      { name: "Photoshop", color: "#31A8FF" },
+      { name: "Illustrator", color: "#FF9A00" },
+      { name: "Spline", color: "#7C6EFA" },
+      { name: "Blender", color: "#E87D0D" },
+    ],
+  },
+  {
+    category: "Video & Motion",
+    tools: [
+      { name: "Final Cut Pro", color: "#d4d4d4" },
+      { name: "Premiere Pro", color: "#9999FF" },
+      { name: "After Effects", color: "#9999FF" },
+    ],
+  },
+  {
+    category: "AI",
+    tools: [
+      { name: "Claude", color: "#D4A574" },
+      { name: "ChatGPT", color: "#74AA9C" },
+    ],
+  },
+];
+
 const stats = [
-  { value: "5+", label: "Years" },
-  { value: "40+", label: "Projects" },
-  { value: "3", label: "Disciplines" },
+  { value: "4+", label: "Years" },
+  { value: "3M+", label: "Community" },
+  { value: "5M+", label: "Monthly Reach" },
+  { value: "$1.7M", label: "Sales Pipeline" },
 ];
 
 export default function About() {
@@ -43,9 +72,20 @@ export default function About() {
               className="font-bold tracking-tight leading-tight mb-10"
               style={{ fontSize: "clamp(2rem, 4.5vw, 3.5rem)", color: "#f5f5f7" }}
             >
-              A creative with
+              A{" "}
+              <span className="glow-bluepurple">creative</span>{" "}with
               <br />
-              <span style={{ color: "#f5f5f7" }}>a strategic mind.</span>
+              a{" "}
+              <span
+                style={{
+                  color: "#f5f5f7",
+                  textDecoration: "underline wavy rgba(52,211,153,0.9)",
+                  textDecorationThickness: "2px",
+                  textUnderlineOffset: "10px",
+                }}
+              >
+                strategic
+              </span>{" "}mind.
             </motion.h2>
 
             <motion.div
@@ -56,17 +96,38 @@ export default function About() {
               style={{ color: "#f5f5f7" }}
             >
               <p>
-                I sit at the intersection of design, marketing, and photography.
-                That means I don't just make things look good. I make them work.
+                I like designing things that create an impact and people actually pay attention to, and figuring out how to grow them. Over the last few years, I&apos;ve worked across industries in startups, built communities, grew newsletters, curated podcasts, and designed campaigns that reached millions.
               </p>
-              <p>
-                Whether it's building a brand from scratch, directing a campaign, or finding
-                the perfect frame, my work is driven by curiosity and a deep respect for craft.
-              </p>
-              <p>
-                I've worked with startups, agencies, and independent creators to bring ideas
-                to life across every medium. Let's make something worth looking at.
-              </p>
+            </motion.div>
+
+            {/* Tech stack pills */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.25 }}
+              className="mt-8 flex flex-col gap-4"
+            >
+              {techStack.map((group) => (
+                <div key={group.category} className="flex flex-wrap gap-2">
+                  {group.tools.map((tool) => (
+                    <span
+                      key={tool.name}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
+                      style={{
+                        background: "rgba(255,255,255,0.06)",
+                        border: "1px solid rgba(255,255,255,0.08)",
+                        color: "#f5f5f7",
+                      }}
+                    >
+                      <span
+                        className="inline-block rounded-full flex-shrink-0"
+                        style={{ width: 7, height: 7, background: tool.color }}
+                      />
+                      {tool.name}
+                    </span>
+                  ))}
+                </div>
+              ))}
             </motion.div>
 
             {/* Stats */}
