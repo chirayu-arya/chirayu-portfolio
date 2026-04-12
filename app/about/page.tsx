@@ -144,10 +144,10 @@ export default function AboutPage() {
         </div>
 
         <div className="relative max-w-6xl mx-auto" style={{ zIndex: 1 }}>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-16 lg:gap-x-20 gap-y-8 lg:gap-y-0 items-start">
 
-            {/* Left: text + pills */}
-            <div className="lg:col-span-7">
+            {/* Label + headline + bio — order 1 on mobile, top-left on desktop */}
+            <div className="order-1 lg:col-start-1 lg:col-span-7 lg:row-start-1">
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -173,12 +173,34 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
-                className="text-base leading-relaxed mb-10"
+                className="text-base leading-relaxed"
                 style={{ color: "#a1a1a6", maxWidth: "52ch" }}
               >
                 Placeholder bio. Tell your story here. Where you grew up, what drives you, what makes you tick. Keep it real, keep it human. This is the place where people decide if they like you.
               </motion.p>
+            </div>
 
+            {/* Portrait — order 2 on mobile (after bio), right column spanning both rows on desktop */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
+              className="order-2 lg:col-start-8 lg:col-span-5 lg:row-start-1 lg:row-span-2"
+            >
+              <div
+                className="w-full aspect-[3/4] rounded-3xl overflow-hidden relative"
+                style={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.05)" }}
+              >
+                <img
+                  src="/Chirayu Full.png"
+                  alt="Chirayu Arya"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </div>
+            </motion.div>
+
+            {/* Currently chips + interests — order 3 on mobile, bottom-left on desktop */}
+            <div className="order-3 lg:col-start-1 lg:col-span-7 lg:row-start-2">
               {/* Currently chips */}
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
@@ -237,33 +259,6 @@ export default function AboutPage() {
                 ))}
               </div>
             </div>
-
-            {/* Right: portrait */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
-              className="lg:col-span-5"
-            >
-              <div
-                className="w-full aspect-[3/4] rounded-3xl overflow-hidden relative"
-                style={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.05)" }}
-              >
-                <div
-                  className="absolute inset-0 opacity-25"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-                    backgroundSize: "180px 180px",
-                  }}
-                />
-                <div
-                  className="absolute inset-0 flex items-center justify-center text-sm"
-                  style={{ color: "#515154" }}
-                >
-                  Portrait photo
-                </div>
-              </div>
-            </motion.div>
 
           </div>
         </div>
