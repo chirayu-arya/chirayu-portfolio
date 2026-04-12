@@ -263,8 +263,12 @@ export default function Hero() {
         className="absolute bottom-0 left-0 right-0 flex justify-center pb-8 pointer-events-none"
         style={{ zIndex: 22 }}
       >
-        <p className="text-sm font-bold tracking-wide" style={{ color: "#f5f5f7" }}>
-          🚧 Marketing @ SiteMarker &nbsp;|&nbsp; 📍 Charleston, South Carolina
+        <p className="text-base font-bold tracking-wide" style={{ color: "#f5f5f7" }}>
+          <span className="hidden sm:inline">🚧 Marketing @ SiteMarker &nbsp;|&nbsp; 📍 Charleston, South Carolina</span>
+            <span className="sm:hidden flex flex-col items-center gap-1">
+              <span>🚧 Marketing @ SiteMarker</span>
+              <span>📍 Charleston, South Carolina</span>
+            </span>
         </p>
       </motion.div>
 
