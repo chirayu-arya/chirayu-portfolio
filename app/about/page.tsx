@@ -1,6 +1,7 @@
 "use client";
 
 import Nav from "../components/Nav";
+import Contact from "../components/Contact";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
@@ -97,16 +98,34 @@ const experience = [
 
 const education = [
   {
-    degree: "Degree Placeholder",
-    school: "University Name",
-    dates: "2019 - 2023",
-    description: "Placeholder: Brief description of your program, focus areas, and what you gained from this education.",
+    degree: "Master's in Management Studies (MMS)",
+    school: "Duke University, The Fuqua School of Business",
+    dates: "July 2022 - May 2023  |  Durham, USA",
+    description: "Spent the year building a strong foundation in business while working on hands-on projects across marketing, product, and emerging tech, with a focus on how ideas translate into real-world execution.",
   },
   {
-    degree: "Degree Placeholder",
-    school: "University Name",
-    dates: "2017 - 2019",
-    description: "Placeholder: Brief description of your program, focus areas, and what you gained from this education.",
+    degree: "CORe (Credential of Readiness)",
+    school: "Harvard Business School",
+    dates: "June 2021 - September 2021  |  Online",
+    description: "Completed an intensive program covering business analytics, economics, and financial accounting, helping me understand how businesses operate from the ground up.",
+  },
+  {
+    degree: "B.A. (Hons) Business Economics",
+    school: "University of Delhi",
+    dates: "2018 - 2021  |  Delhi, India",
+    description: "Studied economics with a focus on markets, behavior, and decision-making, which shaped how I approach growth and strategy today.",
+  },
+  {
+    degree: "Higher Secondary Education",
+    school: "The Heritage School, New Delhi",
+    dates: "2004 - 2018  |  New Delhi, India",
+    description: "Built my early foundation in commerce and developed an interest in business, economics, and problem-solving.",
+  },
+  {
+    degree: "Global Summer Program, International Economics",
+    school: "National University of Singapore",
+    dates: "June 2017 - July 2017  |  Singapore",
+    description: "Gained early exposure to global markets and international economics through an immersive summer program.",
   },
 ];
 
@@ -392,6 +411,8 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <Contact />
 
     </main>
   );

@@ -5,9 +5,8 @@ import { useRef } from "react";
 
 const socials = [
   { label: "Instagram", href: "#" },
-  { label: "LinkedIn", href: "#" },
-  { label: "Behance", href: "#" },
-  { label: "Twitter / X", href: "#" },
+  { label: "Medium", href: "#" },
+  { label: "X", href: "#" },
 ];
 
 export default function Contact() {
