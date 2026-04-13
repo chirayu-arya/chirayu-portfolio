@@ -3,15 +3,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
-const workCol1 = [
+const workItems = [
   { label: "Branding & Marketing", href: "#brand-marketing" },
   { label: "UI & UX", href: "#ui-ux" },
-  { label: "Photography", href: "#photography" },
-];
-
-const workCol2 = [
-  { label: "Illustrations", href: "#illustrations" },
-  { label: "Virtual Photography", href: "#virtual-photography" },
+  { label: "Visual Arts", href: "/gallery" },
 ];
 
 const glassStyle = {
@@ -41,58 +36,35 @@ const LinkedInIcon = () => (
 );
 
 const WorkDropdownContent = ({ onClose, showGetInTouch }: { onClose?: () => void; showGetInTouch?: boolean }) => (
-  <div className="flex flex-col gap-1">
-    <div className="flex gap-1">
-      <div className="flex flex-col min-w-[160px]">
-        {workCol1.map((item, i) => (
-          <motion.a
-            key={item.label}
-            href={item.href}
-            initial={{ opacity: 0, x: -6 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.03, duration: 0.2 }}
-            className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-            onClick={onClose}
-          >
-            {item.label}
-          </motion.a>
-        ))}
-      </div>
-      <div className="w-px self-stretch mx-1" style={{ background: "rgba(255,255,255,0.08)" }} />
-      <div className="flex flex-col min-w-[160px]">
-        {workCol2.map((item, i) => (
-          <motion.a
-            key={item.label}
-            href={item.href}
-            initial={{ opacity: 0, x: -6 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.03 + 0.05, duration: 0.2 }}
-            className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-            onClick={onClose}
-          >
-            {item.label}
-          </motion.a>
-        ))}
-        {showGetInTouch && (
-          <motion.a
-            href="#contact"
-            initial={{ opacity: 0, x: -6 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.12, duration: 0.2 }}
-            className="inline-block px-4 py-2 rounded-full text-sm font-semibold cursor-pointer whitespace-nowrap mx-2 my-0.5"
-            style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
-            onClick={onClose}
-          >
-            Get In Touch
-          </motion.a>
-        )}
-      </div>
-    </div>
-
+  <div className="flex flex-col min-w-[180px]">
+    {workItems.map((item, i) => (
+      <motion.a
+        key={item.label}
+        href={item.href}
+        initial={{ opacity: 0, x: -6 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: i * 0.03, duration: 0.2 }}
+        className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
+        onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+        onClick={onClose}
+      >
+        {item.label}
+      </motion.a>
+    ))}
+    {showGetInTouch && (
+      <motion.a
+        href="#contact"
+        initial={{ opacity: 0, x: -6 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.12, duration: 0.2 }}
+        className="inline-block px-4 py-2 rounded-full text-sm font-semibold cursor-pointer whitespace-nowrap mx-2 my-0.5 mt-1"
+        style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
+        onClick={onClose}
+      >
+        Get In Touch
+      </motion.a>
+    )}
   </div>
 );
 
@@ -127,6 +99,15 @@ export default function Nav() {
             onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
           >
             About
+          </a>
+
+          <a
+            href="/gallery"
+            className="px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+          >
+            Gallery
           </a>
 
           {/* Work dropdown */}
@@ -212,6 +193,14 @@ export default function Nav() {
               onTouchEnd={e => (e.currentTarget.style.background = "transparent")}
             >
               About
+            </a>
+            <a
+              href="/gallery"
+              className="px-3 py-2 rounded-full text-sm font-medium text-white/65 cursor-pointer"
+              onTouchStart={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+              onTouchEnd={e => (e.currentTarget.style.background = "transparent")}
+            >
+              Gallery
             </a>
           </div>
 
