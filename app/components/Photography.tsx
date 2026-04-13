@@ -261,7 +261,7 @@ export default function Photography() {
         style={{ zIndex: 1 }}
       >
         <a
-          href="/exhibition"
+          href="/gallery"
           className="inline-flex items-center gap-2 px-8 py-3 rounded-full text-sm font-semibold cursor-pointer"
           style={{
             background: "#f5f5f7",
@@ -277,7 +277,7 @@ export default function Photography() {
             <rect x="3" y="14" width="7" height="7" rx="1" />
             <rect x="14" y="14" width="7" height="7" rx="1" />
           </svg>
-          Exhibition Mode
+          Gallery Mode
         </a>
       </motion.div>
     </section>
