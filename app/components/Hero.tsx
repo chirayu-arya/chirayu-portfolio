@@ -215,6 +215,40 @@ export default function Hero() {
                   : undefined,
               }}
             />
+
+            {/* Wave bubble — mobile only, diagonally above top-right of memoji */}
+            <AnimatePresence>
+              {headlineHovered && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.7 }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute pointer-events-none sm:hidden"
+                  style={{ top: "-1rem", right: "-1rem" }}
+                >
+                  <div
+                    className="flex items-center justify-center rounded-full w-10 h-10"
+                    style={{
+                      background: "rgba(255,255,255,0.1)",
+                      border: "1px solid rgba(255,255,255,0.18)",
+                      backdropFilter: "blur(24px)",
+                      WebkitBackdropFilter: "blur(24px)",
+                      boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
+                    }}
+                  >
+                    <motion.span
+                      animate={{ rotate: [0, 25, -10, 25, 0] }}
+                      transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
+                      className="text-lg"
+                      style={{ display: "flex", alignItems: "center", justifyContent: "center", transformOrigin: "70% 70%", lineHeight: 1 }}
+                    >
+                      👋
+                    </motion.span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
 
           {/* Headline — bubble appears top-right on hover of image or headline */}
@@ -246,7 +280,7 @@ export default function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute pointer-events-none"
+                  className="absolute pointer-events-none hidden sm:block"
                   style={{ bottom: "calc(100% - 20px)", right: "-2.5rem" }}
                 >
                   <div
