@@ -250,10 +250,8 @@ export default function Hero() {
                   style={{ bottom: "calc(100% - 20px)", right: "-2.5rem" }}
                 >
                   <div
-                    className="flex items-center justify-center rounded-full"
+                    className="flex items-center justify-center rounded-full w-10 h-10 sm:w-[clamp(3.6rem,8vw,5rem)] sm:h-[clamp(3.6rem,8vw,5rem)]"
                     style={{
-                      width: "clamp(3.6rem, 8vw, 5rem)",
-                      height: "clamp(3.6rem, 8vw, 5rem)",
                       background: "rgba(255,255,255,0.1)",
                       border: "1px solid rgba(255,255,255,0.18)",
                       backdropFilter: "blur(24px)",
@@ -264,7 +262,8 @@ export default function Hero() {
                     <motion.span
                       animate={{ rotate: [0, 25, -10, 25, 0] }}
                       transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
-                      style={{ fontSize: "clamp(1.5rem, 3.5vw, 2rem)", display: "flex", alignItems: "center", justifyContent: "center", transformOrigin: "70% 70%", lineHeight: 1 }}
+                      className="text-lg sm:text-[clamp(1.5rem,3.5vw,2rem)]"
+                      style={{ display: "flex", alignItems: "center", justifyContent: "center", transformOrigin: "70% 70%", lineHeight: 1 }}
                     >
                       👋
                     </motion.span>
