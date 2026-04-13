@@ -44,40 +44,62 @@ Sections in order:
 2. Marquee — infinite scrolling logo strip (placeholders, user to supply real logos)
 3. Experience — 2-col grid, `borderBottom` dividers between rows, no divider above first entries
 4. Education — same pattern as Experience
+5. Contact footer
 
 Mobile order on /about hero: label+headline+bio → portrait → currently chips+interests pills
+
+### `/gallery` (app/gallery/page.tsx)
+- Headline: "Take a deep dive!" (centered, bold, clamp font size)
+- Centered Photography | Illustrations segmented toggle with animated sliding pill
+- 30 photography cards, 18 illustration cards (placeholder)
+- True double-sided card flip on toggle: each card has front (photo) and back (illustration), rotates 0deg to 180deg with diagonal stagger (top-left to bottom-right, `delay = (row + col) * 0.055s`)
+- Cards: 4:3 aspect ratio, noise texture, hover lift + glow + gradient + text overlay, custom "View" cursor pill
+- Lightbox modal on card click
+- Colourful background blobs (purple, pink, blue, teal, amber)
+- Contact footer at bottom
 
 ## Components
 
 ### Nav (app/components/Nav.tsx)
-- Desktop: floating glass pill, centered, fixed top. Links: Home, About, Work (dropdown), LinkedIn, Get In Touch
-- Mobile: glass bar with Home, About left; LinkedIn + hamburger right
-- Work dropdown: 2 columns (Branding & Marketing, UI & UX, Photography | Illustrations, Virtual Photography)
+- Desktop: floating glass pill, centered, fixed top. Links: Home, About, Gallery, Work (dropdown), LinkedIn, Get In Touch
+- Mobile: glass bar with Home, About, Gallery left; LinkedIn + hamburger right
+- Work dropdown: single column — Branding & Marketing, UI & UX, Visual Arts (→ /gallery)
 - "Get In Touch" CTA in mobile hamburger dropdown
 - Nav label is "About" (not "About Me")
 
 ### Hero (app/components/Hero.tsx)
 - Full-screen, Spline 3D background fades to 20% opacity after load (fallback: 4.5s)
 - Gradient blobs: purple, blue, pink, teal
-- Memoji (Memoji 3.png) with cursor reveal effect (hover/touch reveals Chirayu Reveal.png underneath)
-- Wave bubble on headline hover
-- Footer line: role + location
+- Memoji (Memoji 3.png) with cursor/touch reveal effect (reveals Chirayu Reveal.png underneath via radial mask)
+- Wave bubble (👋) on hover/touch:
+  - Desktop: appears top-right of headline (`bottom: calc(100% - 20px), right: -2.5rem`), size via clamp
+  - Mobile: appears diagonally above top-right of Memoji (`top: -1rem, right: -1rem`), `w-10 h-10`
+- Footer line: role + location (two-line on mobile)
 
 ### About (app/components/About.tsx)
 - Section on home page, links to /about via "Learn More" button
-- 3-part CSS grid on desktop: headline (col 1-7 row 1) | portrait (col 8-12 row 1-2) | bio+pills+stats (col 1-7 row 2)
-- Mobile order: headline → portrait → bio+pills+stats
-- Portrait: `Chirayu Full.png`, `object-cover`, rounded-3xl
-- Tech stack pills: Design (Figma, Photoshop, Illustrator, Spline, Blender), Video & Motion (Final Cut Pro, Premiere Pro, After Effects), AI (Claude, ChatGPT)
-- Stats: 4+ Years, 3M+ Community, 5M+ Monthly Reach, $1.7M Sales Pipeline
-- Stats: `text-2xl sm:text-4xl`, gap `gap-4 sm:gap-10`, divider `rgba(255,255,255,0.18)`
+- Desktop layout: 12-col grid
+  - Row 1: headline (col 1-7) | portrait (col 8-12, row-span-2)
+  - Row 2: bio + pills (col 1-7, `self-end` — bottom-aligned to portrait footer)
+  - Below grid (full width, centered): stats row with divider above
+- Mobile: headline → portrait → bio+pills → stats (all centered)
+- Portrait: `Chirayu Full.png`, `aspect-[3/4]`, `rounded-3xl`
+- Tech stack pills:
+  - Desktop: grouped by category in separate rows
+  - Mobile: all pills flat in one continuous centered wrap (no category separation)
+  - Categories: Design (Figma, Photoshop, Illustrator, Spline, Blender), Video & Motion (Final Cut Pro, Premiere Pro, After Effects), Analytics (Power BI, Tableau), AI (Claude, ChatGPT, Gemini), CRM (HubSpot, Apollo.io, Salesforce)
+- Stats (full-width, centered, each stat text-center): 4+ Years, 3M+ Community, 5M+ Impressions, $1.7M Sales Pipeline
+- Stats use `justify-center gap-8 sm:gap-16`, divider `rgba(255,255,255,0.18)` above
+
+### Photography (app/components/Photography.tsx)
+- Polaroid scatter section on home page
+- "Gallery Mode" button links to `/gallery`
 
 ## Content Placeholders (still needed from user)
 - `/about` hero: personal bio paragraph
 - `/about` hero: "Listening to" chip content
 - `/about` marquee: real company/brand logos
-- `/about` experience: all 4 role entries (role, company, dates, description)
-- `/about` education: both degree entries (degree, school, dates, description)
+- K. Hovnanian Homes testimonial: placeholder quotes (from SiteMarker project, unrelated)
 
 ## Git
 - Branch: `main` (production)
