@@ -257,18 +257,16 @@ export default function GalleryPage() {
         </div>
 
         {/* Page header */}
-        <section className="pt-36 pb-10 px-8">
-          <div className="max-w-6xl mx-auto">
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              className="text-xs tracking-[0.22em] uppercase font-medium"
-              style={{ color: "#86868b" }}
-            >
-              Gallery
-            </motion.p>
-          </div>
+        <section className="pt-36 pb-10 px-8 text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+            className="font-bold tracking-tight"
+            style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", color: "#f5f5f7" }}
+          >
+            Take a deep dive!
+          </motion.h1>
         </section>
 
         {/* Toggle */}
