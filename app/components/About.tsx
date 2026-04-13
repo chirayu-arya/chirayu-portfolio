@@ -23,10 +23,26 @@ const techStack = [
     ],
   },
   {
+    category: "Analytics",
+    tools: [
+      { name: "Power BI", color: "#F2C811" },
+      { name: "Tableau", color: "#E97627" },
+    ],
+  },
+  {
     category: "AI",
     tools: [
       { name: "Claude", color: "#D4A574" },
       { name: "ChatGPT", color: "#74AA9C" },
+      { name: "Gemini", color: "#8AB4F8" },
+    ],
+  },
+  {
+    category: "CRM",
+    tools: [
+      { name: "HubSpot", color: "#FF7A59" },
+      { name: "Apollo.io", color: "#6C63FF" },
+      { name: "Salesforce", color: "#00A1E0" },
     ],
   },
 ];
@@ -34,7 +50,7 @@ const techStack = [
 const stats = [
   { value: "4+", label: "Years" },
   { value: "3M+", label: "Community" },
-  { value: "5M+", label: "Monthly Reach" },
+  { value: "5M+", label: "Impressions" },
   { value: "$1.7M", label: "Sales Pipeline" },
 ];
 
@@ -63,7 +79,7 @@ export default function About() {
         </div>
 
         {/* Bio block */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-16 lg:gap-x-24 gap-y-8 lg:gap-y-0 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-16 lg:gap-x-24 gap-y-8 lg:gap-y-0 mb-0">
           {/* Headline */}
           <div className="order-1 lg:col-start-1 lg:col-span-7 lg:row-start-1">
             <motion.h2
@@ -109,8 +125,8 @@ export default function About() {
             </div>
           </motion.div>
 
-          {/* Bio + pills + stats */}
-          <div className="order-3 lg:col-start-1 lg:col-span-7 lg:row-start-2">
+          {/* Bio + pills */}
+          <div className="order-3 lg:col-start-1 lg:col-span-7 lg:row-start-2 flex flex-col lg:self-end">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -128,10 +144,10 @@ export default function About() {
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.25 }}
-              className="mt-8 flex flex-col gap-4"
+              className="mt-8 flex flex-col items-center lg:items-start gap-4"
             >
               {techStack.map((group) => (
-                <div key={group.category} className="flex flex-wrap gap-2">
+                <div key={group.category} className="flex flex-wrap justify-center lg:justify-start gap-2">
                   {group.tools.map((tool) => (
                     <span
                       key={tool.name}
@@ -152,31 +168,31 @@ export default function About() {
                 </div>
               ))}
             </motion.div>
-
-            {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="flex gap-4 sm:gap-10 mt-12 pt-10"
-              style={{ borderTop: "1px solid rgba(255,255,255,0.18)" }}
-            >
-              {stats.map(stat => (
-                <div key={stat.label}>
-                  <div
-                    className="text-2xl sm:text-4xl font-bold tracking-tight"
-                    style={{ color: "#f5f5f7" }}
-                  >
-                    {stat.value}
-                  </div>
-                  <div className="text-xs mt-1" style={{ color: "#f5f5f7" }}>
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </motion.div>
           </div>
         </div>
+
+        {/* Stats — full width, centered below the two-column block */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.35 }}
+          className="flex justify-center gap-8 sm:gap-16 mt-12 pt-10 mb-12"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.18)" }}
+        >
+          {stats.map(stat => (
+            <div key={stat.label} className="flex flex-col items-center text-center">
+              <div
+                className="text-2xl sm:text-4xl font-bold tracking-tight"
+                style={{ color: "#f5f5f7" }}
+              >
+                {stat.value}
+              </div>
+              <div className="text-xs mt-1" style={{ color: "#86868b" }}>
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </motion.div>
 
         {/* Learn More button */}
         <motion.div
