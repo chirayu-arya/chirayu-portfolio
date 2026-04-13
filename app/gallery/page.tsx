@@ -3,7 +3,7 @@
 import Nav from "../components/Nav";
 import Contact from "../components/Contact";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 type Tab = "photography" | "illustrations";
 
@@ -35,56 +35,179 @@ const ILLUSTRATIONS: Photo[] = Array.from({ length: 18 }, (_, i) => ({
 }));
 
 const COLS = 3;
+// Always 30 slots — photography fills all, illustrations fills first 18 (rest are blank backs)
+const MAX_SLOTS = PHOTOGRAPHY.length;
+
 const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
-// Diagonal stagger: top-left to bottom-right
 function getDiagDelay(i: number): number {
   return (Math.floor(i / COLS) + (i % COLS)) * 0.055;
 }
 
-type FlipPhase = "idle" | "folding" | "unfolding";
+// Card face content — driven by hovered state passed from parent
+function CardFace({
+  photo,
+  hovered,
+}: {
+  photo: Photo | null;
+  hovered: boolean;
+}) {
+  return (
+    <div
+      className="absolute inset-0 overflow-hidden rounded-2xl"
+      style={{
+        background: "#0a0a0a",
+        border: "1px solid rgba(255,255,255,0.05)",
+      }}
+    >
+      {/* Noise texture */}
+      <div
+        className="absolute inset-0 opacity-[0.18]"
+        style={{ backgroundImage: NOISE, backgroundSize: "180px 180px" }}
+      />
+
+      {/* Glow on hover */}
+      <div
+        className="absolute inset-0 rounded-2xl pointer-events-none"
+        style={{
+          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 48px rgba(255,255,255,0.07)",
+          opacity: hovered ? 1 : 0,
+          transition: "opacity 0.3s ease",
+        }}
+      />
+
+      {/* Bottom gradient */}
+      <div
+        className="absolute inset-x-0 bottom-0 pointer-events-none"
+        style={{
+          height: "65%",
+          background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%)",
+          opacity: hovered ? 1 : 0,
+          transition: "opacity 0.3s ease",
+        }}
+      />
+
+      {/* Text */}
+      {photo && (
+        <div
+          className="absolute inset-x-0 bottom-0 p-5 pointer-events-none"
+          style={{
+            opacity: hovered ? 1 : 0,
+            transform: hovered ? "translateY(0)" : "translateY(8px)",
+            transition: "opacity 0.3s ease, transform 0.3s ease",
+          }}
+        >
+          <p className="text-sm font-semibold mb-0.5" style={{ color: "#f5f5f7" }}>
+            {photo.title}
+          </p>
+          <p className="text-xs" style={{ color: "#a1a1a6" }}>
+            {photo.location} · {photo.year}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CardSlot({
+  i,
+  activeTab,
+  onSelect,
+  onCursorEnter,
+  onMouseMove,
+  onCursorLeave,
+}: {
+  i: number;
+  activeTab: Tab;
+  onSelect: (photo: Photo) => void;
+  onCursorEnter: () => void;
+  onMouseMove: (e: React.MouseEvent) => void;
+  onCursorLeave: () => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+
+  const photo = PHOTOGRAPHY[i];
+  const illus = ILLUSTRATIONS[i] ?? null;
+  const diagDelay = getDiagDelay(i);
+  const flipRotate = activeTab === "photography" ? 0 : 180;
+
+  const activePhoto = activeTab === "photography" ? photo : illus;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.6,
+        delay: i * 0.03,
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+      }}
+      whileHover={{ y: -6, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+      className="cursor-none"
+      style={{ aspectRatio: "4/3", perspective: "1200px" }}
+      onMouseEnter={() => { setHovered(true); onCursorEnter(); }}
+      onMouseMove={onMouseMove}
+      onMouseLeave={() => { setHovered(false); onCursorLeave(); }}
+      onClick={() => { if (activePhoto) onSelect(activePhoto); }}
+    >
+      {/* Flipper */}
+      <motion.div
+        animate={{ rotateY: flipRotate }}
+        transition={{
+          duration: 0.3,
+          delay: diagDelay,
+          ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+        }}
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          transformStyle: "preserve-3d",
+        }}
+      >
+        {/* Front face — Photography */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+          }}
+        >
+          <CardFace photo={photo} hovered={hovered && activeTab === "photography"} />
+        </div>
+
+        {/* Back face — Illustrations */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+          }}
+        >
+          <CardFace photo={illus} hovered={hovered && activeTab === "illustrations"} />
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export default function GalleryPage() {
   const [activeTab, setActiveTab] = useState<Tab>("photography");
-  const [displayTab, setDisplayTab] = useState<Tab>("photography");
-  const [flipPhase, setFlipPhase] = useState<FlipPhase>("idle");
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [selected, setSelected] = useState<Photo | null>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [cursorVisible, setCursorVisible] = useState(false);
-  const transitionLock = useRef(false);
-
-  const photos = displayTab === "photography" ? PHOTOGRAPHY : ILLUSTRATIONS;
-  const count = photos.length;
-
-  // Total fold duration: last card starts at getDiagDelay(count-1), runs for 0.3s
-  function totalFoldDuration(n: number): number {
-    return getDiagDelay(n - 1) * 1000 + 320;
-  }
 
   function switchTab(tab: Tab) {
-    if (tab === activeTab || transitionLock.current) return;
-    transitionLock.current = true;
+    if (tab === activeTab || isTransitioning) return;
+    setIsTransitioning(true);
     setActiveTab(tab);
-
-    // Phase 1: fold current cards
-    setFlipPhase("folding");
-
-    const foldDur = totalFoldDuration(count);
-
-    setTimeout(() => {
-      // Swap content while cards are at 90deg (invisible)
-      setDisplayTab(tab);
-      // Phase 2: unfold new cards
-      setFlipPhase("unfolding");
-
-      const nextCount = tab === "photography" ? PHOTOGRAPHY.length : ILLUSTRATIONS.length;
-      const unfoldDur = totalFoldDuration(nextCount);
-
-      setTimeout(() => {
-        setFlipPhase("idle");
-        transitionLock.current = false;
-      }, unfoldDur);
-    }, foldDur);
+    // Lock until the last card finishes: getDiagDelay(MAX_SLOTS-1) + flip duration
+    const lockMs = (getDiagDelay(MAX_SLOTS - 1) + 0.35) * 1000;
+    setTimeout(() => setIsTransitioning(false), lockMs);
   }
 
   // Close lightbox on Escape
@@ -187,98 +310,19 @@ export default function GalleryPage() {
         <section className="px-4 pb-24">
           <div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
-            style={{ pointerEvents: flipPhase !== "idle" ? "none" : undefined }}
+            style={{ pointerEvents: isTransitioning ? "none" : undefined }}
           >
-            {photos.map((photo, i) => {
-              const diagDelay = getDiagDelay(i);
-
-              // Determine rotateY target and initial
-              let rotateY = 0;
-              let initialRotateY = 0;
-
-              if (flipPhase === "folding") {
-                rotateY = 90;
-                initialRotateY = 0;
-              } else if (flipPhase === "unfolding") {
-                rotateY = 0;
-                initialRotateY = 90;
-              }
-
-              return (
-                <div
-                  key={`${displayTab}-${photo.id}`}
-                  style={{ perspective: "1200px" }}
-                >
-                  <motion.div
-                    initial={{ rotateY: initialRotateY }}
-                    animate={{ rotateY }}
-                    transition={{
-                      duration: 0.3,
-                      delay: diagDelay,
-                      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-                    }}
-                    style={{ transformStyle: "preserve-3d", backfaceVisibility: "hidden" }}
-                  >
-                    {/* Card entrance animation only on first mount */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        duration: 0.6,
-                        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-                        delay: i * 0.03,
-                      }}
-                      whileHover={{ y: -6, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
-                      className="group relative overflow-hidden rounded-2xl cursor-none"
-                      style={{
-                        aspectRatio: "4/3",
-                        background: "#0a0a0a",
-                        border: "1px solid rgba(255,255,255,0.05)",
-                      }}
-                      onMouseEnter={() => setCursorVisible(true)}
-                      onMouseMove={handleMouseMove}
-                      onMouseLeave={() => setCursorVisible(false)}
-                      onClick={() => setSelected(photo)}
-                    >
-                      {/* Noise texture placeholder */}
-                      <div
-                        className="absolute inset-0 opacity-[0.18]"
-                        style={{ backgroundImage: NOISE, backgroundSize: "180px 180px" }}
-                      />
-
-                      {/* Glow on hover */}
-                      <div
-                        className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        style={{
-                          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 48px rgba(255,255,255,0.07)",
-                        }}
-                      />
-
-                      {/* Bottom dark gradient */}
-                      <div
-                        className="absolute inset-x-0 bottom-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        style={{
-                          height: "65%",
-                          background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%)",
-                        }}
-                      />
-
-                      {/* Text overlay */}
-                      <div
-                        className="absolute inset-x-0 bottom-0 p-5 pointer-events-none opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
-                      >
-                        <p className="text-sm font-semibold mb-0.5" style={{ color: "#f5f5f7" }}>
-                          {photo.title}
-                        </p>
-                        <p className="text-xs" style={{ color: "#a1a1a6" }}>
-                          {photo.location} · {photo.year}
-                        </p>
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                </div>
-              );
-            })}
+            {Array.from({ length: MAX_SLOTS }, (_, i) => (
+              <CardSlot
+                key={i}
+                i={i}
+                activeTab={activeTab}
+                onSelect={setSelected}
+                onCursorEnter={() => setCursorVisible(true)}
+                onMouseMove={handleMouseMove}
+                onCursorLeave={() => setCursorVisible(false)}
+              />
+            ))}
           </div>
         </section>
 
@@ -326,10 +370,7 @@ export default function GalleryPage() {
                 </button>
 
                 {/* Image placeholder */}
-                <div
-                  className="w-full relative"
-                  style={{ aspectRatio: "4/3", background: "#0a0a0a" }}
-                >
+                <div className="w-full relative" style={{ aspectRatio: "4/3", background: "#0a0a0a" }}>
                   <div
                     className="absolute inset-0 opacity-[0.18]"
                     style={{ backgroundImage: NOISE, backgroundSize: "180px 180px" }}
