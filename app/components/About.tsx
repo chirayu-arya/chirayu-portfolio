@@ -144,29 +144,53 @@ export default function About() {
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.25 }}
-              className="mt-8 flex flex-col items-center lg:items-start gap-4"
+              className="mt-8"
             >
-              {techStack.map((group) => (
-                <div key={group.category} className="flex flex-wrap justify-center lg:justify-start gap-2">
-                  {group.tools.map((tool) => (
+              {/* Mobile: all pills flat in one wrap */}
+              <div className="flex lg:hidden flex-wrap justify-center gap-2">
+                {techStack.flatMap((group) => group.tools).map((tool) => (
+                  <span
+                    key={tool.name}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
+                    style={{
+                      background: "rgba(255,255,255,0.06)",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                      color: "#f5f5f7",
+                    }}
+                  >
                     <span
-                      key={tool.name}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
-                      style={{
-                        background: "rgba(255,255,255,0.06)",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        color: "#f5f5f7",
-                      }}
-                    >
+                      className="inline-block rounded-full flex-shrink-0"
+                      style={{ width: 7, height: 7, background: tool.color }}
+                    />
+                    {tool.name}
+                  </span>
+                ))}
+              </div>
+
+              {/* Desktop: grouped by category */}
+              <div className="hidden lg:flex flex-col items-start gap-4">
+                {techStack.map((group) => (
+                  <div key={group.category} className="flex flex-wrap gap-2">
+                    {group.tools.map((tool) => (
                       <span
-                        className="inline-block rounded-full flex-shrink-0"
-                        style={{ width: 7, height: 7, background: tool.color }}
-                      />
-                      {tool.name}
-                    </span>
-                  ))}
-                </div>
-              ))}
+                        key={tool.name}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
+                        style={{
+                          background: "rgba(255,255,255,0.06)",
+                          border: "1px solid rgba(255,255,255,0.08)",
+                          color: "#f5f5f7",
+                        }}
+                      >
+                        <span
+                          className="inline-block rounded-full flex-shrink-0"
+                          style={{ width: 7, height: 7, background: tool.color }}
+                        />
+                        {tool.name}
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </motion.div>
           </div>
         </div>
