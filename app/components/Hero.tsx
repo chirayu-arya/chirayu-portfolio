@@ -112,7 +112,7 @@ export default function Hero() {
       {/* ── Spline — desktop only (lg+), too heavy for mobile ── */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
-        animate={{ opacity: introDone ? 0.2 : 1 }}
+        animate={{ opacity: introDone ? 0 : 1 }}
         transition={{ duration: 1.2, ease: "easeInOut" }}
         style={{
           zIndex: introDone ? 3 : 20,
