@@ -26,12 +26,9 @@ interface ShootingStar {
   duration: number;
 }
 
-// Parallax multipliers per layer (far → near)
 const PARALLAX = [0.007, 0.017, 0.036];
-// Star counts per layer
 const COUNTS = [220, 140, 60];
 
-// Base star colours: white, blue-white, soft purple-white
 const STAR_COLORS: [number, number, number][] = [
   [255, 255, 255],
   [232, 240, 254],
@@ -40,7 +37,6 @@ const STAR_COLORS: [number, number, number][] = [
   [240, 249, 255],
 ];
 
-// Cursor proximity glow palette: purple, blue, lavender
 const GLOW_RGB: [number, number, number][] = [
   [139, 92, 246],
   [37, 99, 235],
@@ -48,13 +44,18 @@ const GLOW_RGB: [number, number, number][] = [
 ];
 
 const GLOW_RADIUS = 148;
-const FADE_START = 0.56; // canvas fraction where stars start fading out
-const FADE_END = 0.88;   // canvas fraction where stars are fully gone
+const FADE_START = 0.56;
+const FADE_END = 0.88;
 
 export default function StarField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
-  const mouseRef = useRef({ x: -9999, y: -9999 });
+
+  // Parallax offset from center — { x, y } in logical px, defaults to 0 (no shift)
+  const parallaxRef = useRef({ x: 0, y: 0 });
+  // Absolute mouse position for proximity glow — kept far off-screen on mobile
+  const mouseAbsRef = useRef({ x: -99999, y: -99999 });
+
   const shootingRef = useRef<ShootingStar | null>(null);
   const nextShootRef = useRef(0);
   const rafRef = useRef(0);
@@ -91,6 +92,9 @@ export default function StarField() {
     if (!ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
+    const isMobile =
+      /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+      "ontouchstart" in window;
 
     const resize = () => {
       const el = canvas.parentElement;
@@ -103,25 +107,73 @@ export default function StarField() {
       initStars(w, h);
     };
     resize();
-
     const ro = new ResizeObserver(resize);
     ro.observe(canvas.parentElement!);
 
+    // ── Desktop: mouse drives parallax + proximity glow ──
     const onMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      const absX = e.clientX - rect.left;
+      const absY = e.clientY - rect.top;
+      mouseAbsRef.current = { x: absX, y: absY };
+      const { w, h } = sizeRef.current;
+      parallaxRef.current = { x: absX - w / 2, y: absY - h / 2 };
     };
-    window.addEventListener("mousemove", onMouseMove, { passive: true });
 
-    // Schedule first shooting star (10-12s)
+    // ── Mobile: gyroscope drives parallax ──
+    // beta (~45-90 when held upright), gamma (-90 to 90 side tilt)
+    const onOrientation = (e: DeviceOrientationEvent) => {
+      if (e.gamma === null || e.beta === null) return;
+      parallaxRef.current = {
+        x: e.gamma * 10,         // ~10px per degree of left/right tilt
+        y: (e.beta - 45) * 7,    // centered around natural ~45° upright hold
+      };
+    };
+
+    let cleanupOrientation = () => {};
+
+    if (!isMobile) {
+      window.addEventListener("mousemove", onMouseMove, { passive: true });
+    } else {
+      const attachOrientation = () => {
+        window.addEventListener("deviceorientation", onOrientation, { passive: true });
+        cleanupOrientation = () =>
+          window.removeEventListener("deviceorientation", onOrientation);
+      };
+
+      // iOS 13+ requires permission from a user gesture
+      if (
+        typeof DeviceOrientationEvent !== "undefined" &&
+        typeof (DeviceOrientationEvent as unknown as { requestPermission?: () => Promise<string> })
+          .requestPermission === "function"
+      ) {
+        const requestPerm = () => {
+          (
+            DeviceOrientationEvent as unknown as {
+              requestPermission: () => Promise<string>;
+            }
+          )
+            .requestPermission()
+            .then((result) => {
+              if (result === "granted") attachOrientation();
+            })
+            .catch(() => {});
+        };
+        window.addEventListener("touchstart", requestPerm, { once: true });
+        cleanupOrientation = () =>
+          window.removeEventListener("touchstart", requestPerm);
+      } else {
+        // Android / iOS ≤12 — no permission needed
+        attachOrientation();
+      }
+    }
+
     nextShootRef.current = performance.now() + 10000 + Math.random() * 2000;
 
     const spawnShootingStar = (now: number, w: number, h: number) => {
-      // Angle: mostly rightward, 10-35 degrees downward
       const angleDeg = 10 + Math.random() * 25;
       const angleRad = (angleDeg * Math.PI) / 180;
       const speed = 480 + Math.random() * 320;
-      // Start anywhere in the upper 55% of the canvas
       shootingRef.current = {
         x: Math.random() * w,
         y: Math.random() * h * 0.5,
@@ -141,26 +193,21 @@ export default function StarField() {
       const t = now / 1000;
       ctx.clearRect(0, 0, w, h);
 
-      const cx = w / 2;
-      const cy = h / 2;
-      const mdx = mouseRef.current.x - cx;
-      const mdy = mouseRef.current.y - cy;
+      // Clamp parallax offset so stars don't shift more than ~80px
+      const pdx = Math.max(-80, Math.min(80, parallaxRef.current.x));
+      const pdy = Math.max(-50, Math.min(50, parallaxRef.current.y));
 
       // ── Stars ──
       starsRef.current.forEach(star => {
-        // Parallax shift (clamp to avoid excessive offsets on huge screens)
-        const sx = star.x + Math.max(-60, Math.min(60, PARALLAX[star.layer] * mdx));
-        const sy = star.y + Math.max(-40, Math.min(40, PARALLAX[star.layer] * mdy));
+        const sx = star.x + PARALLAX[star.layer] * pdx;
+        const sy = star.y + PARALLAX[star.layer] * pdy;
 
-        // Skip stars fully below fade zone
         if (sy / h >= FADE_END) return;
 
-        // Twinkle (sine breathing)
         const twinkle = 0.55 + 0.45 * Math.sin(t * star.twinkleSpeed + star.twinklePhase);
 
-        // Cursor proximity
-        const dx = sx - mouseRef.current.x;
-        const dy = sy - mouseRef.current.y;
+        const dx = sx - mouseAbsRef.current.x;
+        const dy = sy - mouseAbsRef.current.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         const prox = dist < GLOW_RADIUS ? Math.pow(1 - dist / GLOW_RADIUS, 1.6) : 0;
 
@@ -168,13 +215,11 @@ export default function StarField() {
         const radius = star.baseSize * (1 + prox * 0.9);
 
         ctx.save();
-
         if (prox > 0.04) {
           const [gr, gg, gb] = GLOW_RGB[star.glowColorIdx];
           ctx.shadowBlur = 4 + prox * 22;
           ctx.shadowColor = `rgba(${gr},${gg},${gb},${Math.min(1, prox * 1.1).toFixed(2)})`;
         }
-
         ctx.globalAlpha = alpha;
         ctx.fillStyle = `rgb(${star.r},${star.g},${star.b})`;
         ctx.beginPath();
@@ -201,18 +246,12 @@ export default function StarField() {
           const speed = Math.sqrt(ss.vx * ss.vx + ss.vy * ss.vy);
           const nx = ss.vx / speed;
           const ny = ss.vy / speed;
-          // Tail grows in then holds full length
           const currentTail = Math.min(ss.tailLength, ss.tailLength * progress * 4);
           const tailX = headX - nx * currentTail;
           const tailY = headY - ny * currentTail;
 
-          // Alpha: fade in 0→0.18, full 0.18→0.75, fade out 0.75→1
           const alpha =
-            progress < 0.18
-              ? progress / 0.18
-              : progress > 0.75
-              ? (1 - progress) / 0.25
-              : 1;
+            progress < 0.18 ? progress / 0.18 : progress > 0.75 ? (1 - progress) / 0.25 : 1;
 
           const grad = ctx.createLinearGradient(tailX, tailY, headX, headY);
           grad.addColorStop(0, "rgba(255,255,255,0)");
@@ -234,7 +273,6 @@ export default function StarField() {
       }
 
       // ── Vertical fade mask ──
-      // Erases everything below FADE_START, fully gone by FADE_END
       ctx.save();
       ctx.globalCompositeOperation = "destination-out";
       const fadeGrad = ctx.createLinearGradient(0, h * FADE_START, 0, h * FADE_END);
@@ -253,6 +291,7 @@ export default function StarField() {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
       window.removeEventListener("mousemove", onMouseMove);
+      cleanupOrientation();
     };
   }, [initStars]);
 
