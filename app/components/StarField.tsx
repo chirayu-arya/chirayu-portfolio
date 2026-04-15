@@ -26,7 +26,10 @@ interface ShootingStar {
   duration: number;
 }
 
+// Gyroscope / mouse parallax multipliers (mobile only)
 const PARALLAX = [0.007, 0.017, 0.036];
+// Scroll parallax multipliers per layer (desktop) — far moves least, near moves most
+const SCROLL_PARALLAX = [0.03, 0.08, 0.18];
 const COUNTS = [220, 140, 60];
 
 const STAR_COLORS: [number, number, number][] = [
@@ -51,10 +54,12 @@ export default function StarField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
 
-  // Parallax offset from center — { x, y } in logical px, defaults to 0 (no shift)
+  // Gyroscope parallax offset (mobile only) — { x, y } from device orientation
   const parallaxRef = useRef({ x: 0, y: 0 });
-  // Absolute mouse position for proximity glow — kept far off-screen on mobile
+  // Absolute mouse position for proximity glow (desktop only)
   const mouseAbsRef = useRef({ x: -99999, y: -99999 });
+  // Scroll position for desktop parallax
+  const scrollRef = useRef(0);
 
   const shootingRef = useRef<ShootingStar | null>(null);
   const nextShootRef = useRef(0);
@@ -110,15 +115,15 @@ export default function StarField() {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas.parentElement!);
 
-    // ── Desktop: mouse drives parallax + proximity glow ──
+    // ── Desktop: mouse drives proximity glow only (no parallax) ──
     const onMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      const absX = e.clientX - rect.left;
-      const absY = e.clientY - rect.top;
-      mouseAbsRef.current = { x: absX, y: absY };
-      const { w, h } = sizeRef.current;
-      parallaxRef.current = { x: absX - w / 2, y: absY - h / 2 };
+      mouseAbsRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
+
+    // ── Desktop: scroll drives parallax ──
+    const onScroll = () => { scrollRef.current = window.scrollY; };
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     // ── Mobile: gyroscope drives parallax ──
     // beta (~45-90 when held upright), gamma (-90 to 90 side tilt)
@@ -193,14 +198,20 @@ export default function StarField() {
       const t = now / 1000;
       ctx.clearRect(0, 0, w, h);
 
-      // Clamp parallax offset so stars don't shift more than ~80px
-      const pdx = Math.max(-80, Math.min(80, parallaxRef.current.x));
-      const pdy = Math.max(-50, Math.min(50, parallaxRef.current.y));
+      // Mobile gyroscope offsets (clamped)
+      const gyroDx = Math.max(-80, Math.min(80, parallaxRef.current.x));
+      const gyroDy = Math.max(-50, Math.min(50, parallaxRef.current.y));
 
       // ── Stars ──
       starsRef.current.forEach(star => {
-        const sx = star.x + PARALLAX[star.layer] * pdx;
-        const sy = star.y + PARALLAX[star.layer] * pdy;
+        // Desktop: x stays fixed, y shifts with scroll (near stars move more)
+        // Mobile: x+y shift with gyroscope
+        const sx = isMobile
+          ? star.x + PARALLAX[star.layer] * gyroDx
+          : star.x;
+        const sy = isMobile
+          ? star.y + PARALLAX[star.layer] * gyroDy
+          : star.y - SCROLL_PARALLAX[star.layer] * scrollRef.current;
 
         if (sy / h >= FADE_END) return;
 
@@ -291,6 +302,7 @@ export default function StarField() {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("scroll", onScroll);
       cleanupOrientation();
     };
   }, [initStars]);
