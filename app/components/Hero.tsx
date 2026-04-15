@@ -88,17 +88,6 @@ export default function Hero() {
           animate={isMobile ? {} : { scale: [1, 1.08, 1], x: [0, -20, 0] }}
           transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 5 }}
         />
-        <motion.div
-          className="absolute rounded-full"
-          style={{
-            width: "50vmax", height: "50vmax",
-            bottom: "-10vmax", left: "-10vmax",
-            background: "radial-gradient(ellipse, rgba(20,184,166,0.25) 0%, transparent 68%)",
-            filter: "blur(70px)",
-          }}
-          animate={isMobile ? {} : { scale: [1, 1.06, 1] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-        />
         <div
           className="absolute inset-0"
           style={{ background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,0,0,0.2) 0%, transparent 100%)" }}
