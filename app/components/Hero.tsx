@@ -99,8 +99,15 @@ export default function Hero() {
         />
       </div>
 
-      {/* ── Star field ── */}
-      <StarField />
+      {/* ── Star field — fades in with content after Spline intro ── */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        animate={{ opacity: introDone ? 1 : 0 }}
+        transition={{ duration: 1.2, ease: "easeInOut" }}
+        style={{ zIndex: 2 }}
+      >
+        <StarField />
+      </motion.div>
 
       {/* ── Spline — desktop only (lg+), too heavy for mobile ── */}
       <motion.div
