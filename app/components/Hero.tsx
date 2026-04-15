@@ -351,7 +351,7 @@ export default function Hero() {
         className="absolute bottom-0 left-0 right-0 flex justify-center pb-8 pointer-events-none"
         style={{ zIndex: 22 }}
       >
-        <p className="text-base font-bold tracking-wide" style={{ color: "#f5f5f7" }}>
+        <p className="text-base font-medium tracking-wide" style={{ color: "#f5f5f7" }}>
           <span className="hidden sm:inline">🚧 Marketing @ SiteMarker &nbsp;|&nbsp; 📍 Charleston, South Carolina</span>
             <span className="sm:hidden flex flex-col items-center gap-1">
               <span>🚧 Marketing @ SiteMarker</span>
@@ -360,11 +360,6 @@ export default function Hero() {
         </p>
       </motion.div>
 
-      {/* Bottom fade */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
-        style={{ zIndex: 21, background: "linear-gradient(to bottom, transparent, #000)" }}
-      />
     </section>
   );
 }
