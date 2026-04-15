@@ -29,7 +29,7 @@ interface ShootingStar {
 // Parallax multipliers per layer (far → near)
 const PARALLAX = [0.007, 0.017, 0.036];
 // Star counts per layer
-const COUNTS = [130, 85, 35];
+const COUNTS = [220, 140, 60];
 
 // Base star colours: white, blue-white, soft purple-white
 const STAR_COLORS: [number, number, number][] = [
