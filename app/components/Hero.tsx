@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform, type Variants, AnimatePresence } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
+import StarField from "./StarField";
 
 const container: Variants = {
   hidden: {},
@@ -97,6 +98,9 @@ export default function Hero() {
           style={{ background: "radial-gradient(ellipse 140% 140% at 50% 50%, transparent 45%, rgba(0,0,0,0.4) 100%)" }}
         />
       </div>
+
+      {/* ── Star field ── */}
+      <StarField />
 
       {/* ── Spline — desktop only (lg+), too heavy for mobile ── */}
       <motion.div
