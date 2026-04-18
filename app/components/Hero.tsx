@@ -328,11 +328,10 @@ export default function Hero() {
               onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.4)")}
               onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
             >
-              View work
+              View Work
             </a>
             <a
-              href="/Resume.pdf"
-              download
+              href="mailto:chirayuarya21@gmail.com"
               className="px-7 py-3 rounded-full text-sm font-medium cursor-pointer whitespace-nowrap"
               style={{
                 border: "1px solid rgba(255,255,255,0.2)",
@@ -349,7 +348,7 @@ export default function Hero() {
                 e.currentTarget.style.boxShadow = "none";
               }}
             >
-              Download Resume
+              Get in Touch
             </a>
           </motion.div>
         </motion.div>

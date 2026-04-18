@@ -54,7 +54,9 @@ const WorkDropdownContent = ({ onClose, showGetInTouch }: { onClose?: () => void
     ))}
     {showGetInTouch && (
       <motion.a
-        href="#contact"
+        href="/Resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
         initial={{ opacity: 0, x: -6 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.12, duration: 0.2 }}
@@ -62,7 +64,7 @@ const WorkDropdownContent = ({ onClose, showGetInTouch }: { onClose?: () => void
         style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
         onClick={onClose}
       >
-        Get In Touch
+        View Resume
       </motion.a>
     )}
   </div>
@@ -158,11 +160,13 @@ export default function Nav() {
           </a>
 
           <a
-            href="#contact"
+            href="/Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-5 py-2 rounded-full text-sm font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
             style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
           >
-            Get In Touch
+            View Resume
           </a>
         </motion.nav>
       </div>
