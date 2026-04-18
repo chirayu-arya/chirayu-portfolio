@@ -26,7 +26,7 @@ export default function Contact() {
             className="text-xs tracking-[0.22em] uppercase font-medium mb-8"
             style={{ color: "#86868b" }}
           >
-            Let's talk
+            Connect With Me
           </motion.p>
 
           <motion.h2
@@ -36,9 +36,9 @@ export default function Contact() {
             className="font-bold tracking-tight leading-[0.9] mb-12"
             style={{ fontSize: "clamp(3rem, 9vw, 8.5rem)", color: "#f5f5f7" }}
           >
-            Have a project
+            If it's worth building,
             <br />
-            <span style={{ color: "#f5f5f7" }}>in mind?</span>
+            <span style={{ color: "#f5f5f7" }}>it's worth talking about.</span>
           </motion.h2>
 
           <motion.div
@@ -47,14 +47,18 @@ export default function Contact() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
           >
             <motion.a
-              href="mailto:hello@chirayuarya.com"
+              href="mailto:chirayuarya21@gmail.com"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.18 }}
-              className="inline-block px-10 py-4 rounded-full text-base font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
+              className="inline-flex items-center gap-2.5 px-10 py-4 rounded-full text-base font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
               style={{ background: "#f5f5f7", color: "#000" }}
             >
-              hello@chirayuarya.com
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+              Get in Touch
             </motion.a>
           </motion.div>
         </div>
