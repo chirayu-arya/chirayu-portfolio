@@ -3,21 +3,20 @@
 import Nav from "../components/Nav";
 import Contact from "../components/Contact";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const interests = [
   { label: "Photography", emoji: "📷" },
-  { label: "Film", emoji: "🎬" },
-  { label: "Podcasts", emoji: "🎙️" },
-  { label: "Startups", emoji: "🚀" },
-  { label: "Coffee", emoji: "☕" },
+  { label: "Movies", emoji: "🍿" },
   { label: "Travel", emoji: "✈️" },
   { label: "Music", emoji: "🎵" },
   { label: "Writing", emoji: "✍️" },
   { label: "Fitness", emoji: "🏋️" },
   { label: "Design", emoji: "🎨" },
-  { label: "Tech", emoji: "💻" },
   { label: "Cooking", emoji: "🍳" },
+  { label: "Gaming", emoji: "🎮" },
+  { label: "Guitar", emoji: "🎸" },
+  { label: "Vibe-coding", emoji: "🧑‍💻" },
 ];
 
 const logos = ["Logo 1", "Logo 2", "Logo 3", "Logo 4", "Logo 5", "Logo 6", "Logo 7", "Logo 8"];
@@ -129,6 +128,38 @@ const education = [
   },
 ];
 
+
+function PillItem({ item, delay }: { item: { label: string; emoji: string }; delay: number }) {
+  const [entered, setEntered] = useState(false);
+  return (
+    <motion.span
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={entered ? { duration: 0.15, ease: "easeOut" } : { duration: 0.55, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay }}
+      onAnimationComplete={() => setEntered(true)}
+      whileHover={{ y: -4 }}
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm cursor-pointer"
+      style={{
+        background: "rgba(255,255,255,0.06)",
+        border: "1px solid rgba(255,255,255,0.1)",
+        color: "#f5f5f7",
+        transition: "background 0.18s ease, border-color 0.18s ease",
+      }}
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.12)";
+        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.22)";
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)";
+        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
+      }}
+    >
+      <span style={{ fontSize: "0.85em" }}>{item.emoji}</span>
+      {item.label}
+    </motion.span>
+  );
+}
+
 function SectionHeader({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-5 mb-6">
@@ -199,6 +230,8 @@ export default function AboutPage() {
               top: "-25vmax", right: "-10vmax",
               background: "radial-gradient(ellipse, rgba(251,191,36,0.25) 0%, transparent 68%)",
               filter: "blur(80px)",
+              willChange: "transform",
+              transform: "translateZ(0)",
             }}
           />
           <div
@@ -208,6 +241,8 @@ export default function AboutPage() {
               top: "-15vmax", left: "-15vmax",
               background: "radial-gradient(ellipse, rgba(251,113,133,0.22) 0%, transparent 68%)",
               filter: "blur(80px)",
+              willChange: "transform",
+              transform: "translateZ(0)",
             }}
           />
           <div
@@ -217,128 +252,90 @@ export default function AboutPage() {
               bottom: "-10vmax", left: "35%",
               background: "radial-gradient(ellipse, rgba(52,211,153,0.18) 0%, transparent 68%)",
               filter: "blur(70px)",
+              willChange: "transform",
+              transform: "translateZ(0)",
             }}
           />
         </div>
 
         <div className="relative max-w-6xl mx-auto" style={{ zIndex: 1 }}>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-16 lg:gap-x-20 gap-y-8 lg:gap-y-0 items-start">
 
-            {/* Label + headline + bio — order 1 on mobile, top-left on desktop */}
-            <div className="order-1 lg:col-start-1 lg:col-span-7 lg:row-start-1">
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6 }}
-                className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
-                style={{ color: "#86868b" }}
-              >
-                About Me
-              </motion.p>
+          {/* Headline — full width, centered */}
+          <motion.h1
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.1 }}
+            className="font-bold tracking-tight leading-tight text-center mb-16"
+            style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)", color: "#f5f5f7" }}
+          >
+            I believe in <span className="glow-bluepurple">infinite possibilities.</span>
+          </motion.h1>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 28 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.1 }}
-                className="font-bold tracking-tight leading-tight mb-8"
-                style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)", color: "#f5f5f7" }}
-              >
-                Most people pick a lane.{" "}
-                <span style={{ color: "#86868b" }}>I refused to.</span>
-              </motion.h1>
+          {/* 2-col: bio + photos */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-16 lg:gap-x-20 gap-y-12 lg:gap-y-0 items-stretch">
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
-                className="text-base leading-relaxed"
-                style={{ color: "#a1a1a6", maxWidth: "52ch" }}
-              >
-                Placeholder bio. Tell your story here. Where you grew up, what drives you, what makes you tick. Keep it real, keep it human. This is the place where people decide if they like you.
-              </motion.p>
-            </div>
+            {/* Bio */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
+              className="order-1 lg:col-start-1 lg:col-span-7 flex flex-col gap-5 text-base leading-relaxed"
+              style={{ color: "#f5f5f7" }}
+            >
+              <p>I grew up in India, in a fairly traditional environment where the path ahead often feels predefined. But my parents gave me something different - they gave me the space to choose. They trusted me to carve my own path, even when it didn&apos;t look conventional, and stood behind me with a kind of quiet strength that never wavered.</p>
+              <p>Maybe that&apos;s where it started, the belief that you don&apos;t have to stay on a path.<br /><em><strong>You can carve your own path.</strong></em></p>
+              <p>I studied economics, trying to understand how the world works. But somewhere along the way, I found myself building things, designing, writing, experimenting, growing ideas from scratch. That curiosity took me 8,000 miles away from home to attend Duke, and into environments where I had to rebuild everything: my work, my identity, and my sense of direction.</p>
+              <p>There were moments of uncertainty. Of not knowing if I was on the <em>right</em> path. But through it all, my parents remained my backbone. Steady, grounded, and always there, no matter how far I was.</p>
+              <p>Over time, things started to connect in unexpected ways. <strong>An economics student turned into someone working at the intersection of marketing, product, and design. A side interest in creativity turned into being featured on the Times Square billboard. A few experiments turned into platforms that helped and inspired hundreds of thousands of people.</strong></p>
+              <p>None of it was planned. But now when I look back, it all makes sense.</p>
+              <p>What I enjoy most now is <strong>building, understanding why something works, why people care, and creating systems</strong> that turn that attention into something meaningful.</p>
+              <p>I&apos;m still figuring things out. But if there&apos;s one thing I&apos;ve learned, it&apos;s this:<br /><em><strong>There&apos;s always more than one path.</strong></em></p>
+            </motion.div>
 
-            {/* Portrait — order 2 on mobile (after bio), right column spanning both rows on desktop */}
+            {/* 3 photos — equal size, top/middle/bottom aligned to text */}
             <motion.div
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
-              className="order-2 lg:col-start-8 lg:col-span-5 lg:row-start-1 lg:row-span-2"
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.25 }}
+              className="order-2 lg:col-start-8 lg:col-span-5 flex flex-col gap-4 h-full"
             >
-              <div
-                className="w-full aspect-[3/4] rounded-3xl overflow-hidden relative"
-                style={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.05)" }}
-              >
-                <img
-                  src="/Chirayu Full.png"
-                  alt="Chirayu Arya"
-                  className="absolute inset-0 w-full h-full object-cover"
+              {[
+                { bg: "#0f0f12" },
+                { bg: "#0c0c10" },
+                { bg: "#0a0a0e" },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="w-full flex-1 min-h-0 rounded-3xl overflow-hidden"
+                  style={{
+                    background: item.bg,
+                    border: "1px solid rgba(255,255,255,0.06)",
+                  }}
                 />
-              </div>
+              ))}
             </motion.div>
 
-            {/* Currently chips + interests — order 3 on mobile, bottom-left on desktop */}
-            <div className="order-3 lg:col-start-1 lg:col-span-7 lg:row-start-2">
-              {/* Currently chips */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.28 }}
-                className="flex flex-wrap gap-2 mb-12"
-              >
-                {[
-                  { icon: "📍", text: "Charleston, SC" },
-                  { icon: "🚧", text: "Marketing @ SiteMarker" },
-                  { icon: "🎧", text: "Listening to: placeholder" },
-                ].map(item => (
-                  <span
-                    key={item.text}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs"
-                    style={{
-                      background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(255,255,255,0.09)",
-                      color: "#86868b",
-                    }}
-                  >
-                    <span>{item.icon}</span>
-                    {item.text}
-                  </span>
-                ))}
-              </motion.div>
-
-              {/* Interests */}
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.35 }}
-                className="text-xs tracking-[0.18em] uppercase font-medium mb-4"
-                style={{ color: "#515154" }}
-              >
-                Things I love
-              </motion.p>
-
-              <div className="flex flex-wrap gap-2">
-                {interests.map((item, i) => (
-                  <motion.span
-                    key={item.label}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.42 + i * 0.045 }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm"
-                    style={{
-                      background: "rgba(255,255,255,0.06)",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      color: "#f5f5f7",
-                    }}
-                  >
-                    <span style={{ fontSize: "0.85em" }}>{item.emoji}</span>
-                    {item.label}
-                  </motion.span>
-                ))}
-              </div>
-            </div>
-
           </div>
+
+          {/* Interests — full width, centered, below grid */}
+          <div className="mt-16 flex flex-col items-center">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.35 }}
+              className="text-xs tracking-[0.18em] uppercase font-medium mb-5"
+              style={{ color: "#515154" }}
+            >
+              Things I love
+            </motion.p>
+
+            <div className="flex flex-wrap justify-center gap-2">
+              {interests.map((item, i) => (
+                <PillItem key={item.label} item={item} delay={0.42 + i * 0.045} />
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 

@@ -312,7 +312,11 @@ export default function Hero() {
             className="text-base sm:text-lg leading-relaxed mb-10 max-w-2xl"
             style={{ color: "#f5f5f7", textShadow: "0 2px 20px rgba(0,0,0,0.7)" }}
           >
-            <span className="hidden sm:inline">Working at the intersection of art &amp; technology, I believe Steve Jobs was really onto something. </span>Great design is never just functional or just beautiful. It has to be both. And that&apos;s the only way I know how to work.
+            Most people treat design &amp; marketing as separate things. I don&apos;t.
+            <br />
+            Design without strategy is decoration. Marketing without craft is noise.
+            <br />
+            I believe in working at the intersection, and creating an impact.
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex items-center justify-center gap-3">

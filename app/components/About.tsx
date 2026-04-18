@@ -110,12 +110,14 @@ const interests = [
 
 function InterestCard({ item, inView, delay }: { item: typeof interests[0]; inView: boolean; delay: number }) {
   const [hovered, setHovered] = useState(false);
+  const [entered, setEntered] = useState(false);
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay }}
-      whileHover={{ y: -5, transition: { duration: 0.18, ease: "easeOut" } }}
+      transition={entered ? { duration: 0.18, ease: "easeOut" } : { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay }}
+      onAnimationComplete={() => { if (inView) setEntered(true); }}
+      whileHover={{ y: -5 }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       className="flex flex-row items-center gap-4 rounded-2xl p-4"
