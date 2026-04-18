@@ -220,6 +220,37 @@ export default function Work() {
             <ProjectCard key={project.index} project={project} index={i} />
           ))}
         </div>
+
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.35 }}
+          className="flex justify-center gap-8 sm:gap-16 mt-24 pt-10 pb-24"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.18)" }}
+        >
+          {[
+            { value: "4+", label: "Years" },
+            { value: "3M+", label: "Community" },
+            { value: "5M+", label: "Impressions" },
+            { value: "$1.7M", label: "Sales Pipeline" },
+          ].map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 12 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.4 + i * 0.07 }}
+              className="flex flex-col items-center text-center"
+            >
+              <div className="text-2xl sm:text-4xl font-bold tracking-tight" style={{ color: "#f5f5f7" }}>
+                {stat.value}
+              </div>
+              <div className="text-xs mt-1" style={{ color: "#86868b" }}>
+                {stat.label}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

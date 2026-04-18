@@ -201,7 +201,7 @@ export default function Photography() {
           className="text-xs tracking-[0.22em] uppercase font-medium mb-5"
           style={{ color: "#86868b" }}
         >
-          Virtual Photography
+          Photography
         </motion.p>
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
@@ -213,7 +213,7 @@ export default function Photography() {
           className="font-bold tracking-tight"
           style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)", color: "#f5f5f7" }}
         >
-          Worlds I&apos;ve built.
+          Capturing the moments, both real &amp; virtual.
         </motion.h2>
       </div>
 
