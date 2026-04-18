@@ -68,13 +68,32 @@ Mobile order on /about hero: label+headline+bio → portrait → currently chips
 - Nav label is "About" (not "About Me")
 
 ### Hero (app/components/Hero.tsx)
-- Full-screen, Spline 3D background fades to 20% opacity after load (fallback: 4.5s)
-- Gradient blobs: purple, blue, pink, teal
+- Full-screen, Spline 3D background fades to 0% opacity after load (fallback: 4.5s)
+- 3 gradient blobs: purple (top-left), blue (top-right), pink (bottom-center)
+- No bottom vignette
+- Footer line: role + location, `font-medium`, two-line on mobile
 - Memoji (Memoji 3.png) with cursor/touch reveal effect (reveals Chirayu Reveal.png underneath via radial mask)
 - Wave bubble (👋) on hover/touch:
-  - Desktop: appears top-right of headline (`bottom: calc(100% - 20px), right: -2.5rem`), size via clamp
-  - Mobile: appears diagonally above top-right of Memoji (`top: -1rem, right: -1rem`), `w-10 h-10`
-- Footer line: role + location (two-line on mobile)
+  - Desktop: appears top-right of headline (`bottom: calc(100% - 20px), right: -2.5rem`), size via clamp, `hidden sm:block`
+  - Mobile: appears diagonally above top-right of Memoji (`top: -1rem, right: -1rem`), `w-10 h-10`, `sm:hidden`
+- StarField canvas fades in with content after Spline intro completes (wrapped in `motion.div` gated on `introDone`)
+
+### StarField (app/components/StarField.tsx)
+- HTML5 Canvas, `pointer-events: none`, `zIndex: 2` (above blobs at z:1, below content at z:10)
+- 420 stars across 3 depth layers: far (220), mid (140), near (60)
+- Star colours: white, blue-white, soft purple-white palette
+- Twinkle: each star breathes opacity at its own random speed/phase
+- Vertical fade: stars fully visible at top, completely gone by ~88% of canvas height (canvas `destination-out` gradient mask)
+- Desktop behaviour:
+  - Stars do NOT move with mouse
+  - Scroll drives parallax: near stars drift up faster (`SCROLL_PARALLAX = [0.03, 0.08, 0.18]`), far stars barely move
+  - Cursor proximity glow within 148px: purple/blue/lavender per star's assigned palette colour
+- Mobile behaviour:
+  - Stars distributed evenly (no default parallax offset)
+  - `deviceorientation` drives parallax: gamma (left/right tilt) → x shift, beta (front/back, centered at 45°) → y shift
+  - iOS 13+: permission requested on first `touchstart`; Android/iOS≤12: immediate
+  - No proximity glow on mobile
+- Shooting stars: spawn every 10-12s, random position in upper 50% of canvas, 10-40° downward angle, tail grows in then fades out
 
 ### About (app/components/About.tsx)
 - Section on home page, links to /about via "Learn More" button
@@ -99,7 +118,6 @@ Mobile order on /about hero: label+headline+bio → portrait → currently chips
 - `/about` hero: personal bio paragraph
 - `/about` hero: "Listening to" chip content
 - `/about` marquee: real company/brand logos
-- K. Hovnanian Homes testimonial: placeholder quotes (from SiteMarker project, unrelated)
 
 ## Git
 - Branch: `main` (production)
