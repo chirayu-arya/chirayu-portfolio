@@ -331,7 +331,8 @@ export default function Hero() {
               View work
             </a>
             <a
-              href="#contact"
+              href="/Resume.pdf"
+              download
               className="px-7 py-3 rounded-full text-sm font-medium cursor-pointer whitespace-nowrap"
               style={{
                 border: "1px solid rgba(255,255,255,0.2)",
@@ -348,7 +349,7 @@ export default function Hero() {
                 e.currentTarget.style.boxShadow = "none";
               }}
             >
-              Get in touch
+              Download Resume
             </a>
           </motion.div>
         </motion.div>
