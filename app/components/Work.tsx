@@ -173,6 +173,9 @@ export default function Work() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-5%" });
 
+  const statsRef = useRef<HTMLDivElement>(null);
+  const statsInView = useInView(statsRef, { once: true, margin: "-5%" });
+
   return (
     <section id="work" className="pt-36 pb-0 px-8" style={{ background: "#000" }}>
       <div className="max-w-6xl mx-auto">
@@ -223,9 +226,10 @@ export default function Work() {
 
         {/* Stats */}
         <motion.div
+          ref={statsRef}
           initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.35 }}
+          animate={statsInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.1 }}
           className="flex justify-center gap-8 sm:gap-16 mt-24 pt-10 pb-24"
           style={{ borderTop: "1px solid rgba(255,255,255,0.18)" }}
         >
@@ -238,8 +242,8 @@ export default function Work() {
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 12 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.4 + i * 0.07 }}
+              animate={statsInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.1 + i * 0.07 }}
               className="flex flex-col items-center text-center"
             >
               <div className="text-2xl sm:text-4xl font-bold tracking-tight" style={{ color: "#f5f5f7" }}>

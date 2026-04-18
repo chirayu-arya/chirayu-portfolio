@@ -133,6 +133,9 @@ export default function Photography() {
   const inView = useInView(scatterRef, { once: true, margin: "-5%" });
   const mobileInView = useInView(mobileRef, { once: true, margin: "-5%" });
 
+  const btnRef = useRef<HTMLDivElement>(null);
+  const btnInView = useInView(btnRef, { once: true, margin: "-5%" });
+
   return (
     <section
       id="virtual-photography"
@@ -254,9 +257,10 @@ export default function Photography() {
 
       {/* Exhibition Mode button */}
       <motion.div
+        ref={btnRef}
         initial={{ opacity: 0, y: 16 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.4 }}
+        animate={btnInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
         className="flex justify-center pb-20 relative"
         style={{ zIndex: 1 }}
       >
