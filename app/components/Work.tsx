@@ -3,6 +3,36 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
+function SlotNumber({ value, inView, delay }: { value: string; inView: boolean; delay: number }) {
+  return (
+    <div
+      className="text-2xl sm:text-4xl font-bold tracking-tight flex items-center justify-center"
+      style={{ color: "#f5f5f7", lineHeight: 1 }}
+    >
+      {value.split("").map((char, i) => {
+        if (/\d/.test(char)) {
+          const target = parseInt(char);
+          return (
+            <span key={i} style={{ display: "inline-block", overflow: "hidden", height: "1em" }}>
+              <motion.span
+                style={{ display: "flex", flexDirection: "column", lineHeight: 1 }}
+                initial={{ y: "0%" }}
+                animate={inView ? { y: `-${target * 10}%` } : { y: "0%" }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: delay + i * 0.05 }}
+              >
+                {["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => (
+                  <span key={d} style={{ display: "block", height: "1em" }}>{d}</span>
+                ))}
+              </motion.span>
+            </span>
+          );
+        }
+        return <span key={i} style={{ lineHeight: 1 }}>{char}</span>;
+      })}
+    </div>
+  );
+}
+
 const projects = [
   {
     index: "01",
@@ -246,9 +276,7 @@ export default function Work() {
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.1 + i * 0.07 }}
               className="flex flex-col items-center text-center"
             >
-              <div className="text-2xl sm:text-4xl font-bold tracking-tight" style={{ color: "#f5f5f7" }}>
-                {stat.value}
-              </div>
+              <SlotNumber value={stat.value} inView={statsInView} delay={0.15 + i * 0.1} />
               <div className="text-xs mt-1" style={{ color: "#86868b" }}>
                 {stat.label}
               </div>
