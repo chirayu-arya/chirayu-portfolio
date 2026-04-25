@@ -20,13 +20,13 @@ const glassStyle = {
 };
 
 const dropdownGlassStyle = {
-  backdropFilter: "blur(72px) saturate(2.4) brightness(1.08)",
-  WebkitBackdropFilter: "blur(72px) saturate(2.4) brightness(1.08)",
+  backdropFilter: "blur(64px) saturate(2.2) brightness(1.08)",
+  WebkitBackdropFilter: "blur(64px) saturate(2.2) brightness(1.08)",
   background:
-    "linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%), rgba(10,10,12,0.35)",
-  border: "1px solid rgba(255,255,255,0.08)",
+    "linear-gradient(135deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.01) 100%), rgba(12,12,14,0.72)",
+  border: "1px solid rgba(255,255,255,0.09)",
   boxShadow:
-    "inset 0 0.5px 0 rgba(255,255,255,0.13), 0 20px 60px rgba(0,0,0,0.45), 0 4px 14px rgba(0,0,0,0.25)",
+    "inset 0 0.5px 0 rgba(255,255,255,0.15), inset 0 -0.5px 0 rgba(0,0,0,0.15), 0 16px 56px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.2)",
 };
 
 const LinkedInIcon = () => (
