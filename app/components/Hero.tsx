@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform, type Variants, AnimatePresence } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import StarField from "./StarField";
+import MagneticButton from "./MagneticButton";
 
 const container: Variants = {
   hidden: {},
@@ -320,40 +321,40 @@ export default function Hero() {
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex items-center justify-center gap-3">
-            <a
-              href="#work"
-              className="px-7 py-3 rounded-full text-sm font-semibold cursor-pointer whitespace-nowrap"
-              style={{
-                background: "#f5f5f7",
-                color: "#000",
-                transition: "box-shadow 0.3s ease",
-                boxShadow: "none",
-              }}
-              onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.4)")}
-              onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
-            >
-              View Work
-            </a>
-            <a
-              href="mailto:chirayuarya21@gmail.com"
-              className="px-7 py-3 rounded-full text-sm font-medium cursor-pointer whitespace-nowrap"
-              style={{
-                border: "1px solid rgba(255,255,255,0.2)",
-                color: "#f5f5f7",
-                transition: "box-shadow 0.3s ease, color 0.3s ease",
-                boxShadow: "none",
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.color = "#f5f5f7";
-                e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.2)";
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.color = "#f5f5f7";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            >
-              Get in Touch
-            </a>
+            <MagneticButton>
+              <a
+                href="#work"
+                className="px-7 py-3 rounded-full text-sm font-semibold whitespace-nowrap"
+                style={{
+                  background: "#f5f5f7",
+                  color: "#000",
+                  transition: "box-shadow 0.3s ease",
+                  boxShadow: "none",
+                  display: "block",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.4)")}
+                onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
+              >
+                View Work
+              </a>
+            </MagneticButton>
+            <MagneticButton>
+              <a
+                href="mailto:chirayuarya21@gmail.com"
+                className="px-7 py-3 rounded-full text-sm font-medium whitespace-nowrap"
+                style={{
+                  border: "1px solid rgba(255,255,255,0.2)",
+                  color: "#f5f5f7",
+                  transition: "box-shadow 0.3s ease",
+                  boxShadow: "none",
+                  display: "block",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.2)")}
+                onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
+              >
+                Get in Touch
+              </a>
+            </MagneticButton>
           </motion.div>
         </motion.div>
       </motion.div>
