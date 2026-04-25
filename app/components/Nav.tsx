@@ -3,10 +3,15 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
-const workItems = [
+const professionalItems = [
   { label: "Branding & Marketing", href: "#brand-marketing" },
   { label: "UI & UX", href: "#ui-ux" },
   { label: "Visual Arts", href: "/gallery" },
+];
+
+const interestItems = [
+  { label: "Gaming", href: "/gaming" },
+  { label: "Bookshelf", href: "/bookshelf" },
 ];
 
 const glassStyle = {
@@ -35,15 +40,26 @@ const LinkedInIcon = () => (
   </svg>
 );
 
-const WorkDropdownContent = ({ onClose, showGetInTouch }: { onClose?: () => void; showGetInTouch?: boolean }) => (
-  <div className="flex flex-col min-w-[180px]">
-    {workItems.map((item, i) => (
+const NavColumn = ({ label, items, startDelay, onClose }: {
+  label: string;
+  items: { label: string; href: string }[];
+  startDelay: number;
+  onClose?: () => void;
+}) => (
+  <div className="flex flex-col min-w-[160px]">
+    <p
+      className="px-4 pb-1.5 pt-1 text-[10px] font-semibold tracking-[0.16em] uppercase"
+      style={{ color: "#515154" }}
+    >
+      {label}
+    </p>
+    {items.map((item, i) => (
       <motion.a
         key={item.label}
         href={item.href}
         initial={{ opacity: 0, x: -6 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: i * 0.03, duration: 0.2 }}
+        transition={{ delay: startDelay + i * 0.03, duration: 0.2 }}
         className="block px-4 py-2.5 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
         onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
         onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
@@ -52,20 +68,32 @@ const WorkDropdownContent = ({ onClose, showGetInTouch }: { onClose?: () => void
         {item.label}
       </motion.a>
     ))}
+  </div>
+);
+
+const WorkDropdownContent = ({ onClose, showGetInTouch }: { onClose?: () => void; showGetInTouch?: boolean }) => (
+  <div className="flex flex-col gap-1">
+    <div className="flex gap-1">
+      <NavColumn label="Professional" items={professionalItems} startDelay={0} onClose={onClose} />
+      <div className="w-px mx-1 self-stretch" style={{ background: "rgba(255,255,255,0.07)" }} />
+      <NavColumn label="Interest Areas" items={interestItems} startDelay={0.06} onClose={onClose} />
+    </div>
     {showGetInTouch && (
-      <motion.a
-        href="/Resume.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        initial={{ opacity: 0, x: -6 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.12, duration: 0.2 }}
-        className="inline-block px-4 py-2 rounded-full text-sm font-semibold cursor-pointer whitespace-nowrap mx-2 my-0.5 mt-1"
-        style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
-        onClick={onClose}
-      >
-        View Resume
-      </motion.a>
+      <div className="pt-1" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+        <motion.a
+          href="/Resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, x: -6 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.15, duration: 0.2 }}
+          className="inline-block px-4 py-2 rounded-full text-sm font-semibold cursor-pointer whitespace-nowrap mx-1 mt-1"
+          style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
+          onClick={onClose}
+        >
+          View Resume
+        </motion.a>
+      </div>
     )}
   </div>
 );
