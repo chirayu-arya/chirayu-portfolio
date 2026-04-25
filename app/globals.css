@@ -93,3 +93,12 @@ body {
 ::-webkit-scrollbar {
   width: 0px;
 }
+
+/* Library card hover — outer wrapper owns the lift, inner motion.div owns entrance only */
+.library-card-wrap {
+  will-change: transform;
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.library-card-wrap:hover {
+  transform: translateY(-8px);
+}
