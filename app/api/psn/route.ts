@@ -29,7 +29,7 @@ export async function GET() {
     const [titlesRes, trophySummaryRes, playedRes, purchasedRes] = await Promise.all([
       getUserTitles(authorization, "me", { limit: 200 }),
       getUserTrophyProfileSummary(authorization, "me"),
-      getUserPlayedGames(authorization, "me", { limit: 200 }),
+      getUserPlayedGames(authorization, "me", { limit: 200, offset: 0 }),
       getPurchasedGames(authorization, { size: 2000 }),
     ]);
 
