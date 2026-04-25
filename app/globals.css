@@ -94,6 +94,21 @@ body {
   width: 0px;
 }
 
+/* Background blobs — blur only on non-touch devices (filter: blur is expensive on mobile) */
+.bg-blob {
+  filter: blur(60px);
+}
+@media (pointer: coarse) {
+  .bg-blob {
+    filter: none;
+    opacity: 0.6;
+  }
+  /* Also hide the physics PS buttons entirely on mobile */
+  .physics-ps-buttons {
+    display: none;
+  }
+}
+
 /* Library card hover — outer wrapper owns the lift, inner motion.div owns entrance only */
 .library-card-wrap {
   will-change: transform;

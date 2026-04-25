@@ -155,6 +155,9 @@ function PhysicsPSButtons() {
   ]);
 
   useEffect(() => {
+    // Skip physics loop entirely on touch devices — rAF at 60fps kills mobile performance
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
+
     let raf: number;
     const tick = () => {
       const vw = window.innerWidth;
@@ -741,24 +744,26 @@ export default function GamingPage() {
 
       {/* Background blobs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-        <div className="absolute" style={{
+        <div className="bg-blob absolute" style={{
           top: "-15%", left: "-10%", width: "55%", height: "55%",
           background: "radial-gradient(ellipse, rgba(0,48,135,0.18) 0%, transparent 70%)",
-          filter: "blur(60px)", willChange: "transform", transform: "translateZ(0)",
+          willChange: "transform", transform: "translateZ(0)",
         }} />
-        <div className="absolute" style={{
+        <div className="bg-blob absolute" style={{
           top: "30%", right: "-10%", width: "45%", height: "45%",
           background: "radial-gradient(ellipse, rgba(0,64,180,0.12) 0%, transparent 70%)",
-          filter: "blur(80px)", willChange: "transform", transform: "translateZ(0)",
+          willChange: "transform", transform: "translateZ(0)",
         }} />
-        <div className="absolute" style={{
+        <div className="bg-blob absolute" style={{
           bottom: "-10%", left: "20%", width: "50%", height: "40%",
           background: "radial-gradient(ellipse, rgba(0,32,100,0.15) 0%, transparent 70%)",
-          filter: "blur(60px)", willChange: "transform", transform: "translateZ(0)",
+          willChange: "transform", transform: "translateZ(0)",
         }} />
 
-        {/* Physics-driven PS buttons */}
-        <PhysicsPSButtons />
+        {/* Physics-driven PS buttons — hidden on mobile via CSS, rAF skipped on touch */}
+        <div className="physics-ps-buttons">
+          <PhysicsPSButtons />
+        </div>
       </div>
 
       <div className="relative z-10 px-5 sm:px-8 lg:px-16 pt-32 pb-0 max-w-7xl mx-auto">

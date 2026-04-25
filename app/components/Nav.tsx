@@ -14,6 +14,7 @@ const interestItems = [
   { label: "Bookshelf", href: "/bookshelf" },
 ];
 
+// Desktop — heavy blur is fine on desktop GPUs
 const glassStyle = {
   backdropFilter: "blur(64px) saturate(2.2) brightness(1.08)",
   WebkitBackdropFilter: "blur(64px) saturate(2.2) brightness(1.08)",
@@ -32,6 +33,20 @@ const dropdownGlassStyle = {
   border: "1px solid rgba(255,255,255,0.09)",
   boxShadow:
     "inset 0 0.5px 0 rgba(255,255,255,0.15), inset 0 -0.5px 0 rgba(0,0,0,0.15), 0 16px 56px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.2)",
+};
+
+// Mobile — no backdrop-filter, solid opaque background instead. backdrop-filter
+// re-composites on every frame and kills performance on mobile GPUs.
+const mobileGlassStyle = {
+  background: "rgba(10,10,12,0.94)",
+  border: "1px solid rgba(255,255,255,0.09)",
+  boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+};
+
+const mobileDropdownStyle = {
+  background: "rgba(8,8,10,0.97)",
+  border: "1px solid rgba(255,255,255,0.09)",
+  boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
 };
 
 const LinkedInIcon = () => (
@@ -206,7 +221,7 @@ export default function Nav() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="flex items-center justify-between px-3 py-1.5 rounded-full"
-          style={glassStyle}
+          style={mobileGlassStyle}
         >
           {/* Left: Home + About */}
           <div className="flex items-center gap-1">
@@ -289,7 +304,7 @@ export default function Nav() {
               exit={{ opacity: 0, y: 8, scale: 0.96 }}
               transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
               className="mt-2 rounded-2xl p-2"
-              style={dropdownGlassStyle}
+              style={mobileDropdownStyle}
             >
               <WorkDropdownContent onClose={() => setMenuOpen(false)} showGetInTouch />
             </motion.div>
