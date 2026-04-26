@@ -315,10 +315,13 @@ function TrophyDashboard({ summary }: { summary: TrophySummary }) {
   const levelProgress = (summary.trophyLevel % 100) / 100;
 
   return (
-    <motion.div ref={ref} className="rounded-2xl overflow-hidden"
-      style={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.06)" }}
+    <motion.div ref={ref} className="relative rounded-2xl overflow-hidden"
+      style={{ background: "#0a0a0a", border: "1px solid rgba(212,168,67,0.15)" }}
       whileHover={{ y: -4, borderColor: "rgba(212,168,67,0.3)" }}
       transition={{ duration: 0.3, ease: EASE }}>
+      {/* Amber gradient overlay — mirrors the blue in Currently Playing */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: "linear-gradient(135deg, rgba(212,168,67,0.13) 0%, transparent 55%)" }} />
       <div className="flex flex-col lg:flex-row">
 
         {/* Left: level ring */}
@@ -457,9 +460,9 @@ function CurrentlyPlaying({ game }: { game: LibraryGame }) {
           <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(0,16,48,0.85) 0%, rgba(0,0,0,0.92) 100%)" }} />
         </div>
       )}
-      <div className="relative z-10 flex flex-col lg:flex-row gap-8 p-8 lg:p-12 items-start lg:items-center">
-        <div className="flex-shrink-0">
-          <div className="relative w-36 h-36 lg:w-48 lg:h-48 rounded-2xl overflow-hidden"
+      <div className="relative z-10 flex flex-col lg:flex-row gap-8 p-8 lg:p-10 items-start lg:items-stretch">
+        <div className="flex-shrink-0 flex items-center">
+          <div className="relative w-36 h-36 lg:w-40 lg:h-40 rounded-2xl overflow-hidden"
             style={{ border: "1px solid rgba(0,48,135,0.45)" }}>
             {img
               ? <img src={img} alt={game.name} className="w-full h-full object-cover" />
@@ -467,7 +470,8 @@ function CurrentlyPlaying({ game }: { game: LibraryGame }) {
             }
           </div>
         </div>
-        <div className="flex-1 flex flex-col gap-5">
+        <div className="flex-1 flex flex-col justify-between gap-4">
+          {/* Top: eyebrow + title — always pinned to the top */}
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#003087" }}>
               Currently Playing
@@ -476,36 +480,39 @@ function CurrentlyPlaying({ game }: { game: LibraryGame }) {
               {game.name}
             </h2>
           </div>
-          <div className="flex flex-wrap gap-6">
-            {duration && (
-              <div>
-                <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "#515154" }}>Play Time</p>
-                <p className="text-lg font-semibold" style={{ color: "#f5f5f7" }}>{duration}</p>
-              </div>
-            )}
-            {game.playCount > 0 && (
-              <div>
-                <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "#515154" }}>Sessions</p>
-                <p className="text-lg font-semibold" style={{ color: "#f5f5f7" }}>{game.playCount}</p>
-              </div>
-            )}
+          {/* Bottom: stats + progress — always pinned to the bottom */}
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-wrap gap-6">
+              {duration && (
+                <div>
+                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "#515154" }}>Play Time</p>
+                  <p className="text-lg font-semibold" style={{ color: "#f5f5f7" }}>{duration}</p>
+                </div>
+              )}
+              {game.playCount > 0 && (
+                <div>
+                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "#515154" }}>Sessions</p>
+                  <p className="text-lg font-semibold" style={{ color: "#f5f5f7" }}>{game.playCount}</p>
+                </div>
+              )}
+              {game.trophy && (
+                <div>
+                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "#515154" }}>Trophy Progress</p>
+                  <p className="text-lg font-semibold" style={{ color: "#f5f5f7" }}>{pct}%</p>
+                </div>
+              )}
+            </div>
             {game.trophy && (
-              <div>
-                <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "#515154" }}>Trophy Progress</p>
-                <p className="text-lg font-semibold" style={{ color: "#f5f5f7" }}>{pct}%</p>
+              <div className="flex flex-col gap-2 max-w-sm">
+                <ProgressBar value={pct} color="#003087" />
+                <div className="flex gap-4">
+                  {(["platinum", "gold", "silver", "bronze"] as const).map((t) => (
+                    <TrophyPip key={t} type={t} count={game.trophy!.earnedTrophies[t]} />
+                  ))}
+                </div>
               </div>
             )}
           </div>
-          {game.trophy && (
-            <div className="flex flex-col gap-2 max-w-sm">
-              <ProgressBar value={pct} color="#003087" />
-              <div className="flex gap-4">
-                {(["platinum", "gold", "silver", "bronze"] as const).map((t) => (
-                  <TrophyPip key={t} type={t} count={game.trophy!.earnedTrophies[t]} />
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </motion.div>
