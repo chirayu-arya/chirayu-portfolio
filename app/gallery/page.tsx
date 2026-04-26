@@ -227,11 +227,11 @@ export default function GalleryPage() {
     <main style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7", position: "relative", overflow: "hidden" }}>
       {/* Colourful background blobs */}
       <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-        <div className="absolute rounded-full" style={{ width: "70vmax", height: "70vmax", top: "-25vmax", left: "-15vmax", background: "radial-gradient(ellipse, rgba(139,92,246,0.3) 0%, transparent 68%)", filter: "blur(90px)" }} />
-        <div className="absolute rounded-full" style={{ width: "60vmax", height: "60vmax", top: "-10vmax", right: "-20vmax", background: "radial-gradient(ellipse, rgba(251,113,133,0.25) 0%, transparent 68%)", filter: "blur(80px)" }} />
-        <div className="absolute rounded-full" style={{ width: "55vmax", height: "55vmax", top: "40vh", left: "30%", background: "radial-gradient(ellipse, rgba(37,99,235,0.2) 0%, transparent 68%)", filter: "blur(80px)" }} />
-        <div className="absolute rounded-full" style={{ width: "50vmax", height: "50vmax", bottom: "10vh", right: "-10vmax", background: "radial-gradient(ellipse, rgba(52,211,153,0.18) 0%, transparent 68%)", filter: "blur(70px)" }} />
-        <div className="absolute rounded-full" style={{ width: "45vmax", height: "45vmax", bottom: "-10vmax", left: "10%", background: "radial-gradient(ellipse, rgba(251,191,36,0.15) 0%, transparent 68%)", filter: "blur(70px)" }} />
+        <div className="bg-blob absolute rounded-full" style={{ width: "70vmax", height: "70vmax", top: "-25vmax", left: "-15vmax", background: "radial-gradient(ellipse, rgba(139,92,246,0.3) 0%, transparent 68%)" }} />
+        <div className="bg-blob absolute rounded-full" style={{ width: "60vmax", height: "60vmax", top: "-10vmax", right: "-20vmax", background: "radial-gradient(ellipse, rgba(251,113,133,0.25) 0%, transparent 68%)" }} />
+        <div className="bg-blob absolute rounded-full" style={{ width: "55vmax", height: "55vmax", top: "40vh", left: "30%", background: "radial-gradient(ellipse, rgba(37,99,235,0.2) 0%, transparent 68%)" }} />
+        <div className="bg-blob absolute rounded-full" style={{ width: "50vmax", height: "50vmax", bottom: "10vh", right: "-10vmax", background: "radial-gradient(ellipse, rgba(52,211,153,0.18) 0%, transparent 68%)" }} />
+        <div className="bg-blob absolute rounded-full" style={{ width: "45vmax", height: "45vmax", bottom: "-10vmax", left: "10%", background: "radial-gradient(ellipse, rgba(251,191,36,0.15) 0%, transparent 68%)" }} />
       </div>
 
       <div className="relative" style={{ zIndex: 1 }}>

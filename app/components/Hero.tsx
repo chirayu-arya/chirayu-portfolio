@@ -58,34 +58,31 @@ export default function Hero() {
       {/* ── Gradient blobs — z:1 ── */}
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
         <motion.div
-          className="absolute rounded-full"
+          className="bg-blob absolute rounded-full"
           style={{
             width: "70vmax", height: "70vmax",
             top: "-20vmax", left: "-20vmax",
             background: "radial-gradient(ellipse, rgba(139,92,246,0.38) 0%, transparent 68%)",
-            filter: "blur(80px)",
           }}
           animate={isMobile ? {} : { scale: [1, 1.07, 1], x: [0, 18, 0] }}
           transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute rounded-full"
+          className="bg-blob absolute rounded-full"
           style={{
             width: "65vmax", height: "65vmax",
             top: "-15vmax", right: "-15vmax",
             background: "radial-gradient(ellipse, rgba(37,99,235,0.35) 0%, transparent 68%)",
-            filter: "blur(80px)",
           }}
           animate={isMobile ? {} : { scale: [1, 1.1, 1], y: [0, 24, 0] }}
           transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
         <motion.div
-          className="absolute rounded-full"
+          className="bg-blob absolute rounded-full"
           style={{
             width: "65vmax", height: "65vmax",
             bottom: "-15vmax", left: "50%", marginLeft: "-32.5vmax",
             background: "radial-gradient(ellipse, rgba(219,39,119,0.3) 0%, transparent 68%)",
-            filter: "blur(80px)",
           }}
           animate={isMobile ? {} : { scale: [1, 1.08, 1], x: [0, -20, 0] }}
           transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 5 }}
@@ -229,7 +226,7 @@ export default function Hero() {
                   style={{ top: "-1rem", right: "-1rem" }}
                 >
                   <div
-                    className="flex items-center justify-center rounded-full w-10 h-10"
+                    className="mobile-no-backdrop flex items-center justify-center rounded-full w-10 h-10"
                     style={{
                       background: "rgba(255,255,255,0.1)",
                       border: "1px solid rgba(255,255,255,0.18)",
@@ -291,6 +288,7 @@ export default function Hero() {
                       border: "1px solid rgba(255,255,255,0.18)",
                       backdropFilter: "blur(24px)",
                       WebkitBackdropFilter: "blur(24px)",
+                      // mobile-no-backdrop class strips this on touch devices
                       boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
                     }}
                   >

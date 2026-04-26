@@ -91,6 +91,9 @@ export default function StarField() {
   }, []);
 
   useEffect(() => {
+    // Skip entirely on touch/mobile — 420-star rAF loop at 60fps kills mobile GPUs
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");

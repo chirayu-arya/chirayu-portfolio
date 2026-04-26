@@ -224,36 +224,30 @@ export default function AboutPage() {
         {/* Warm gradient blobs */}
         <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
           <div
-            className="absolute rounded-full"
+            className="bg-blob absolute rounded-full"
             style={{
               width: "65vmax", height: "65vmax",
               top: "-25vmax", right: "-10vmax",
               background: "radial-gradient(ellipse, rgba(251,191,36,0.25) 0%, transparent 68%)",
-              filter: "blur(80px)",
-              willChange: "transform",
-              transform: "translateZ(0)",
+              willChange: "transform", transform: "translateZ(0)",
             }}
           />
           <div
-            className="absolute rounded-full"
+            className="bg-blob absolute rounded-full"
             style={{
               width: "55vmax", height: "55vmax",
               top: "-15vmax", left: "-15vmax",
               background: "radial-gradient(ellipse, rgba(251,113,133,0.22) 0%, transparent 68%)",
-              filter: "blur(80px)",
-              willChange: "transform",
-              transform: "translateZ(0)",
+              willChange: "transform", transform: "translateZ(0)",
             }}
           />
           <div
-            className="absolute rounded-full"
+            className="bg-blob absolute rounded-full"
             style={{
               width: "50vmax", height: "50vmax",
               bottom: "-10vmax", left: "35%",
               background: "radial-gradient(ellipse, rgba(52,211,153,0.18) 0%, transparent 68%)",
-              filter: "blur(70px)",
-              willChange: "transform",
-              transform: "translateZ(0)",
+              willChange: "transform", transform: "translateZ(0)",
             }}
           />
         </div>

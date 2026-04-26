@@ -94,16 +94,24 @@ body {
   width: 0px;
 }
 
-/* Background blobs — blur only on non-touch devices (filter: blur is expensive on mobile) */
+/* Background blobs — blur on desktop, none on mobile */
 .bg-blob {
   filter: blur(60px);
 }
+
+/* ── Mobile performance: strip all expensive GPU ops on touch devices ── */
 @media (pointer: coarse) {
+  /* Remove blur from all background blobs */
   .bg-blob {
-    filter: none;
-    opacity: 0.6;
+    filter: none !important;
+    opacity: 0.55;
   }
-  /* Also hide the physics PS buttons entirely on mobile */
+  /* Remove backdrop-filter from any element that uses it */
+  .mobile-no-backdrop {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  /* Hide physics PS buttons — rAF loop already skipped, DOM not needed */
   .physics-ps-buttons {
     display: none;
   }
