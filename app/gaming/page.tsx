@@ -291,10 +291,10 @@ function TrophyDashboard({ summary }: { summary: TrophySummary }) {
   const inView = useInView(ref, { once: true, margin: "-8%" });
 
   const tiers = [
-    { type: "bronze" as const,   label: "Bronze",   color: "#C87A40", glow: "rgba(200,122,64,0.45)" },
-    { type: "silver" as const,   label: "Silver",   color: "#A8A8B0", glow: "rgba(168,168,176,0.4)" },
-    { type: "gold" as const,     label: "Gold",     color: "#D4A843", glow: "rgba(212,168,67,0.5)" },
     { type: "platinum" as const, label: "Platinum", color: "#B8C5D6", glow: "rgba(184,197,214,0.45)" },
+    { type: "gold" as const,     label: "Gold",     color: "#D4A843", glow: "rgba(212,168,67,0.5)" },
+    { type: "silver" as const,   label: "Silver",   color: "#A8A8B0", glow: "rgba(168,168,176,0.4)" },
+    { type: "bronze" as const,   label: "Bronze",   color: "#C87A40", glow: "rgba(200,122,64,0.45)" },
   ];
 
   const counts = tiers.map((t) => summary.earnedTrophies[t.type]);
@@ -371,6 +371,7 @@ function TrophyDashboard({ summary }: { summary: TrophySummary }) {
         <div className="flex-1 p-8 lg:p-10 flex flex-col justify-center gap-5"
           style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
           <div className="flex items-baseline gap-2 mb-1">
+            <span className="text-2xl" style={{ lineHeight: 1 }}>🏆</span>
             <motion.span
               className="text-3xl font-bold"
               style={{ color: "#f5f5f7" }}
