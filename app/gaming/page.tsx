@@ -60,6 +60,13 @@ type PSNData = {
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
+function parseDurationHours(iso: string | undefined): number {
+  if (!iso) return 0;
+  const match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!match) return 0;
+  return parseInt(match[1] ?? "0") + parseInt(match[2] ?? "0") / 60;
+}
+
 function parseDuration(iso: string | undefined): string {
   if (!iso) return "";
   const match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
@@ -676,10 +683,10 @@ export default function GamingPage() {
       games = games.filter((g) => g.name.toLowerCase().includes(q));
     }
 
-    // Status
+    // Status — based on play time, not trophy progress
     if (status === "completed") games = games.filter((g) => g.trophy?.progress === 100);
-    if (status === "in-progress") games = games.filter((g) => (g.trophy?.progress ?? 0) > 0 && (g.trophy?.progress ?? 0) < 100);
-    if (status === "not-started") games = games.filter((g) => (g.trophy?.progress ?? 0) === 0);
+    if (status === "in-progress") games = games.filter((g) => parseDurationHours(g.playDuration) > 0 && (g.trophy?.progress ?? 0) < 100);
+    if (status === "not-started") games = games.filter((g) => parseDurationHours(g.playDuration) === 0);
 
     return games;
   }, [data, search, status]);
