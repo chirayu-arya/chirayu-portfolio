@@ -2,7 +2,44 @@
 
 import Nav from "../components/Nav";
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
+
+// Resolves a cover URL — Google Books for reliable coverage, falls back to Open Library
+function gbCover(isbn: string) {
+  return `https://books.google.com/books/content?vid=ISBN${isbn}&printsec=frontcover&img=1&zoom=1`;
+}
+function olCover(isbn: string) {
+  return `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
+}
+
+// Cover image with automatic fallback to spine-color placeholder on load error
+function BookCover({
+  src, fallbackSrc, alt, spineColor, className, style,
+}: {
+  src: string; fallbackSrc?: string; alt: string; spineColor: string;
+  className?: string; style?: React.CSSProperties;
+}) {
+  const [failed, setFailed] = useState(false);
+  const [triedFallback, setTriedFallback] = useState(false);
+
+  const handleError = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    if (!triedFallback && fallbackSrc) {
+      setTriedFallback(true);
+      (e.target as HTMLImageElement).src = fallbackSrc;
+    } else {
+      setFailed(true);
+    }
+  }, [fallbackSrc, triedFallback]);
+
+  if (failed) {
+    return (
+      <div className={className} style={{ ...style, background: spineColor, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <span style={{ fontSize: "2rem", opacity: 0.5 }}>📖</span>
+      </div>
+    );
+  }
+  return <img src={src} alt={alt} className={className} style={style} onError={handleError} />;
+}
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -17,6 +54,7 @@ type Book = {
   title: string;
   author: string;
   cover: string;
+  coverFallback?: string;
   spineColor: string;
   categories: BookCategory[];
   reading?: boolean;
@@ -35,7 +73,8 @@ const BOOKS: Book[] = [
     id: "let-them-theory",
     title: "The Let Them Theory",
     author: "Mel Robbins",
-    cover: "https://covers.openlibrary.org/b/isbn/9781401983376-L.jpg",
+    cover: gbCover("9781401983376"),
+    coverFallback: olCover("9781401983376"),
     spineColor: "#C4773B",
     categories: ["self-help"],
     reading: true,
@@ -47,7 +86,8 @@ const BOOKS: Book[] = [
     id: "mind-magic",
     title: "Mind Magic",
     author: "James R. Doty",
-    cover: "https://covers.openlibrary.org/b/isbn/9780593578612-L.jpg",
+    cover: gbCover("9780593578612"),
+    coverFallback: olCover("9780593578612"),
     spineColor: "#6B8ED6",
     categories: ["psychology", "self-help"],
     reading: true,
@@ -61,7 +101,8 @@ const BOOKS: Book[] = [
     id: "steve-jobs",
     title: "Steve Jobs",
     author: "Walter Isaacson",
-    cover: "https://covers.openlibrary.org/b/isbn/9781451648539-L.jpg",
+    cover: gbCover("9781451648539"),
+    coverFallback: olCover("9781451648539"),
     spineColor: "#A0A0A0",
     categories: ["biography"],
     allTime: true,
@@ -72,7 +113,8 @@ const BOOKS: Book[] = [
     id: "atomic-habits",
     title: "Atomic Habits",
     author: "James Clear",
-    cover: "https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg",
+    cover: gbCover("9780735211292"),
+    coverFallback: olCover("9780735211292"),
     spineColor: "#E8A030",
     categories: ["self-help"],
     allTime: true,
@@ -85,7 +127,8 @@ const BOOKS: Book[] = [
     id: "harry-potter",
     title: "Harry Potter Series",
     author: "J.K. Rowling",
-    cover: "https://covers.openlibrary.org/b/isbn/9780439708180-L.jpg",
+    cover: gbCover("9780439708180"),
+    coverFallback: olCover("9780439708180"),
     spineColor: "#8B2635",
     categories: ["fiction"],
     bookCount: 7,
@@ -95,7 +138,8 @@ const BOOKS: Book[] = [
     id: "percy-jackson",
     title: "Percy Jackson Series",
     author: "Rick Riordan",
-    cover: "https://covers.openlibrary.org/b/isbn/9780786838653-L.jpg",
+    cover: gbCover("9780786838653"),
+    coverFallback: olCover("9780786838653"),
     spineColor: "#2B6CB0",
     categories: ["fiction"],
     bookCount: 5,
@@ -105,7 +149,8 @@ const BOOKS: Book[] = [
     id: "sherlock-holmes",
     title: "The Complete Sherlock Holmes",
     author: "Arthur Conan Doyle",
-    cover: "https://covers.openlibrary.org/b/isbn/9780762457816-L.jpg",
+    cover: gbCover("9780762457816"),
+    coverFallback: olCover("9780762457816"),
     spineColor: "#5C4A1E",
     categories: ["fiction", "mystery"],
     quote: "When you eliminate the impossible, whatever remains, however improbable, must be the truth.",
@@ -114,7 +159,8 @@ const BOOKS: Book[] = [
     id: "psychology-of-money",
     title: "The Psychology of Money",
     author: "Morgan Housel",
-    cover: "https://covers.openlibrary.org/b/isbn/9780857197689-L.jpg",
+    cover: gbCover("9780857197689"),
+    coverFallback: olCover("9780857197689"),
     spineColor: "#2D6A4F",
     categories: ["non-fiction", "psychology"],
     pages: 256,
@@ -124,7 +170,8 @@ const BOOKS: Book[] = [
     id: "the-secret-series",
     title: "The Secret Series",
     author: "Rhonda Byrne",
-    cover: "https://covers.openlibrary.org/b/isbn/9781582701707-L.jpg",
+    cover: gbCover("9781582701707"),
+    coverFallback: olCover("9781582701707"),
     spineColor: "#B8860B",
     categories: ["self-help"],
     bookCount: 4,
@@ -134,7 +181,8 @@ const BOOKS: Book[] = [
     id: "iliad",
     title: "The Iliad",
     author: "Homer",
-    cover: "https://covers.openlibrary.org/b/isbn/9780140275360-L.jpg",
+    cover: gbCover("9780140275360"),
+    coverFallback: olCover("9780140275360"),
     spineColor: "#8B0000",
     categories: ["fiction", "classics"],
     quote: "Even brave men weep.",
@@ -143,7 +191,8 @@ const BOOKS: Book[] = [
     id: "odyssey",
     title: "The Odyssey",
     author: "Homer",
-    cover: "https://covers.openlibrary.org/b/isbn/9780140268867-L.jpg",
+    cover: gbCover("9780140268867"),
+    coverFallback: olCover("9780140268867"),
     spineColor: "#1A3A5C",
     categories: ["fiction", "classics"],
     quote: "There is a time for many words, and there is also a time for sleep.",
@@ -176,20 +225,18 @@ function CurrentlyReadingCard({ book, index }: { book: Book; index: number }) {
       whileHover={{ y: -6, borderColor: "rgba(212,168,67,0.5)" }}
     >
       {/* Blurred cover background */}
-      {book.cover && (
-        <div className="absolute inset-0">
-          <img
-            src={book.cover}
-            alt=""
-            className="w-full h-full object-cover"
-            style={{ filter: "blur(32px) brightness(0.2) saturate(1.2)", transform: "scale(1.15)" }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{ background: "linear-gradient(135deg, rgba(40,24,4,0.88) 0%, rgba(0,0,0,0.94) 100%)" }}
-          />
-        </div>
-      )}
+      <div className="absolute inset-0">
+        <BookCover
+          src={book.cover} fallbackSrc={book.coverFallback}
+          alt="" spineColor={book.spineColor}
+          className="w-full h-full object-cover"
+          style={{ filter: "blur(32px) brightness(0.2) saturate(1.2)", transform: "scale(1.15)" }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(135deg, rgba(40,24,4,0.88) 0%, rgba(0,0,0,0.94) 100%)" }}
+        />
+      </div>
 
       <div className="relative z-10 flex flex-col sm:flex-row gap-7 p-7 sm:p-9 items-start sm:items-stretch">
         {/* Cover */}
@@ -202,14 +249,11 @@ function CurrentlyReadingCard({ book, index }: { book: Book; index: number }) {
               boxShadow: `0 8px 32px rgba(0,0,0,0.6), 4px 4px 0 rgba(0,0,0,0.4)`,
             }}
           >
-            {book.cover
-              ? <img src={book.cover} alt={book.title} className="w-full h-full object-cover" />
-              : (
-                <div className="w-full h-full flex items-center justify-center" style={{ background: book.spineColor }}>
-                  <span className="text-3xl">📖</span>
-                </div>
-              )
-            }
+            <BookCover
+              src={book.cover} fallbackSrc={book.coverFallback}
+              alt={book.title} spineColor={book.spineColor}
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
 
@@ -287,10 +331,11 @@ function AllTimeCard({ book, index }: { book: Book; index: number }) {
             boxShadow: "3px 3px 0 rgba(0,0,0,0.5)",
           }}
         >
-          {book.cover
-            ? <img src={book.cover} alt={book.title} className="w-full h-full object-cover" />
-            : <div className="w-full h-full" style={{ background: book.spineColor }} />
-          }
+          <BookCover
+            src={book.cover} fallbackSrc={book.coverFallback}
+            alt={book.title} spineColor={book.spineColor}
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Info */}
@@ -345,10 +390,12 @@ function LibraryBookCard({ book, index }: { book: Book; index: number }) {
           <div className="absolute inset-0" style={{ background: book.spineColor, opacity: 0.4 }} />
           <div className="absolute inset-0" style={{ backgroundImage: NOISE, backgroundSize: "180px 180px", opacity: 0.12 }} />
 
-          {book.cover
-            ? <img src={book.cover} alt={book.title} className="w-full h-full object-cover object-top" style={{ display: "block" }} />
-            : <div className="w-full h-full flex items-center justify-center"><span className="text-4xl opacity-40">📚</span></div>
-          }
+          <BookCover
+            src={book.cover} fallbackSrc={book.coverFallback}
+            alt={book.title} spineColor={book.spineColor}
+            className="w-full h-full object-cover object-top"
+            style={{ display: "block" }}
+          />
 
           {/* Gradient overlay — before tags in DOM so tags paint on top */}
           <div className="absolute inset-0" style={{ background: "linear-gradient(to top, #0a0a0a 0%, transparent 55%)" }} />
