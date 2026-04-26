@@ -590,7 +590,7 @@ function LibraryCard({ game, index }: { game: LibraryGame; index: number }) {
           </div>
         )}
         <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-xs font-medium"
-          style={{ background: "rgba(0,0,0,0.65)", color: "#86868b", backdropFilter: "blur(8px)" }}>
+          style={{ background: "rgba(0,0,0,0.65)", color: "#f5f5f7", backdropFilter: "blur(8px)" }}>
           {platformLabel(game.category)}
         </div>
         <div className="absolute inset-0" style={{ background: "linear-gradient(to top, #0a0a0a 0%, transparent 50%)" }} />
