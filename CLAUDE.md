@@ -87,25 +87,34 @@ Full PlayStation gaming dashboard connected to live PSN API.
 
 **Trophy Dashboard (`TrophyDashboard` component):**
 - Left: 160×160 SVG ring animated with `stroke-dashoffset`, gradient (platinum→gold→bronze), level number centered
-- Right: animated horizontal bars for bronze/silver/gold/platinum with colored glow layers
+- Right: animated horizontal bars — order is **Platinum, Gold, Silver, Bronze** (top to bottom)
+- 🏆 emoji before total trophy count
+- Amber/gold gradient overlay (`rgba(212,168,67,0.13)`) in top-left corner, amber tint on border
 - `whileHover: { y: -4, borderColor: gold tint }` on outer card
 
 **Currently Playing:**
 - 2-column grid, 2 most recent games from `recentlyPlayed`
-- `motion.div` with `whileHover: { y: -8, scale: 1.015 }` on each card
+- Layout: `lg:items-stretch` + `justify-between` on content column — "Currently Playing" eyebrow pinned to top, stats pinned to bottom, both cards align uniformly regardless of content
+- `whileHover: { y: -8, scale: 1.015 }` on each card
 - Game name: `text-xl lg:text-2xl`
 
 **Recently Played strip:**
-- Games 3–10 from `recentlyPlayed`, horizontal scroll, `whileHover: { y: -8, scale: 1.04 }`
+- Games 3–10 from `recentlyPlayed`, horizontal scroll only — no vertical hover movement
+- Entrance animation: `x: 16 → 0` (not y) — natural for a horizontal strip
+- Container: `alignItems: flex-start`, `paddingTop: 4px`, `paddingBottom: 2px` — cards align to natural height, no extra gap below
+- Platform tag: white text (`#f5f5f7`), rendered after gradient div in DOM so it paints on top
 
 **My Library:**
 - Full `library` array (played games enriched with trophy data)
 - Count shows `totalLibraryCount` (from `getPurchasedGames`, ~1,396)
-- Search, sort (5 options), platform filter (All/PS5/PS4), status filter (6 options)
+- Search bar + status filter only: **All, Completed, In Progress, Not Started** — sort and platform filter removed
+- Filter logic based on **play time** (not trophy progress): In Progress = `parseDurationHours > 0 && trophy < 100`, Not Started = `parseDurationHours === 0`
 - 3-column grid of `LibraryCard` components
 - Hover: outer `div.library-card-wrap` (CSS `translateY(-8px)`) wraps inner `motion.div` (entrance only) — keeps CSS hover and FM entrance animation on separate elements to prevent GPU layer-swap seam
 - Image container: fixed `height: 160px` (not `aspect-video`) to eliminate fractional-pixel gap
 - `object-cover object-top` on images
+- Platform tag: white text, gradient div rendered before tag divs in DOM so tags always appear on top
+- No Contact footer
 
 **API Route (`app/api/psn/route.ts`):**
 - Server-side, 5-min in-memory cache
@@ -117,7 +126,28 @@ Full PlayStation gaming dashboard connected to live PSN API.
 
 **PSButtons component:** 4 inline SVG PS button icons (cross=blue `#6B8ED6`, circle=red `#C44B4B`, triangle=teal `#4BAE8A`, square=purple `#BA7CC4`), used in eyebrow row at `opacity={0.5}`
 
-### `/bookshelf` — placeholder page (not yet built, linked from nav)
+### `/bookshelf` (app/bookshelf/page.tsx) — BUILT 2026-04-27
+Personal reading page. Warm amber/sepia design system (same dark bg, but amber blobs and accents instead of blue/purple). No Contact footer.
+
+**Sections:**
+1. **Hero** — eyebrow "Bookshelf", headline "The books that built me.", warm subtitle. Amber radial gradient blobs.
+2. **Currently Reading** — 2-col grid of `CurrentlyReadingCard`. Blurred cover as background with sepia overlay, amber progress bar (page-based), quote. Mirrors Currently Playing layout on /gaming.
+3. **All-Time Favourites** — 2-col grid of `AllTimeCard`. Noise texture, amber gradient overlay, "★ All-Time" amber badge, cover + quote with hairline divider.
+4. **Library** — 3-col grid of `LibraryBookCard` with category filter pills (All, Fiction, Non-Fiction, Self-Help, Biography, Psychology, Classics, Mystery).
+
+**Book data (hardcoded in page — no API):**
+- Currently Reading: The Let Them Theory (Mel Robbins), Mind Magic (James R. Doty)
+- All-Time: Steve Jobs (Walter Isaacson), Atomic Habits (James Clear)
+- Library: Harry Potter Series (7), Percy Jackson Series (5), The Complete Sherlock Holmes, The Psychology of Money, The Secret Series (4), The Iliad, The Odyssey
+
+**Cover images:** `BookCover` component with 3-tier fallback:
+1. Google Books CDN (`books.google.com/books/content?vid=ISBN{isbn}`) — reliable for new/recent books
+2. Open Library (`covers.openlibrary.org/b/isbn/{isbn}-L.jpg`) — fallback
+3. Spine-color placeholder div — final fallback, never shows broken image
+
+**`Book` type fields:** `id, title, author, cover, coverFallback, spineColor, categories, reading?, allTime?, pages?, currentPage?, bookCount?, quote?`
+
+**Accent color:** `#D4A843` (amber/gold) — used for eyebrows, progress bars, active filter pills, badges, borders
 
 ## Components
 
@@ -200,7 +230,14 @@ Full PlayStation gaming dashboard connected to live PSN API.
 - `app/icon.tsx` — dynamic PNG favicon (32×32): dark bg, blue/purple glows, "CA" text — replaces globe icon in Google Search
 - JSON-LD Person schema in `<head>`
 - `metadataBase`, `openGraph`, `twitter` card all wired up
-- Sitemap auto-generated by Next.js
+- `app/robots.ts` — `allow: "/"`, points to sitemap
+- `app/sitemap.ts` — uses `existsSync` to only include routes that have an actual `page.tsx` or `page.js` file. Skips `components/` and `api/`. Priority: `/` = 1.0, all others = 0.8.
+- **Per-page metadata** via route-level `layout.tsx` files (metadata can't be exported from `"use client"` pages — layouts are server components):
+  - `app/about/layout.tsx` — "About | Chirayu Arya"
+  - `app/gallery/layout.tsx` — "Gallery | Chirayu Arya"
+  - `app/gaming/layout.tsx` — "Gaming | Chirayu Arya"
+  - `app/bookshelf/layout.tsx` — "Bookshelf | Chirayu Arya"
+- Google Search Console: sitemap submitted, /gaming and /bookshelf need manual "Request Indexing" via URL Inspection tool
 
 ## Known Gotchas
 - **Next.js build cache**: if a component is deleted and its import removed, run `rm -rf .next` and restart.
@@ -225,7 +262,7 @@ Full PlayStation gaming dashboard connected to live PSN API.
 - `/about` marquee: real company/brand logos
 - Contact footer: real social media links (Instagram, Medium, X)
 - Work section: real project cards
-- `/bookshelf` page: needs to be built
+- `/bookshelf`: update `currentPage` values as reading progresses, add more books to the BOOKS array as remembered
 
 ## Future Ideas (brainstormed)
 - Custom cursor: done
@@ -242,8 +279,19 @@ Full PlayStation gaming dashboard connected to live PSN API.
 - Branch: `main` (production)
 - Git identity: Chirayu Arya, chirayuarya21@gmail.com (set globally)
 - GitHub repo: chirayu-arya/chirayu-portfolio
-- Last session commits (2026-04-25 to 2026-04-26):
+- Last session commits (2026-04-25 to 2026-04-27):
   - `a5203ed` — Add /gaming page with live PSN integration and physics background
   - `023e212` — Fix: add required offset param to getUserPlayedGames for TypeScript build
   - `0af74395` — Comprehensive mobile performance fix across all pages (blob blur, Nav backdrop-filter, StarField rAF)
   - `c9de92ca` — Mobile UX polish and cursor redesign (16px purple cursor, gaming mobile header, hero mobile bio)
+  - `c2d995ef` — Gaming: simplify library filters and fix recently played strip
+  - `c2d8f813` — Fix: reduce recently played bottom padding to match section gap rhythm
+  - `a2aac403` — Trophy dashboard: reverse tier order (platinum first) and add trophy emoji
+  - `b6e9a88f` — Fix library filters: base In Progress and Not Started on play time
+  - `6e1aa224` — Library cards: make platform tag text white
+  - `9b4f031c` — Fix library cards: render gradient before tags so tags appear in front
+  - `820ab9bd` — Fix recently played cards: platform tag in front of gradient, text white
+  - `8faa8d1c` — Gaming: amber gradient on trophy section, align currently playing cards uniformly
+  - `ba39284b` — Add /bookshelf page and remove Contact footer from gaming page
+  - `8a7f9588` — Bookshelf: fix missing covers with Google Books CDN and onError fallback chain
+  - `c3dd2f66` — SEO: add robots.txt, per-page metadata, fix sitemap route detection
