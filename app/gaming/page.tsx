@@ -1,7 +1,6 @@
 "use client";
 
 import Nav from "../components/Nav";
-import Contact from "../components/Contact";
 import { motion, useInView, useAnimation, useMotionValue } from "framer-motion";
 import { useRef, useEffect, useState, useMemo } from "react";
 
@@ -926,9 +925,6 @@ export default function GamingPage() {
         )}
       </div>
 
-      <div className="mt-24">
-        <Contact />
-      </div>
     </main>
   );
 }
