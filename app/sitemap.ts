@@ -1,8 +1,10 @@
 import { MetadataRoute } from "next";
-import { readdirSync } from "fs";
+import { readdirSync, existsSync } from "fs";
 import { join } from "path";
 
 const siteUrl = "https://chirayuarya.com";
+
+const SKIP = new Set(["components", "api"]);
 
 function getAppRoutes(): string[] {
   const appDir = join(process.cwd(), "app");
@@ -12,16 +14,13 @@ function getAppRoutes(): string[] {
     const entries = readdirSync(appDir, { withFileTypes: true });
     for (const entry of entries) {
       if (!entry.isDirectory()) continue;
-      // Skip Next.js internals and component folders
       if (entry.name.startsWith("_") || entry.name.startsWith("(")) continue;
-      if (entry.name === "components" || entry.name === "api") continue;
+      if (SKIP.has(entry.name)) continue;
 
-      const pageFile = join(appDir, entry.name, "page.tsx");
-      try {
-        readdirSync(join(appDir, entry.name));
+      // Only include if a page.tsx or page.js actually exists in the folder
+      const dir = join(appDir, entry.name);
+      if (existsSync(join(dir, "page.tsx")) || existsSync(join(dir, "page.js"))) {
         routes.push(`/${entry.name}`);
-      } catch {
-        // folder exists but no page — skip
       }
     }
   } catch {
@@ -38,6 +37,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${siteUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: route === "/" ? "weekly" : "monthly",
-    priority: route === "/" ? 1 : 0.7,
+    priority: route === "/" ? 1 : 0.8,
   }));
 }
