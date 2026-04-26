@@ -535,16 +535,16 @@ function RecentCard({ game, index }: { game: LibraryGame; index: number }) {
           : <div className="w-full h-full flex items-center justify-center" style={{ background: "#111" }}><span className="text-3xl">🎮</span></div>
         }
         <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)" }} />
+        <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded text-xs font-medium"
+          style={{ background: "rgba(0,0,0,0.65)", color: "#f5f5f7", backdropFilter: "blur(8px)" }}>
+          {platformLabel(game.category)}
+        </div>
         <div className="absolute bottom-2 left-2 right-2">
           {pct !== null && (
             <div className="w-full h-0.5 rounded-full mb-1" style={{ background: "rgba(255,255,255,0.15)" }}>
               <div className="h-0.5 rounded-full" style={{ width: `${pct}%`, background: pct === 100 ? "#B8C5D6" : "#003087" }} />
             </div>
           )}
-        </div>
-        <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded text-xs font-medium"
-          style={{ background: "rgba(0,0,0,0.65)", color: "#86868b", backdropFilter: "blur(8px)" }}>
-          {platformLabel(game.category)}
         </div>
       </div>
       <p className="text-xs font-semibold leading-snug line-clamp-2" style={{ color: "#f5f5f7" }}>{game.name}</p>
