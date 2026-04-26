@@ -311,11 +311,20 @@ export default function Hero() {
             className="text-base sm:text-lg leading-relaxed mb-10 max-w-2xl"
             style={{ color: "#f5f5f7", textShadow: "0 2px 20px rgba(0,0,0,0.7)" }}
           >
-            Most people treat design &amp; marketing as separate things. I don&apos;t.
-            <br />
-            Design without strategy is decoration. Marketing without craft is noise.
-            <br />
-            I believe in working at the intersection, and creating an impact.
+            {/* Mobile: condensed two-liner */}
+            <span className="sm:hidden">
+              Most people treat design &amp; marketing as separate things.
+              <br />
+              I believe in working at the intersection.
+            </span>
+            {/* Desktop: full three-liner */}
+            <span className="hidden sm:inline">
+              Most people treat design &amp; marketing as separate things. I don&apos;t.
+              <br />
+              Design without strategy is decoration. Marketing without craft is noise.
+              <br />
+              I believe in working at the intersection, and creating an impact.
+            </span>
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex items-center justify-center gap-3">

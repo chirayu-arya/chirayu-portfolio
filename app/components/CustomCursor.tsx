@@ -44,7 +44,7 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Amber glow — box-shadow spreads outward only, never bleeds under the dot */}
+      {/* Purple glow — box-shadow spreads outward only, never bleeds under the dot */}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none"
         style={{
@@ -62,12 +62,12 @@ export default function CustomCursor() {
       >
         <div
           style={{
-            width: 20,
-            height: 20,
+            width: 16,
+            height: 16,
             borderRadius: "50%",
             background: "transparent",
             boxShadow:
-              "0 0 12px 6px rgba(251,168,44,0.55), 0 0 28px 12px rgba(251,168,44,0.2)",
+              "0 0 10px 5px rgba(168,85,247,0.6), 0 0 24px 10px rgba(139,92,246,0.22)",
           }}
         />
       </motion.div>
@@ -91,8 +91,8 @@ export default function CustomCursor() {
       >
         <div
           style={{
-            width: 20,
-            height: 20,
+            width: 16,
+            height: 16,
             borderRadius: "50%",
             background: "#ffffff",
           }}

@@ -770,39 +770,63 @@ export default function GamingPage() {
 
         {/* Header */}
         <div className="mb-12">
-          {/* Eyebrow row: label left, PS buttons right */}
+          {/* Eyebrow row */}
           <motion.div
             className="flex items-center justify-between mb-4"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE }}
           >
+            {/* Mobile: "Gaming Dashboard" | Desktop: "Gaming Dashboard · PlayStation" */}
             <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#003087" }}>
-              Gaming Dashboard&nbsp;&nbsp;·&nbsp;&nbsp;PlayStation
+              <span className="sm:hidden">Gaming Dashboard</span>
+              <span className="hidden sm:inline">Gaming Dashboard&nbsp;&nbsp;·&nbsp;&nbsp;PlayStation</span>
             </p>
-            <PSButtons opacity={0.5} />
+            {/* Mobile: Photo Mode button | Desktop: PS button icons */}
+            <a
+              href="https://instagram.com/technonaut.frames"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sm:hidden flex items-center gap-1.5 flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold"
+              style={{
+                background: "rgba(0,48,135,0.18)",
+                border: "1px solid rgba(0,48,135,0.45)",
+                color: "#f5f5f7",
+              }}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+              Photo Mode
+            </a>
+            <div className="hidden sm:block">
+              <PSButtons opacity={0.5} />
+            </div>
           </motion.div>
 
           {/* Headline row */}
           <div className="flex items-center justify-between gap-4">
             <motion.h1
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-none tracking-tight flex items-center gap-4"
+              className="text-3xl sm:text-6xl lg:text-7xl font-bold leading-none tracking-tight flex items-center gap-3"
               style={{ color: "#f5f5f7" }}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EASE, delay: 0.08 }}
             >
-              I am Techno_Naut!
-              {/* PS Plus logo */}
-              <img src="/PS-Plus.png" alt="PlayStation Plus" style={{ width: 52, height: 52, flexShrink: 0, marginBottom: "0.1em", objectFit: "contain" }} />
+              {/* Mobile: "Techno_Naut" | Desktop: "I am Techno_Naut!" */}
+              <span className="sm:hidden">Techno_Naut</span>
+              <span className="hidden sm:inline">I am Techno_Naut!</span>
+              {/* PS Plus logo — slightly smaller on mobile */}
+              <img src="/PS-Plus.png" alt="PlayStation Plus" style={{ flexShrink: 0, marginBottom: "0.1em", objectFit: "contain" }} className="w-9 h-9 sm:w-[52px] sm:h-[52px]" />
             </motion.h1>
 
-            {/* Photo Mode */}
+            {/* Photo Mode — desktop only (mobile is in eyebrow row) */}
             <motion.a
               href="https://instagram.com/technonaut.frames"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 flex-shrink-0 px-4 py-2.5 rounded-xl text-sm font-semibold"
+              className="hidden sm:flex items-center gap-2 flex-shrink-0 px-4 py-2.5 rounded-xl text-sm font-semibold"
               style={{
                 background: "rgba(0,48,135,0.18)",
                 border: "1px solid rgba(0,48,135,0.45)",
@@ -814,7 +838,6 @@ export default function GamingPage() {
               transition={{ duration: 0.7, ease: EASE, delay: 0.14 }}
               whileHover={{ y: -3, background: "rgba(0,48,135,0.35)", borderColor: "rgba(0,48,135,0.75)" }}
             >
-              {/* Camera icon */}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                 <circle cx="12" cy="13" r="4"/>
