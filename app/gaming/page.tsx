@@ -583,6 +583,7 @@ function LibraryCard({ game, index }: { game: LibraryGame; index: number }) {
           ? <img src={img} alt={game.name} className="w-full h-full object-cover object-top" style={{ display: "block", transition: "transform 0.7s ease", }} />
           : <div className="w-full h-full flex items-center justify-center" style={{ background: "#111" }}><span className="text-4xl opacity-20">🎮</span></div>
         }
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, #0a0a0a 0%, transparent 50%)" }} />
         {hasPlatinum && (
           <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-semibold"
             style={{ background: "rgba(184,197,214,0.18)", color: "#B8C5D6", backdropFilter: "blur(8px)", border: "1px solid rgba(184,197,214,0.25)" }}>
@@ -593,7 +594,6 @@ function LibraryCard({ game, index }: { game: LibraryGame; index: number }) {
           style={{ background: "rgba(0,0,0,0.65)", color: "#f5f5f7", backdropFilter: "blur(8px)" }}>
           {platformLabel(game.category)}
         </div>
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, #0a0a0a 0%, transparent 50%)" }} />
       </div>
 
       <div className="p-4 pt-3 flex flex-col gap-3">
