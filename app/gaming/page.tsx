@@ -843,7 +843,7 @@ export default function GamingPage() {
             {recentlyPlayed.length > 0 && (
               <div>
                 <h2 className="text-lg font-semibold mb-5" style={{ color: "#f5f5f7" }}>Recently Played</h2>
-                <div className="flex gap-4 overflow-x-auto" style={{ scrollbarWidth: "none", paddingTop: "4px", paddingBottom: "16px", alignItems: "flex-start" }}>
+                <div className="flex gap-4 overflow-x-auto" style={{ scrollbarWidth: "none", paddingTop: "4px", paddingBottom: "2px", alignItems: "flex-start" }}>
                   {recentlyPlayed.map((g, i) => (
                     <RecentCard key={g.titleId} game={g} index={i} />
                   ))}
