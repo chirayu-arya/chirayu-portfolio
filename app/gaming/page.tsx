@@ -3,7 +3,7 @@
 import Nav from "../components/Nav";
 import Contact from "../components/Contact";
 import { motion, useInView, useAnimation, useMotionValue } from "framer-motion";
-import { useRef, useEffect, useState, useMemo, useCallback } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -71,12 +71,6 @@ function parseDuration(iso: string | undefined): string {
   return `${h}h ${m}m`;
 }
 
-function parseDurationHours(iso: string | undefined): number {
-  if (!iso) return 0;
-  const match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-  if (!match) return 0;
-  return parseInt(match[1] ?? "0") + parseInt(match[2] ?? "0") / 60;
-}
 
 function gameImage(g: LibraryGame): string {
   const conceptImg = g.concept?.media?.images?.find(
@@ -521,9 +515,8 @@ function RecentCard({ game, index }: { game: LibraryGame; index: number }) {
     <motion.div
       className="flex-shrink-0 w-44 flex flex-col gap-2"
       style={{ cursor: "pointer" }}
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -8, scale: 1.04 }}
+      initial={{ opacity: 0, x: 16 }}
+      whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-8%" }}
       transition={{ duration: 0.5, ease: EASE, delay: index * 0.05 }}
     >
@@ -649,9 +642,7 @@ function Skeleton() {
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
-type SortKey = "recent" | "playtime" | "name" | "progress" | "sessions";
-type FilterPlatform = "all" | "ps5" | "ps4";
-type FilterStatus = "all" | "platinum" | "completed" | "in-progress" | "not-started" | "no-trophy";
+type FilterStatus = "all" | "completed" | "in-progress" | "not-started";
 
 export default function GamingPage() {
   const [data, setData] = useState<PSNData | null>(null);
@@ -659,8 +650,6 @@ export default function GamingPage() {
 
   // Library controls
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<SortKey>("recent");
-  const [platform, setPlatform] = useState<FilterPlatform>("all");
   const [status, setStatus] = useState<FilterStatus>("all");
 
   useEffect(() => {
@@ -686,56 +675,21 @@ export default function GamingPage() {
       games = games.filter((g) => g.name.toLowerCase().includes(q));
     }
 
-    // Platform
-    if (platform === "ps5") games = games.filter((g) => g.category === "ps5_native_game");
-    if (platform === "ps4") games = games.filter((g) => g.category === "ps4_game");
-
     // Status
-    if (status === "platinum") games = games.filter((g) => (g.trophy?.earnedTrophies.platinum ?? 0) > 0);
     if (status === "completed") games = games.filter((g) => g.trophy?.progress === 100);
     if (status === "in-progress") games = games.filter((g) => (g.trophy?.progress ?? 0) > 0 && (g.trophy?.progress ?? 0) < 100);
-    if (status === "not-started") games = games.filter((g) => g.trophy?.progress === 0);
-    if (status === "no-trophy") games = games.filter((g) => !g.trophy);
-
-    // Sort
-    if (sort === "recent") {
-      games.sort((a, b) => new Date(b.lastPlayedDateTime ?? 0).getTime() - new Date(a.lastPlayedDateTime ?? 0).getTime());
-    } else if (sort === "playtime") {
-      games.sort((a, b) => parseDurationHours(b.playDuration) - parseDurationHours(a.playDuration));
-    } else if (sort === "sessions") {
-      games.sort((a, b) => b.playCount - a.playCount);
-    } else if (sort === "name") {
-      games.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sort === "progress") {
-      games.sort((a, b) => (b.trophy?.progress ?? -1) - (a.trophy?.progress ?? -1));
-    }
+    if (status === "not-started") games = games.filter((g) => (g.trophy?.progress ?? 0) === 0);
 
     return games;
-  }, [data, search, sort, platform, status]);
+  }, [data, search, status]);
 
   const summary = data?.trophySummary;
 
-  const SORT_OPTIONS: { key: SortKey; label: string }[] = [
-    { key: "recent", label: "Recently Played" },
-    { key: "playtime", label: "Most Played" },
-    { key: "sessions", label: "Most Sessions" },
-    { key: "progress", label: "Trophy Progress" },
-    { key: "name", label: "A – Z" },
-  ];
-
-  const PLATFORM_OPTIONS: { key: FilterPlatform; label: string }[] = [
-    { key: "all", label: "All Platforms" },
-    { key: "ps5", label: "PS5" },
-    { key: "ps4", label: "PS4" },
-  ];
-
   const STATUS_OPTIONS: { key: FilterStatus; label: string }[] = [
     { key: "all", label: "All" },
-    { key: "platinum", label: "Platinum" },
     { key: "completed", label: "Completed" },
     { key: "in-progress", label: "In Progress" },
     { key: "not-started", label: "Not Started" },
-    { key: "no-trophy", label: "No Trophy Data" },
   ];
 
   return (
@@ -889,7 +843,7 @@ export default function GamingPage() {
             {recentlyPlayed.length > 0 && (
               <div>
                 <h2 className="text-lg font-semibold mb-5" style={{ color: "#f5f5f7" }}>Recently Played</h2>
-                <div className="flex gap-4 overflow-x-auto pb-3" style={{ scrollbarWidth: "none" }}>
+                <div className="flex gap-4 overflow-x-auto" style={{ scrollbarWidth: "none", paddingTop: "4px", paddingBottom: "16px", alignItems: "flex-start" }}>
                   {recentlyPlayed.map((g, i) => (
                     <RecentCard key={g.titleId} game={g} index={i} />
                   ))}
@@ -926,59 +880,20 @@ export default function GamingPage() {
                 </div>
               </div>
 
-              {/* Controls row */}
-              <div className="flex flex-wrap gap-3 mb-6">
-                {/* Sort */}
-                <div className="flex gap-1.5 flex-wrap">
-                  {SORT_OPTIONS.map(({ key, label }) => (
-                    <button key={key} onClick={() => setSort(key)}
-                      className="px-3 py-1.5 rounded-full text-xs font-medium"
-                      style={{
-                        background: sort === key ? "#003087" : "rgba(255,255,255,0.05)",
-                        color: sort === key ? "#fff" : "#86868b",
-                        border: sort === key ? "1px solid rgba(0,48,135,0.6)" : "1px solid rgba(255,255,255,0.08)",
-                        cursor: "pointer",
-                      }}>
-                      {label}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="w-px" style={{ background: "rgba(255,255,255,0.08)" }} />
-
-                {/* Platform */}
-                <div className="flex gap-1.5 flex-wrap">
-                  {PLATFORM_OPTIONS.map(({ key, label }) => (
-                    <button key={key} onClick={() => setPlatform(key)}
-                      className="px-3 py-1.5 rounded-full text-xs font-medium"
-                      style={{
-                        background: platform === key ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.05)",
-                        color: platform === key ? "#f5f5f7" : "#86868b",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        cursor: "pointer",
-                      }}>
-                      {label}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="w-px" style={{ background: "rgba(255,255,255,0.08)" }} />
-
-                {/* Status */}
-                <div className="flex gap-1.5 flex-wrap">
-                  {STATUS_OPTIONS.map(({ key, label }) => (
-                    <button key={key} onClick={() => setStatus(key)}
-                      className="px-3 py-1.5 rounded-full text-xs font-medium"
-                      style={{
-                        background: status === key ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.05)",
-                        color: status === key ? "#f5f5f7" : "#86868b",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        cursor: "pointer",
-                      }}>
-                      {label}
-                    </button>
-                  ))}
-                </div>
+              {/* Status filter */}
+              <div className="flex gap-1.5 flex-wrap mb-6">
+                {STATUS_OPTIONS.map(({ key, label }) => (
+                  <button key={key} onClick={() => setStatus(key)}
+                    className="px-4 py-1.5 rounded-full text-xs font-medium"
+                    style={{
+                      background: status === key ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.05)",
+                      color: status === key ? "#f5f5f7" : "#86868b",
+                      border: status === key ? "1px solid rgba(255,255,255,0.2)" : "1px solid rgba(255,255,255,0.08)",
+                      cursor: "pointer",
+                    }}>
+                    {label}
+                  </button>
+                ))}
               </div>
 
               {filteredLibrary.length === 0 ? (
