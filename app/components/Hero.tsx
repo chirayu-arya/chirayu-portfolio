@@ -1,61 +1,45 @@
 "use client";
 
-import { motion, useScroll, useTransform, type Variants, AnimatePresence } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import StarField from "./StarField";
-import MagneticButton from "./MagneticButton";
 
-const container: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.13, delayChildren: 0.15 } },
-};
+const CHARS = ["C", "H", "I", "R", "A", "Y", "U"];
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1.1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
-  },
-};
+const TAPE_ITEMS = [
+  "Marketing",
+  "Design",
+  "Photography",
+  "Gaming",
+  "Charleston, SC",
+  "Techno_Naut",
+  "Guitar",
+  "Books",
+  "SiteMarker",
+];
+
+const TAPE_LOOP = [...TAPE_ITEMS, ...TAPE_ITEMS];
+
+const IDENTITY = ["Marketing", "Design", "Photography", "Gaming", "Guitar", "Books"];
 
 export default function Hero() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
-  const scrollOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
-  // Intro state: spline starts fullscreen, fades to 20% after 3.5s
-  // Falls back after 6s max in case iframe onLoad never fires
-  const [introDone, setIntroD] = useState(false);
+  const [ready, setReady] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const [headlineHovered, setHeadlineHovered] = useState(false);
-  const [revealPos, setRevealPos] = useState<{ x: number; y: number } | null>(null);
-
-  const triggerIntro = () => {
-    if (timerRef.current) return; // already scheduled
-    timerRef.current = setTimeout(() => setIntroD(true), 3500);
-  };
 
   useEffect(() => {
-    // Fallback: guarantee text appears even if iframe onLoad never fires
     setIsMobile(window.innerWidth < 768);
-    const fallback = setTimeout(() => setIntroD(true), 4500);
-    return () => {
-      clearTimeout(fallback);
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
+    const t = setTimeout(() => setReady(true), 100);
+    return () => clearTimeout(t);
   }, []);
+
+  const ease = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
   return (
     <section
-      ref={ref}
       className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-black"
       style={{ isolation: "isolate" }}
     >
-      {/* ── Gradient blobs — z:1 ── */}
+      {/* ── Gradient blobs ── */}
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
         <motion.div
           className="bg-blob absolute rounded-full"
@@ -87,302 +71,188 @@ export default function Hero() {
           animate={isMobile ? {} : { scale: [1, 1.08, 1], x: [0, -20, 0] }}
           transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 5 }}
         />
-        <div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,0,0,0.2) 0%, transparent 100%)" }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse 140% 140% at 50% 50%, transparent 45%, rgba(0,0,0,0.4) 100%)" }}
-        />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,0,0,0.15) 0%, transparent 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 140% 140% at 50% 50%, transparent 45%, rgba(0,0,0,0.5) 100%)" }} />
       </div>
 
-      {/* ── Star field — fades in with content after Spline intro ── */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        animate={{ opacity: introDone ? 1 : 0 }}
-        transition={{ duration: 1.2, ease: "easeInOut" }}
-        style={{ zIndex: 2 }}
-      >
+      {/* ── Star field ── */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
         <StarField />
-      </motion.div>
+      </div>
 
-      {/* ── Spline — desktop only (lg+), too heavy for mobile ── */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        animate={{ opacity: introDone ? 0 : 1 }}
-        transition={{ duration: 1.2, ease: "easeInOut" }}
-        style={{
-          zIndex: introDone ? 3 : 20,
-          transform: "translateZ(0)",
-          backfaceVisibility: "hidden",
-          WebkitBackfaceVisibility: "hidden" as "hidden",
-        }}
+      {/* ── Main content ── */}
+      <div
+        className="relative w-full flex flex-col items-center"
+        style={{ zIndex: 10 }}
       >
-        <iframe
-          src="https://my.spline.design/sentientcopycopy-acxzGqKYwXGxcJSUoNyFjUmZ-QSE/"
+
+        {/* Eyebrow */}
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+          transition={{ duration: 0.9, ease, delay: 0.0 }}
           style={{
-            width: "100%",
-            height: "100%",
-            border: "none",
-            pointerEvents: "none",
-            transform: "translateZ(0)",
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
+            color: "rgba(245,245,247,0.35)",
+            fontSize: "0.65rem",
+            letterSpacing: "0.32em",
+            textTransform: "uppercase",
+            fontWeight: 500,
+            marginBottom: "1.5rem",
           }}
-          onLoad={triggerIntro}
-          allowFullScreen
-        />
-      </motion.div>
-
-      {/* ── Content — hidden during intro, fades in after ── */}
-      <motion.div
-        animate={{ opacity: introDone ? 1 : 0 }}
-        transition={{ duration: 1.0, ease: "easeInOut" }}
-        style={{ y, zIndex: 10 }}
-        className="relative flex flex-col items-center text-center px-6 pt-20 sm:pt-28 pb-24"
-      >
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate={introDone ? "show" : "hidden"}
-          className="flex flex-col items-center"
         >
-          {/* Memoji — above headline, with cursor reveal effect */}
-          <motion.div
-            variants={fadeUp}
-            className="relative mb-6"
+          Charleston, SC &nbsp;·&nbsp; Portfolio 2026
+        </motion.p>
+
+        {/* Name + tape wrapper */}
+        <div className="relative w-full flex justify-center items-center">
+
+          {/* CHIRAYU — per-character clip-up reveal */}
+          <h1
+            className="font-black select-none relative"
             style={{
-              display: "inline-block",
-              cursor: "none",
-              height: isMobile ? "11rem" : "clamp(8rem, 18vw, 16rem)",
-              width: isMobile ? "11rem" : "clamp(8rem, 18vw, 16rem)",
-              filter: "drop-shadow(0 4px 32px rgba(0,0,0,0.5))",
-            }}
-            onMouseEnter={() => setHeadlineHovered(true)}
-            onMouseLeave={() => { setHeadlineHovered(false); setRevealPos(null); }}
-            onMouseMove={e => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              setRevealPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-            }}
-            onTouchStart={e => {
-              setHeadlineHovered(true);
-              const touch = e.touches[0];
-              const rect = e.currentTarget.getBoundingClientRect();
-              setRevealPos({ x: touch.clientX - rect.left, y: touch.clientY - rect.top });
-            }}
-            onTouchMove={e => {
-              const touch = e.touches[0];
-              const rect = e.currentTarget.getBoundingClientRect();
-              setRevealPos({ x: touch.clientX - rect.left, y: touch.clientY - rect.top });
-            }}
-            onTouchEnd={() => {
-              setTimeout(() => { setHeadlineHovered(false); setRevealPos(null); }, 1800);
+              fontSize: "clamp(56px, 21.5vw, 380px)",
+              lineHeight: 1,
+              color: "#f5f5f7",
+              letterSpacing: "-0.02em",
+              zIndex: 1,
             }}
           >
-            {/* Reveal image — behind, fills container */}
-            <img
-              src="/Chirayu Reveal.png"
-              alt=""
-              aria-hidden
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                borderRadius: "1rem",
-              }}
-            />
-
-            {/* Memoji — on top, fully covers container, transparent in spotlight */}
-            <img
-              src="/Memoji 3.png"
-              alt="Chirayu memoji"
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                WebkitMaskImage: revealPos
-                  ? `radial-gradient(circle at ${revealPos.x}px ${revealPos.y}px, transparent 0px, transparent 89px, black 90px)`
-                  : undefined,
-                maskImage: revealPos
-                  ? `radial-gradient(circle at ${revealPos.x}px ${revealPos.y}px, transparent 0px, transparent 89px, black 90px)`
-                  : undefined,
-              }}
-            />
-
-            {/* Wave bubble — mobile only, diagonally above top-right of memoji */}
-            <AnimatePresence>
-              {headlineHovered && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.7 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.7 }}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute pointer-events-none sm:hidden"
-                  style={{ top: "-1rem", right: "-1rem" }}
+            {CHARS.map((char, i) => (
+              <span
+                key={i}
+                style={{
+                  display: "inline-block",
+                  overflow: "hidden",
+                  verticalAlign: "bottom",
+                  lineHeight: 1.12,
+                  marginRight: i === 4 ? "-0.045em" : undefined,
+                }}
+              >
+                <motion.span
+                  style={{ display: "inline-block" }}
+                  initial={{ y: "110%" }}
+                  animate={ready ? { y: "0%" } : { y: "110%" }}
+                  transition={{ duration: 1.0, ease, delay: 0.08 + i * 0.07 }}
                 >
-                  <div
-                    className="mobile-no-backdrop flex items-center justify-center rounded-full w-10 h-10"
-                    style={{
-                      background: "rgba(255,255,255,0.1)",
-                      border: "1px solid rgba(255,255,255,0.18)",
-                      backdropFilter: "blur(24px)",
-                      WebkitBackdropFilter: "blur(24px)",
-                      boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
-                    }}
-                  >
-                    <motion.span
-                      animate={{ rotate: [0, 25, -10, 25, 0] }}
-                      transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
-                      className="text-lg"
-                      style={{ display: "flex", alignItems: "center", justifyContent: "center", transformOrigin: "70% 70%", lineHeight: 1 }}
-                    >
-                      👋
-                    </motion.span>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
+                  {char}
+                </motion.span>
+              </span>
+            ))}
+          </h1>
 
-          {/* Headline — bubble appears top-right on hover of image or headline */}
+          {/* ── Diagonal tape ── */}
           <motion.div
-            variants={fadeUp}
-            className="relative inline-block mb-7"
-            onMouseEnter={() => setHeadlineHovered(true)}
-            onMouseLeave={() => setHeadlineHovered(false)}
-            onTouchStart={() => setHeadlineHovered(true)}
-            onTouchEnd={() => setTimeout(() => setHeadlineHovered(false), 1800)}
+            className="absolute pointer-events-none"
+            style={{ top: "50%", left: "-25vw", width: "150vw", zIndex: 20 }}
+            initial={{ opacity: 0, y: "-50%" }}
+            animate={ready ? { opacity: 1, y: "-50%" } : { opacity: 0, y: "-50%" }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.7 }}
           >
-            <h1
-              className="font-semibold tracking-[-0.03em] whitespace-nowrap cursor-default"
+            <div
               style={{
-                fontSize: "clamp(2.8rem, 6.5vw, 6.5rem)",
-                lineHeight: 1.05,
-                color: "#f5f5f7",
-                textShadow: "0 2px 40px rgba(0,0,0,0.8), 0 1px 8px rgba(0,0,0,0.6)",
+                transform: "rotate(-9deg)",
+                background: "rgba(245,245,247,0.94)",
+                padding: "16px 0",
+                overflow: "hidden",
               }}
             >
-              Hi! I am Chirayu.
-            </h1>
-
-            {/* Glass bubble — top right of headline */}
-            <AnimatePresence>
-              {headlineHovered && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute pointer-events-none hidden sm:block"
-                  style={{ bottom: "calc(100% - 20px)", right: "-2.5rem" }}
-                >
-                  <div
-                    className="flex items-center justify-center rounded-full w-10 h-10 sm:w-[clamp(3.6rem,8vw,5rem)] sm:h-[clamp(3.6rem,8vw,5rem)]"
+              <div
+                className="animate-marquee flex"
+                style={{ width: "max-content", animationDuration: "22s" }}
+              >
+                {TAPE_LOOP.map((item, i) => (
+                  <span
+                    key={i}
                     style={{
-                      background: "rgba(255,255,255,0.1)",
-                      border: "1px solid rgba(255,255,255,0.18)",
-                      backdropFilter: "blur(24px)",
-                      WebkitBackdropFilter: "blur(24px)",
-                      // mobile-no-backdrop class strips this on touch devices
-                      boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "1.6rem",
+                      paddingRight: "1.6rem",
+                      color: "#0a0a0a",
+                      fontWeight: 700,
+                      fontSize: "0.82rem",
+                      letterSpacing: "0.07em",
+                      textTransform: "uppercase",
+                      whiteSpace: "nowrap",
                     }}
                   >
-                    <motion.span
-                      animate={{ rotate: [0, 25, -10, 25, 0] }}
-                      transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
-                      className="text-lg sm:text-[clamp(1.5rem,3.5vw,2rem)]"
-                      style={{ display: "flex", alignItems: "center", justifyContent: "center", transformOrigin: "70% 70%", lineHeight: 1 }}
-                    >
-                      👋
-                    </motion.span>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    {item}
+                    <span style={{ opacity: 0.25, fontSize: "0.5rem" }}>◆</span>
+                  </span>
+                ))}
+              </div>
+            </div>
           </motion.div>
 
-          <motion.p
-            variants={fadeUp}
-            className="text-base sm:text-lg leading-relaxed mb-10 max-w-2xl"
-            style={{ color: "#f5f5f7", textShadow: "0 2px 20px rgba(0,0,0,0.7)" }}
+          {/* ── Circular photo ── */}
+          <motion.div
+            className="absolute"
+            style={{ top: "50%", left: "50%", zIndex: 30 }}
+            initial={{ scale: 0, x: "-50%", y: "-50%" }}
+            animate={ready ? { scale: 1, x: "-50%", y: "-50%" } : { scale: 0, x: "-50%", y: "-50%" }}
+            transition={{ type: "spring", stiffness: 260, damping: 18, delay: 1.15 }}
           >
-            {/* Mobile: condensed two-liner */}
-            <span className="sm:hidden">
-              Most people treat design &amp; marketing as separate things.
-              <br />
-              I believe in working at the intersection.
-            </span>
-            {/* Desktop: full three-liner */}
-            <span className="hidden sm:inline">
-              Most people treat design &amp; marketing as separate things. I don&apos;t.
-              <br />
-              Design without strategy is decoration. Marketing without craft is noise.
-              <br />
-              I believe in working at the intersection, and creating an impact.
-            </span>
-          </motion.p>
-
-          <motion.div variants={fadeUp} className="flex items-center justify-center gap-3">
-            <MagneticButton>
-              <a
-                href="#work"
-                className="px-7 py-3 rounded-full text-sm font-semibold whitespace-nowrap"
-                style={{
-                  background: "#f5f5f7",
-                  color: "#000",
-                  transition: "box-shadow 0.3s ease",
-                  boxShadow: "none",
-                  display: "block",
-                }}
-                onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.4)")}
-                onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
-              >
-                View Work
-              </a>
-            </MagneticButton>
-            <MagneticButton>
-              <a
-                href="mailto:chirayuarya21@gmail.com"
-                className="px-7 py-3 rounded-full text-sm font-medium whitespace-nowrap"
-                style={{
-                  border: "1px solid rgba(255,255,255,0.2)",
-                  color: "#f5f5f7",
-                  transition: "box-shadow 0.3s ease",
-                  boxShadow: "none",
-                  display: "block",
-                }}
-                onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 28px 6px rgba(245,245,247,0.2)")}
-                onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
-              >
-                Get in Touch
-              </a>
-            </MagneticButton>
+            <img
+              src="/Chirayu Square.png"
+              alt="Chirayu"
+              style={{
+                width: isMobile ? 66 : 116,
+                height: isMobile ? 66 : 116,
+                borderRadius: "50%",
+                objectFit: "cover",
+                objectPosition: "center top",
+                border: "3px solid rgba(10,10,10,0.2)",
+                display: "block",
+              }}
+            />
           </motion.div>
-        </motion.div>
-      </motion.div>
+        </div>
 
-      {/* Hero footer line — pinned to bottom of section */}
+        {/* Identity strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+          transition={{ duration: 1.0, ease, delay: 0.85 }}
+          style={{ marginTop: "2rem", display: "flex", alignItems: "center", gap: "0", flexWrap: "wrap", justifyContent: "center" }}
+        >
+          {IDENTITY.map((item, i) => (
+            <span key={i} style={{ display: "inline-flex", alignItems: "center" }}>
+              <span
+                style={{
+                  color: "rgba(245,245,247,0.45)",
+                  fontSize: "0.72rem",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                }}
+              >
+                {item}
+              </span>
+              {i < IDENTITY.length - 1 && (
+                <span style={{ color: "rgba(245,245,247,0.18)", margin: "0 1rem", fontSize: "0.5rem" }}>◆</span>
+              )}
+            </span>
+          ))}
+        </motion.div>
+
+      </div>
+
+      {/* ── Footer line ── */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
-        animate={introDone ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
+        animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+        transition={{ duration: 0.8, ease, delay: 1.5 }}
         className="absolute bottom-0 left-0 right-0 flex justify-center pb-8 pointer-events-none"
         style={{ zIndex: 22 }}
       >
-        <p className="text-base font-medium tracking-wide" style={{ color: "#f5f5f7" }}>
+        <p className="text-base font-medium tracking-wide" style={{ color: "rgba(245,245,247,0.5)" }}>
           <span className="hidden sm:inline">🚧 Marketing @ SiteMarker &nbsp;|&nbsp; 📍 Charleston, South Carolina</span>
-            <span className="sm:hidden flex flex-col items-center gap-1">
-              <span>🚧 Marketing @ SiteMarker</span>
-              <span>📍 Charleston, South Carolina</span>
-            </span>
+          <span className="sm:hidden flex flex-col items-center gap-1">
+            <span>🚧 Marketing @ SiteMarker</span>
+            <span>📍 Charleston, South Carolina</span>
+          </span>
         </p>
       </motion.div>
-
     </section>
   );
 }
