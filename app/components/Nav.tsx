@@ -189,19 +189,6 @@ export default function Nav() {
             </AnimatePresence>
           </div>
 
-          <div className="w-px h-4 mx-1" style={{ background: "rgba(255,255,255,0.1)" }} />
-
-          <a
-            href="https://www.linkedin.com/in/chirayuarya/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center w-9 h-9 rounded-full cursor-pointer transition-colors duration-200"
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-          >
-            <LinkedInIcon />
-          </a>
-
           <a
             href="/Resume.pdf"
             target="_blank"
@@ -251,19 +238,8 @@ export default function Nav() {
             </a>
           </div>
 
-          {/* Right: LinkedIn + Hamburger */}
+          {/* Right: Hamburger */}
           <div className="flex items-center gap-1">
-            <a
-              href="https://www.linkedin.com/in/chirayuarya/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-9 h-9 rounded-full cursor-pointer"
-              onTouchStart={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-              onTouchEnd={e => (e.currentTarget.style.background = "transparent")}
-            >
-              <LinkedInIcon />
-            </a>
-
             <button
               className="flex items-center justify-center w-9 h-9 rounded-full cursor-pointer text-white/65"
               style={{ background: menuOpen ? "rgba(255,255,255,0.07)" : "transparent" }}
