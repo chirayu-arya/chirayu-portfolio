@@ -144,59 +144,54 @@ export default function Photography() {
     >
       {/* Gradient blobs */}
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-        {/* Top-left — pink, toned down */}
+        {/* Top-left — pink */}
         <div
-          className="absolute rounded-full"
+          className="absolute rounded-full bg-blob"
           style={{
             width: "55vmax", height: "55vmax",
             top: "-10vmax", left: "-15vmax",
             background: "radial-gradient(ellipse, rgba(244,114,182,0.3) 0%, transparent 68%)",
-            filter: "blur(80px)",
           }}
         />
-        {/* Bottom-right — amber, unchanged */}
+        {/* Bottom-right — amber */}
         <div
-          className="absolute rounded-full"
+          className="absolute rounded-full bg-blob"
           style={{
             width: "45vmax", height: "45vmax",
             bottom: "0", right: "-10vmax",
             background: "radial-gradient(ellipse, rgba(251,146,60,0.52) 0%, transparent 68%)",
-            filter: "blur(80px)",
           }}
         />
         {/* Center — purple */}
         <div
-          className="absolute rounded-full"
+          className="absolute rounded-full bg-blob"
           style={{
             width: "50vmax", height: "50vmax",
             top: "25%", left: "25%",
             background: "radial-gradient(ellipse, rgba(139,92,246,0.55) 0%, transparent 60%)",
-            filter: "blur(60px)",
           }}
         />
         {/* Top-right — sky blue */}
         <div
-          className="absolute rounded-full"
+          className="absolute rounded-full bg-blob"
           style={{
             width: "40vmax", height: "40vmax",
             top: "5%", right: "0%",
             background: "radial-gradient(ellipse, rgba(56,189,248,0.52) 0%, transparent 60%)",
-            filter: "blur(60px)",
           }}
         />
         {/* Bottom-center — yellow */}
         <div
-          className="absolute rounded-full"
+          className="absolute rounded-full bg-blob"
           style={{
             width: "42vmax", height: "42vmax",
             bottom: "5%", left: "25%",
             background: "radial-gradient(ellipse, rgba(251,191,36,0.5) 0%, transparent 60%)",
-            filter: "blur(60px)",
           }}
         />
       </div>
       {/* Header */}
-      <div ref={headerRef} className="relative max-w-6xl mx-auto px-8 mb-20" style={{ zIndex: 1 }}>
+      <div ref={headerRef} className="relative px-8 sm:px-14 lg:px-20 mb-20" style={{ zIndex: 1 }}>
         <motion.p
           initial={{ opacity: 0 }}
           animate={headerInView ? { opacity: 1 } : {}}
@@ -223,7 +218,7 @@ export default function Photography() {
       {/* Mobile grid (< md) */}
       <div
         ref={mobileRef}
-        className="md:hidden grid grid-cols-2 gap-6 px-6"
+        className="md:hidden grid grid-cols-2 gap-6 px-8"
         style={{ paddingBottom: "2rem", position: "relative", zIndex: 1 }}
       >
         {polaroids.map((p, i) => (
@@ -244,9 +239,7 @@ export default function Photography() {
         style={{
           position: "relative",
           height: "54vw",
-          maxWidth: 1500,
-          margin: "0 auto",
-          padding: "0 40px",
+          padding: "0",
           zIndex: 1,
         }}
       >

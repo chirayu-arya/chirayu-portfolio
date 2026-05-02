@@ -207,8 +207,8 @@ export default function Work() {
   const statsInView = useInView(statsRef, { once: true, margin: "-5%" });
 
   return (
-    <section id="work" className="pt-36 pb-0 px-8" style={{ background: "#000" }}>
-      <div className="max-w-6xl mx-auto">
+    <section id="work" className="pt-36 pb-0 px-8 sm:px-14 lg:px-20" style={{ background: "#000" }}>
+      <div>
         {/* Header */}
         <div ref={ref} className="mb-20">
           <motion.p
@@ -226,7 +226,7 @@ export default function Work() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
               className="font-bold tracking-tight leading-tight"
-              style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)", color: "#f5f5f7" }}
+              style={{ fontSize: "clamp(2.8rem, 5.5vw, 5rem)", color: "#f5f5f7" }}
             >
               Projects that speak
               <br />

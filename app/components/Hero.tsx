@@ -178,7 +178,7 @@ export default function Hero() {
         >
           <motion.div
             className="bg-blob absolute inset-0 rounded-full"
-            style={{ background: "radial-gradient(ellipse, rgba(220,20,60,0.45) 0%, transparent 68%)" }}
+            style={{ background: isMobile ? "radial-gradient(ellipse, rgba(220,20,60,0.82) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(220,20,60,0.45) 0%, transparent 68%)" }}
             animate={isMobile ? {} : { scale: [1, 1.07, 1], x: [0, 18, 0] }}
             transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -194,7 +194,7 @@ export default function Hero() {
         >
           <motion.div
             className="bg-blob absolute inset-0 rounded-full"
-            style={{ background: "radial-gradient(ellipse, rgba(180,0,40,0.38) 0%, transparent 68%)" }}
+            style={{ background: isMobile ? "radial-gradient(ellipse, rgba(180,0,40,0.72) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(180,0,40,0.38) 0%, transparent 68%)" }}
             animate={isMobile ? {} : { scale: [1, 1.1, 1], y: [0, 24, 0] }}
             transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           />
@@ -210,7 +210,7 @@ export default function Hero() {
         >
           <motion.div
             className="bg-blob absolute inset-0 rounded-full"
-            style={{ background: "radial-gradient(ellipse, rgba(139,0,0,0.4) 0%, transparent 68%)" }}
+            style={{ background: isMobile ? "radial-gradient(ellipse, rgba(139,0,0,0.78) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(139,0,0,0.4) 0%, transparent 68%)" }}
             animate={isMobile ? {} : { scale: [1, 1.08, 1], x: [0, -20, 0] }}
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 5 }}
           />

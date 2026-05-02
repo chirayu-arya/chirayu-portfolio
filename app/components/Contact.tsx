@@ -14,8 +14,8 @@ export default function Contact() {
   const inView = useInView(ref, { once: true, margin: "-8%" });
 
   return (
-    <section id="contact" className="pt-36 pb-24 px-8" style={{ background: "#000" }}>
-      <div className="max-w-6xl mx-auto">
+    <section id="contact" className="pt-36 pb-24 px-8 sm:px-14 lg:px-20" style={{ background: "#000" }}>
+      <div>
 
         {/* Big CTA */}
         <div ref={ref} className="text-center mb-28">
@@ -34,7 +34,7 @@ export default function Contact() {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
             className="font-bold tracking-tight leading-[0.9] mb-12"
-            style={{ fontSize: "clamp(2rem, 5.5vw, 5rem)", color: "#f5f5f7" }}
+            style={{ fontSize: "clamp(3rem, 6.5vw, 6rem)", color: "#f5f5f7" }}
           >
             If it's worth building,
             <br />

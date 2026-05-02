@@ -3,6 +3,8 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
 const techStack = [
   {
     category: "Design",
@@ -115,22 +117,22 @@ function InterestCard({ item, inView, delay }: { item: typeof interests[0]; inVi
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={entered ? { duration: 0.18, ease: "easeOut" } : { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay }}
+      transition={entered ? { duration: 0.18, ease: "easeOut" } : { duration: 0.6, ease: EASE, delay }}
       onAnimationComplete={() => { if (inView) setEntered(true); }}
       whileHover={{ y: -5 }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       className="flex flex-row items-center gap-4 rounded-2xl p-4"
       style={{
-        background: hovered ? `rgba(255,255,255,0.07)` : "rgba(255,255,255,0.04)",
+        background: hovered ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.04)",
         border: `1px solid ${hovered ? item.glowColor + "60" : "rgba(255,255,255,0.07)"}`,
-        boxShadow: hovered ? `0 0 28px 4px ${item.glowColor}44, 0 0 8px 0px ${item.glowColor}33` : "none",
-        transition: "box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease",
+        boxShadow: "none",
+        transition: "border-color 0.2s ease, background 0.2s ease",
         cursor: "default",
       }}
     >
       <div
-        className="flex items-center justify-center rounded-xl"
+        className="flex items-center justify-center rounded-xl flex-shrink-0"
         style={{ width: 40, height: 40, background: item.iconBg }}
       >
         {item.icon}
@@ -148,176 +150,156 @@ export default function About() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
 
-  const disciplineRef = useRef<HTMLDivElement>(null);
-  const disciplineInView = useInView(disciplineRef, { once: true, margin: "-8%" });
-
   return (
-    <section id="about" className="pt-36 pb-0 px-8" style={{ background: "#000" }}>
-      <div className="max-w-6xl mx-auto">
+    <section
+      id="about"
+      className="relative pt-36 pb-20 px-8 sm:px-14 lg:px-20 overflow-hidden"
+      style={{ background: "#000", isolation: "isolate" }}
+    >
+      {/* Crimson blobs */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+        <div
+          className="absolute rounded-full bg-blob"
+          style={{
+            width: "70vmax", height: "70vmax",
+            top: "-25vmax", left: "-20vmax",
+            background: "radial-gradient(ellipse, rgba(220,20,60,0.28) 0%, transparent 68%)",
+          }}
+        />
+        <div
+          className="absolute rounded-full bg-blob"
+          style={{
+            width: "55vmax", height: "55vmax",
+            bottom: "-15vmax", right: "-10vmax",
+            background: "radial-gradient(ellipse, rgba(139,0,0,0.22) 0%, transparent 68%)",
+          }}
+        />
+      </div>
 
-        {/* Top: label */}
-        <div ref={ref}>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-16"
-            style={{ color: "#86868b" }}
-          >
-            About Me
-          </motion.p>
-        </div>
+      <div ref={ref} className="relative" style={{ zIndex: 1 }}>
 
-        {/* Bio block */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-16 lg:gap-x-24 gap-y-8 lg:gap-y-0 mb-0">
+        {/* Eyebrow */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
+          style={{ color: "#86868b" }}
+        >
+          About Me
+        </motion.p>
 
-          {/* ── DESKTOP LEFT COLUMN: headline + bio + pills in one flex-col spanning both rows ── */}
-          <div className="hidden lg:flex lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-2 flex-col justify-between">
-            {/* Headline */}
-            <motion.h2
-              initial={{ opacity: 0, y: 28 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-              className="font-bold tracking-tight leading-tight"
-              style={{ fontSize: "clamp(2rem, 4.5vw, 3.5rem)", color: "#f5f5f7" }}
-            >
-              A{" "}<span className="glow-bluepurple">creative</span>{" "}with
-              <br />a{" "}
-              <span style={{ color: "#f5f5f7", textDecoration: "underline wavy rgba(52,211,153,0.9)", textDecorationThickness: "2px", textUnderlineOffset: "10px" }}>
-                strategic
-              </span>{" "}mind.
-            </motion.h2>
+        {/* Full-width headline */}
+        <motion.h2
+          initial={{ opacity: 0, y: 32 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1.0, ease: EASE, delay: 0.1 }}
+          className="font-black tracking-tight leading-[0.92] mb-16 lg:mb-20"
+          style={{ fontSize: "clamp(3rem, 7.5vw, 7.5rem)", color: "#f5f5f7" }}
+        >
+          <span style={{ display: "block" }}>I make things people</span>
+          <span style={{ display: "block" }}>actually pay attention to.</span>
+        </motion.h2>
 
-            {/* Bio */}
+        {/* 2-col: bio + portrait */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-20 lg:items-stretch mb-12">
+
+          {/* Left: bio + pills + CTA */}
+          <div className="order-2 lg:order-1 lg:col-span-7 flex flex-col justify-between gap-10 lg:gap-0 lg:pb-4">
+
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.15 }}
+              transition={{ duration: 0.8, ease: EASE, delay: 0.3 }}
               className="text-base leading-relaxed"
               style={{ color: "#f5f5f7" }}
             >
-              I like designing things that create an impact and people actually pay attention to, and figuring out how to grow them. Over the last few years, I&apos;ve worked across industries in startups, built communities, grew newsletters, curated podcasts, and designed campaigns that reached millions.
+              I like designing things that create an impact and people actually pay
+              attention to, and figuring out how to grow them. Over the last few
+              years, I&apos;ve worked across industries in startups, built
+              communities, grew newsletters, curated podcasts, and designed
+              campaigns that reached millions.
             </motion.p>
 
-            {/* Pills */}
+            {/* Tech stack pills */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.25 }}
-              className="flex flex-col items-start gap-4"
+              transition={{ duration: 0.7, ease: EASE, delay: 0.4 }}
+              className="flex flex-col items-start gap-3"
             >
               {techStack.map((group) => (
                 <div key={group.category} className="flex flex-wrap gap-2">
                   {group.tools.map((tool) => (
                     <span
                       key={tool.name}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
+                      className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium"
                       style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", color: "#f5f5f7" }}
                     >
-                      <span className="inline-block rounded-full flex-shrink-0" style={{ width: 7, height: 7, background: tool.color }} />
+                      <span className="inline-block rounded-full flex-shrink-0" style={{ width: 8, height: 8, background: tool.color }} />
                       {tool.name}
                     </span>
                   ))}
                 </div>
               ))}
             </motion.div>
-          </div>
 
-          {/* ── PORTRAIT (both breakpoints) ── */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
-            className="order-2 lg:col-start-8 lg:col-span-5 lg:row-start-1 lg:row-span-2"
-          >
-            <div
-              className="w-full aspect-[3/4] rounded-3xl overflow-hidden relative"
-              style={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.05)" }}
-            >
-              <img src="/Chirayu Full.png" alt="Chirayu Arya" className="absolute inset-0 w-full h-full object-cover" />
-            </div>
-          </motion.div>
-
-          {/* ── MOBILE ONLY: headline → (portrait above) → bio + pills ── */}
-          <div className="order-1 lg:hidden">
-            <motion.h2
-              initial={{ opacity: 0, y: 28 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-              className="font-bold tracking-tight leading-tight"
-              style={{ fontSize: "clamp(2rem, 4.5vw, 3.5rem)", color: "#f5f5f7" }}
-            >
-              A{" "}<span className="glow-bluepurple">creative</span>{" "}with
-              <br />a{" "}
-              <span style={{ color: "#f5f5f7", textDecoration: "underline wavy rgba(52,211,153,0.9)", textDecorationThickness: "2px", textUnderlineOffset: "10px" }}>
-                strategic
-              </span>{" "}mind.
-            </motion.h2>
-          </div>
-
-          <div className="order-3 lg:hidden flex flex-col gap-8">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.15 }}
-              className="text-base leading-relaxed"
-              style={{ color: "#f5f5f7" }}
-            >
-              I like designing things that create an impact and people actually pay attention to, and figuring out how to grow them. Over the last few years, I&apos;ve worked across industries in startups, built communities, grew newsletters, curated podcasts, and designed campaigns that reached millions.
-            </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.25 }}
-              className="flex flex-wrap justify-center gap-2"
+              transition={{ duration: 0.7, ease: EASE, delay: 0.5 }}
             >
-              {techStack.flatMap((group) => group.tools).map((tool) => (
-                <span
-                  key={tool.name}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", color: "#f5f5f7" }}
-                >
-                  <span className="inline-block rounded-full flex-shrink-0" style={{ width: 7, height: 7, background: tool.color }} />
-                  {tool.name}
-                </span>
-              ))}
+              <a
+                href="/about"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-full text-sm font-semibold cursor-pointer"
+                style={{
+                  background: "#f5f5f7",
+                  color: "#000",
+                  transition: "opacity 0.2s ease",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+                onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+              >
+                Learn More
+              </a>
             </motion.div>
           </div>
 
-        </div>
-
-        {/* Interest tiles */}
-        <div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-12 mb-12"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.18)", paddingTop: "2.5rem" }}
-        >
-          {interests.map((item, i) => (
-            <InterestCard key={item.title} item={item} inView={inView} delay={0.35 + i * 0.07} />
-          ))}
-        </div>
-
-        {/* Learn More button */}
-        <motion.div
-          ref={disciplineRef}
-          initial={{ opacity: 0, y: 16 }}
-          animate={disciplineInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-          className="flex justify-center pb-20"
-        >
-          <a
-            href="/about"
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-full text-sm font-semibold cursor-pointer"
-            style={{
-              background: "#f5f5f7",
-              color: "#000",
-              transition: "opacity 0.2s ease",
-            }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
-            onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+          {/* Right: portrait */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 1.0, ease: EASE, delay: 0.2 }}
+            className="order-1 lg:order-2 lg:col-span-5 mb-10 lg:mb-0"
           >
-            Learn More
-          </a>
-        </motion.div>
+            <div
+              className="w-full overflow-hidden"
+              style={{ height: "clamp(300px, 48vh, 520px)" }}
+            >
+              <img
+                src="/Chirayu Full.png"
+                alt="Chirayu Arya"
+                className="w-full h-full object-cover"
+                style={{ objectPosition: "center 10%" }}
+              />
+            </div>
+          </motion.div>
+
+        </div>
+
+        {/* Interest cards — full-width 4-col strip */}
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "2.5rem", marginTop: "0.5rem" }}>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.55 }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+          >
+            {interests.map((item, i) => (
+              <InterestCard key={item.title} item={item} inView={inView} delay={0.55 + i * 0.07} />
+            ))}
+          </motion.div>
+        </div>
 
       </div>
     </section>
