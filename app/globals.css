@@ -78,12 +78,6 @@ body {
   animation: marquee-scroll 28s linear infinite;
 }
 
-/* Hide default cursor on non-touch devices */
-@media (pointer: fine) {
-  *, *::before, *::after {
-    cursor: none !important;
-  }
-}
 
 ::selection {
   background-color: #fff;
