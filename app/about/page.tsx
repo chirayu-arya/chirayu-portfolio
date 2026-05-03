@@ -558,7 +558,6 @@ export default function AboutPage() {
                 description={item.description}
                 inView={eduInView}
                 delay={0.4 + i * 0.08}
-                logo={item.logo}
               />
             ))}
           </div>
