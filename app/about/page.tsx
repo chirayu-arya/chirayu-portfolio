@@ -23,13 +23,6 @@ const interests = [
 
 const logos = ["Logo 1", "Logo 2", "Logo 3", "Logo 4", "Logo 5", "Logo 6", "Logo 7", "Logo 8"];
 
-const TAG = {
-  construction:    { label: "Construction" },
-  cryptoWeb3:      { label: "Crypto & Web3" },
-  insurance:       { label: "Insurance" },
-  hrTech:          { label: "HR Tech" },
-  govtInitiative:  { label: "Government Initiative" },
-};
 
 const experience = [
   {
@@ -38,7 +31,7 @@ const experience = [
     company: "SiteMarker",
     dates: "Jan 2026 - Present  |  Charleston, USA",
     description: "Building and scaling marketing systems for a SaaS construction tech platform. Connecting product, sales, and marketing through full-funnel strategies, UX improvements, and structured processes that turn demand into measurable growth.",
-    tag: TAG.construction,
+    tag: { label: "Construction | SaaS" },
   },
   {
     year: "2025",
@@ -46,7 +39,7 @@ const experience = [
     company: "Enso Homes",
     dates: "May 2025 - Jan 2026  |  Austin, USA",
     description: "Worked closely with founders to shape the brand and growth engine of a wellness-focused homebuilding company. From website experience to paid ads and SEO, focused on making the product more compelling, leading to meaningful increases in leads and engagement.",
-    tag: TAG.construction,
+    tag: { label: "Construction | Real Estate" },
   },
   {
     year: "2024",
@@ -54,7 +47,7 @@ const experience = [
     company: "Scalis",
     dates: "Feb 2024 - Apr 2025  |  Miami / Durham, USA",
     description: "Built Apex, a student newsletter supporting 200K+ students, through content, campaigns, and community. Evolved from consulting on growth to leading marketing, expanding audience and turning content into a strong distribution channel. Helped build a $1.47M sales pipeline in under 6 months.",
-    tag: TAG.hrTech,
+    tag: { label: "HR Tech | SaaS" },
   },
   {
     year: "2023",
@@ -62,7 +55,7 @@ const experience = [
     company: "Gain Ventures",
     dates: "Jun 2023 - Jan 2024  |  Durham, USA",
     description: "Led marketing and growth across paid channels and outbound for clients. Worked on UI/UX design for ICAREUM, creating wireframes and interactive components while collaborating with engineering and product teams to make complex, emerging tech feel intuitive.",
-    tag: TAG.cryptoWeb3,
+    tag: { label: "Crypto | Web 3 | Venture Capital" },
   },
   {
     year: "2023",
@@ -70,7 +63,7 @@ const experience = [
     company: "Duke University",
     dates: "2023  |  Durham, USA",
     description: "Researched innovation and crypto ventures under Prof. Campbell Harvey, collaborating on blockchain applications in emerging technologies and exploring how new technologies translate into real-world use cases.",
-    tag: TAG.cryptoWeb3,
+    tag: { label: "Crypto | Web 3" },
   },
   {
     year: "2023",
@@ -78,7 +71,7 @@ const experience = [
     company: "NatureServe",
     dates: "Jan 2023 - Apr 2023  |  Durham, USA",
     description: "Conducted market research and worked on positioning for a SaaS product. Focused on customer segments, demand analysis, and competitive landscape to help shape go-to-market strategy.",
-    tag: TAG.govtInitiative,
+    tag: { label: "Environmental Science | SaaS" },
   },
   {
     year: "2021",
@@ -86,7 +79,7 @@ const experience = [
     company: "MGA Insurance",
     dates: "Sep 2021 - Mar 2022  |  New Delhi, India",
     description: "Led campaigns, managed a small team, and improved customer targeting and visibility. Built campaigns, tracked performance, and refined strategy based on data.",
-    tag: TAG.insurance,
+    tag: { label: "Insurance" },
   },
   {
     year: "2021",
@@ -94,7 +87,7 @@ const experience = [
     company: "Matchain",
     dates: "Jul 2021 - Mar 2022  |  Lisbon, Portugal (Remote)",
     description: "Worked on global launch campaigns in the Web3 space. Helped position the product, simplify complex ideas, and create content that made blockchain more accessible to a wider audience.",
-    tag: TAG.cryptoWeb3,
+    tag: { label: "Blockchain | Crypto | Web 3" },
   },
   {
     year: "2020",
@@ -102,7 +95,7 @@ const experience = [
     company: "AIESEC",
     dates: "2020 - 2021  |  India & Malaysia",
     description: "Early leadership and marketing roles managing communications, leading small teams, and working on recruitment and partnerships. Where I first learned how to build and lead from scratch.",
-    tag: TAG.govtInitiative,
+    tag: { label: "UNESCO Initiative" },
   },
 ];
 
@@ -179,9 +172,9 @@ function PillItem({ item, delay }: { item: { label: string; emoji: string }; del
 type Tag = { label: string };
 
 function EditorialRow({
-  year, title, subtitle, dates, description, inView, delay, tag,
+  year, title, subtitle, dates, description, inView, delay, tag, logo,
 }: {
-  year: string; title: string; subtitle: string; dates: string; description: string; inView: boolean; delay: number; tag?: Tag;
+  year: string; title: string; subtitle: string; dates: string; description: string; inView: boolean; delay: number; tag?: Tag; logo?: string;
 }) {
   return (
     <motion.div
@@ -229,6 +222,29 @@ function EditorialRow({
           </span>
         </div>
       )}
+
+      {/* Logo */}
+      {logo && (
+        <div
+          className="hidden sm:flex shrink-0 items-center justify-center overflow-hidden rounded-xl"
+          style={{
+            width: 72,
+            height: 72,
+            background: "#fff",
+            border: "1px solid rgba(255,255,255,0.07)",
+            padding: 8,
+          }}
+        >
+          <img
+            src={logo}
+            alt=""
+            style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.display = "none";
+            }}
+          />
+        </div>
+      )}
     </motion.div>
   );
 }
@@ -249,7 +265,7 @@ export default function AboutPage() {
 
       {/* ── Hero ── */}
       <section
-        className="relative overflow-hidden pt-36 pb-24 px-8 sm:px-14 lg:px-20"
+        className="relative overflow-hidden pt-36 pb-12 px-8 sm:px-14 lg:px-20"
         style={{ isolation: "isolate" }}
       >
         {/* Crimson blobs */}
@@ -294,9 +310,7 @@ export default function AboutPage() {
             style={{ fontSize: "clamp(3rem, 7.5vw, 7.5rem)", color: "#f5f5f7" }}
           >
             <span style={{ display: "block" }}>I believe in</span>
-            <span style={{ display: "block", color: "#f5f5f7" }} className="glow-bluepurple">
-              infinite possibilities.
-            </span>
+            <span style={{ display: "block" }}>infinite possibilities.</span>
           </motion.h1>
 
           {/* Bio + portrait */}
@@ -320,30 +334,34 @@ export default function AboutPage() {
               <p>I&apos;m still figuring things out. But if there&apos;s one thing I&apos;ve learned, it&apos;s this:<br /><em><strong>There&apos;s always more than one path.</strong></em></p>
             </motion.div>
 
-            {/* Portrait */}
+            {/* Photo stack */}
             <motion.div
               initial={{ opacity: 0, x: 60 }}
               animate={heroInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 1.1, ease: EASE, delay: 0.05 }}
-              className="order-1 lg:order-2 lg:col-span-5 lg:sticky lg:top-24"
+              className="order-1 lg:order-2 lg:col-span-5 flex flex-col gap-4"
+              style={{ height: "clamp(420px, 70vh, 720px)" }}
             >
-              <div
-                className="w-full overflow-hidden"
-                style={{ height: "clamp(420px, 70vh, 720px)" }}
-              >
-                <img
-                  src="/Chirayu Full.png"
-                  alt="Chirayu Arya"
-                  className="w-full h-full object-cover"
-                  style={{ objectPosition: "center top" }}
-                />
-              </div>
+              {[
+                { src: "/Chirayu Full.png", pos: "center top" },
+                { src: "/Chirayu Square.png", pos: "center" },
+                { src: "/Chirayu Reveal.png", pos: "center" },
+              ].map((img, i) => (
+                <div key={i} className="w-full flex-1 min-h-0 overflow-hidden">
+                  <img
+                    src={img.src}
+                    alt="Chirayu Arya"
+                    className="w-full h-full object-cover"
+                    style={{ objectPosition: img.pos }}
+                  />
+                </div>
+              ))}
             </motion.div>
 
           </div>
 
           {/* Things I love */}
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "2.5rem" }}>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "2.5rem" }} className="flex flex-col items-center text-center">
             <motion.p
               initial={{ opacity: 0 }}
               animate={heroInView ? { opacity: 1 } : {}}
@@ -353,7 +371,7 @@ export default function AboutPage() {
             >
               Things I love
             </motion.p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap justify-center gap-2">
               {interests.map((item, i) => (
                 <PillItem key={item.label} item={item} delay={0.75 + i * 0.04} />
               ))}
@@ -375,7 +393,7 @@ export default function AboutPage() {
           className="text-xs tracking-[0.22em] uppercase font-medium text-center mb-10"
           style={{ color: "#86868b" }}
         >
-          Worked with
+          Associations
         </p>
         <div className="flex overflow-hidden">
           <div className="animate-marquee flex items-center gap-12">
@@ -402,8 +420,30 @@ export default function AboutPage() {
       </section>
 
       {/* ── Experience ── */}
-      <section className="pt-36 pb-16 px-8 sm:px-14 lg:px-20" style={{ background: "#000" }}>
-        <div ref={expRef}>
+      <section
+        className="relative overflow-hidden pt-20 pb-16 px-8 sm:px-14 lg:px-20"
+        style={{ background: "#000", isolation: "isolate" }}
+      >
+        {/* Crimson blobs */}
+        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+          <div
+            className="bg-blob absolute rounded-full"
+            style={{
+              width: "80vmax", height: "80vmax",
+              top: "-30vmax", left: "-25vmax",
+              background: "radial-gradient(ellipse, rgba(220,20,60,0.32) 0%, transparent 68%)",
+            }}
+          />
+          <div
+            className="bg-blob absolute rounded-full"
+            style={{
+              width: "70vmax", height: "70vmax",
+              bottom: "-25vmax", right: "-20vmax",
+              background: "radial-gradient(ellipse, rgba(139,0,0,0.28) 0%, transparent 68%)",
+            }}
+          />
+        </div>
+        <div ref={expRef} className="relative" style={{ zIndex: 1 }}>
           <motion.p
             initial={{ opacity: 0 }}
             animate={expInView ? { opacity: 1 } : {}}
@@ -421,7 +461,7 @@ export default function AboutPage() {
               className="font-black tracking-tight leading-[0.92]"
               style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
             >
-              Where I&apos;ve built.
+              Roles I&apos;ve owned.
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, x: 20 }}
@@ -430,7 +470,7 @@ export default function AboutPage() {
               className="text-sm hidden sm:block"
               style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "16rem", textAlign: "right" }}
             >
-              Nine roles, five industries, one through-line: making things people actually use.
+              Nine roles, five industries, one obsession.
             </motion.p>
           </div>
 
@@ -453,8 +493,30 @@ export default function AboutPage() {
       </section>
 
       {/* ── Education ── */}
-      <section className="pt-24 pb-28 px-8 sm:px-14 lg:px-20" style={{ background: "#000" }}>
-        <div ref={eduRef}>
+      <section
+        className="relative overflow-hidden pt-24 pb-28 px-8 sm:px-14 lg:px-20"
+        style={{ background: "#000", isolation: "isolate" }}
+      >
+        {/* Crimson blobs */}
+        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+          <div
+            className="bg-blob absolute rounded-full"
+            style={{
+              width: "80vmax", height: "80vmax",
+              top: "-30vmax", right: "-25vmax",
+              background: "radial-gradient(ellipse, rgba(180,0,40,0.32) 0%, transparent 68%)",
+            }}
+          />
+          <div
+            className="bg-blob absolute rounded-full"
+            style={{
+              width: "70vmax", height: "70vmax",
+              bottom: "-25vmax", left: "-20vmax",
+              background: "radial-gradient(ellipse, rgba(220,20,60,0.28) 0%, transparent 68%)",
+            }}
+          />
+        </div>
+        <div ref={eduRef} className="relative" style={{ zIndex: 1 }}>
           <motion.p
             initial={{ opacity: 0 }}
             animate={eduInView ? { opacity: 1 } : {}}
@@ -481,7 +543,7 @@ export default function AboutPage() {
               className="text-sm hidden sm:block"
               style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "16rem", textAlign: "right" }}
             >
-              From Delhi to Durham, by way of Singapore and Boston.
+              Five schools, four countries.
             </motion.p>
           </div>
 
@@ -496,6 +558,7 @@ export default function AboutPage() {
                 description={item.description}
                 inView={eduInView}
                 delay={0.4 + i * 0.08}
+                logo={item.logo}
               />
             ))}
           </div>

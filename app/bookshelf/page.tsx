@@ -454,56 +454,51 @@ export default function BookshelfPage() {
     <main className="min-h-screen" style={{ background: "#000" }}>
       <Nav />
 
-      {/* Warm background blobs — amber/sepia instead of blue */}
+      {/* Crimson background blobs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-        <div className="bg-blob absolute" style={{
-          top: "-15%", left: "-10%", width: "60%", height: "60%",
-          background: "radial-gradient(ellipse, rgba(180,120,40,0.14) 0%, transparent 70%)",
-          willChange: "transform", transform: "translateZ(0)",
+        <div className="bg-blob absolute rounded-full" style={{
+          top: "-30vmax", left: "-25vmax", width: "80vmax", height: "80vmax",
+          background: "radial-gradient(ellipse, rgba(220,20,60,0.32) 0%, transparent 68%)",
         }} />
-        <div className="bg-blob absolute" style={{
-          top: "20%", right: "-15%", width: "50%", height: "50%",
-          background: "radial-gradient(ellipse, rgba(140,80,30,0.1) 0%, transparent 70%)",
-          willChange: "transform", transform: "translateZ(0)",
-        }} />
-        <div className="bg-blob absolute" style={{
-          bottom: "-10%", left: "25%", width: "50%", height: "40%",
-          background: "radial-gradient(ellipse, rgba(160,100,20,0.1) 0%, transparent 70%)",
-          willChange: "transform", transform: "translateZ(0)",
+        <div className="bg-blob absolute rounded-full" style={{
+          bottom: "-25vmax", right: "-20vmax", width: "70vmax", height: "70vmax",
+          background: "radial-gradient(ellipse, rgba(139,0,0,0.28) 0%, transparent 68%)",
         }} />
       </div>
 
-      <div className="relative z-10 px-5 sm:px-8 lg:px-16 max-w-7xl mx-auto">
+      <div className="relative z-10 px-8 sm:px-14 lg:px-20">
 
         {/* ── Hero ─────────────────────────────────────────────────────────── */}
-        <section className="pt-40 pb-20">
+        <section className="pt-36 pb-20">
           <motion.p
-            className="text-xs font-semibold uppercase tracking-widest mb-5"
-            style={{ color: "#D4A843" }}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
+            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
+            style={{ color: "#86868b" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.6, ease: EASE }}
           >
             Bookshelf
           </motion.p>
-          <motion.h1
-            className="font-bold tracking-tight leading-none mb-6"
-            style={{ fontSize: "clamp(2.8rem, 6vw, 5.5rem)", color: "#f5f5f7" }}
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: EASE, delay: 0.08 }}
-          >
-            The books that built me.
-          </motion.h1>
-          <motion.p
-            className="text-base sm:text-lg leading-relaxed max-w-xl"
-            style={{ color: "#86868b" }}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: EASE, delay: 0.18 }}
-          >
-            Every book I have read lives here. Some shaped how I think, some I revisit every year, some I couldn&apos;t put down.
-          </motion.p>
+          <div className="flex items-end justify-between gap-8">
+            <motion.h1
+              className="font-black tracking-tight leading-[0.92]"
+              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
+              initial={{ opacity: 0, x: -60 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.1, ease: EASE, delay: 0.05 }}
+            >
+              My reading list.
+            </motion.h1>
+            <motion.p
+              className="text-sm hidden sm:block"
+              style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "20rem", textAlign: "right" }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
+            >
+              Some shaped how I think. Some I revisit every year. Some I couldn&apos;t put down.
+            </motion.p>
+          </div>
         </section>
 
         <div className="flex flex-col gap-20 pb-32">
@@ -511,12 +506,9 @@ export default function BookshelfPage() {
           {/* ── Currently Reading ──────────────────────────────────────────── */}
           {currentlyReading.length > 0 && (
             <section>
-              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#515154" }}>
+              <p className="text-xs tracking-[0.22em] uppercase font-medium mb-10" style={{ color: "#86868b" }}>
                 Currently Reading
               </p>
-              <h2 className="text-2xl font-bold mb-8" style={{ color: "#f5f5f7" }}>
-                In progress
-              </h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {currentlyReading.map((book, i) => (
                   <CurrentlyReadingCard key={book.id} book={book} index={i} />
@@ -528,12 +520,19 @@ export default function BookshelfPage() {
           {/* ── All-Time Favourites ────────────────────────────────────────── */}
           {allTimeFavs.length > 0 && (
             <section>
-              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#515154" }}>
+              <p className="text-xs tracking-[0.22em] uppercase font-medium mb-6" style={{ color: "#86868b" }}>
                 All-Time Favourites
               </p>
-              <h2 className="text-2xl font-bold mb-8" style={{ color: "#f5f5f7" }}>
-                Books I recommend to everyone
-              </h2>
+              <motion.h2
+                initial={{ opacity: 0, x: -40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-8%" }}
+                transition={{ duration: 1.0, ease: EASE }}
+                className="font-black tracking-tight leading-[0.92] mb-10"
+                style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)", color: "#f5f5f7" }}
+              >
+                The hall of fame.
+              </motion.h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {allTimeFavs.map((book, i) => (
                   <AllTimeCard key={book.id} book={book} index={i} />
@@ -544,16 +543,30 @@ export default function BookshelfPage() {
 
           {/* ── Library ───────────────────────────────────────────────────── */}
           <section>
-            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#515154" }}>
+            <p className="text-xs tracking-[0.22em] uppercase font-medium mb-6" style={{ color: "#86868b" }}>
               Library
             </p>
-            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 mb-8">
-              <h2 className="text-2xl font-bold" style={{ color: "#f5f5f7" }}>
-                All books
-                <span className="ml-3 text-base font-normal" style={{ color: "#515154" }}>
-                  {libraryBooks.length} of {BOOKS.length}
-                </span>
-              </h2>
+            <div className="flex items-end justify-between gap-8 mb-10">
+              <motion.h2
+                initial={{ opacity: 0, x: -40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-8%" }}
+                transition={{ duration: 1.0, ease: EASE }}
+                className="font-black tracking-tight leading-[0.92]"
+                style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)", color: "#f5f5f7" }}
+              >
+                The full shelf.
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-8%" }}
+                transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
+                className="text-sm hidden sm:block"
+                style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "16rem", textAlign: "right" }}
+              >
+                {libraryBooks.length} of {BOOKS.length} books, by category.
+              </motion.p>
             </div>
 
             {/* Category filter */}

@@ -71,12 +71,14 @@ function SocialIcons() {
   return (
     <div style={{ display: "flex", gap: "10px" }}>
       {SOCIALS.map(({ href, label, icon }) => (
-        <a
+        <motion.a
           key={label}
           href={href}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={label}
+          whileHover={{ y: -4 }}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
           style={{
             display: "flex",
             alignItems: "center",
@@ -88,10 +90,20 @@ function SocialIcons() {
             border: "1px solid rgba(255,255,255,0.1)",
             color: "#f5f5f7",
             flexShrink: 0,
+            cursor: "pointer",
+            transition: "background 0.22s ease, border-color 0.22s ease",
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLElement).style.background = "rgba(220,20,60,0.16)";
+            (e.currentTarget as HTMLElement).style.borderColor = "rgba(220,20,60,0.4)";
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.07)";
+            (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
           }}
         >
           {icon}
-        </a>
+        </motion.a>
       ))}
     </div>
   );
