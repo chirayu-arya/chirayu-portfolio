@@ -31,6 +31,7 @@ const PARALLAX = [0.007, 0.017, 0.036];
 // Scroll parallax multipliers per layer (desktop) — far moves least, near moves most
 const SCROLL_PARALLAX = [0.03, 0.08, 0.18];
 const COUNTS = [220, 140, 60];
+const COUNTS_TOUCH = [80, 50, 20];
 
 const STAR_COLORS: [number, number, number][] = [
   [255, 255, 255],
@@ -66,9 +67,9 @@ export default function StarField() {
   const rafRef = useRef(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
-  const initStars = useCallback((w: number, h: number) => {
+  const initStars = useCallback((w: number, h: number, counts = COUNTS) => {
     const stars: Star[] = [];
-    COUNTS.forEach((count, layer) => {
+    counts.forEach((count, layer) => {
       const [sizeMin, sizeMax] =
         layer === 0 ? [0.3, 0.8] : layer === 1 ? [0.6, 1.25] : [0.9, 2.0];
       for (let i = 0; i < count; i++) {
@@ -91,8 +92,7 @@ export default function StarField() {
   }, []);
 
   useEffect(() => {
-    // Skip entirely on touch/mobile — 420-star rAF loop at 60fps kills mobile GPUs
-    if (window.matchMedia("(pointer: coarse)").matches) return;
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -112,7 +112,7 @@ export default function StarField() {
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      initStars(w, h);
+      initStars(w, h, isTouch ? COUNTS_TOUCH : COUNTS);
     };
     resize();
     const ro = new ResizeObserver(resize);
@@ -242,8 +242,8 @@ export default function StarField() {
         ctx.restore();
       });
 
-      // ── Shooting star ──
-      if (now >= nextShootRef.current && !shootingRef.current) {
+      // ── Shooting star (desktop only) ──
+      if (!isTouch && now >= nextShootRef.current && !shootingRef.current) {
         spawnShootingStar(now, w, h);
       }
 

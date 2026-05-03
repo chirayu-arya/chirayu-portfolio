@@ -54,7 +54,7 @@ function CardFace({
 }) {
   return (
     <div
-      className="absolute inset-0 overflow-hidden rounded-2xl"
+      className="absolute inset-0 overflow-hidden"
       style={{
         background: "#0a0a0a",
         border: "1px solid rgba(255,255,255,0.05)",
@@ -68,7 +68,7 @@ function CardFace({
 
       {/* Glow on hover */}
       <div
-        className="absolute inset-0 rounded-2xl pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
           boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 48px rgba(255,255,255,0.07)",
           opacity: hovered ? 1 : 0,
@@ -225,13 +225,10 @@ export default function GalleryPage() {
 
   return (
     <main style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7", position: "relative", overflow: "hidden" }}>
-      {/* Colourful background blobs */}
+      {/* Crimson background blobs */}
       <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-        <div className="bg-blob absolute rounded-full" style={{ width: "70vmax", height: "70vmax", top: "-25vmax", left: "-15vmax", background: "radial-gradient(ellipse, rgba(139,92,246,0.3) 0%, transparent 68%)" }} />
-        <div className="bg-blob absolute rounded-full" style={{ width: "60vmax", height: "60vmax", top: "-10vmax", right: "-20vmax", background: "radial-gradient(ellipse, rgba(251,113,133,0.25) 0%, transparent 68%)" }} />
-        <div className="bg-blob absolute rounded-full" style={{ width: "55vmax", height: "55vmax", top: "40vh", left: "30%", background: "radial-gradient(ellipse, rgba(37,99,235,0.2) 0%, transparent 68%)" }} />
-        <div className="bg-blob absolute rounded-full" style={{ width: "50vmax", height: "50vmax", bottom: "10vh", right: "-10vmax", background: "radial-gradient(ellipse, rgba(52,211,153,0.18) 0%, transparent 68%)" }} />
-        <div className="bg-blob absolute rounded-full" style={{ width: "45vmax", height: "45vmax", bottom: "-10vmax", left: "10%", background: "radial-gradient(ellipse, rgba(251,191,36,0.15) 0%, transparent 68%)" }} />
+        <div className="bg-blob absolute rounded-full" style={{ width: "80vmax", height: "80vmax", top: "-30vmax", left: "-25vmax", background: "radial-gradient(ellipse, rgba(220,20,60,0.32) 0%, transparent 68%)" }} />
+        <div className="bg-blob absolute rounded-full" style={{ width: "70vmax", height: "70vmax", bottom: "-25vmax", right: "-20vmax", background: "radial-gradient(ellipse, rgba(139,0,0,0.28) 0%, transparent 68%)" }} />
       </div>
 
       <div className="relative" style={{ zIndex: 1 }}>
@@ -257,23 +254,43 @@ export default function GalleryPage() {
         </div>
 
         {/* Page header */}
-        <section className="pt-36 pb-10 px-8 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-            className="font-bold tracking-tight"
-            style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", color: "#f5f5f7" }}
+        <section className="pt-36 pb-12 px-8 sm:px-14 lg:px-20">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
+            style={{ color: "#86868b" }}
           >
-            Take a deep dive!
-          </motion.h1>
+            Gallery
+          </motion.p>
+          <div className="flex items-end justify-between gap-8">
+            <motion.h1
+              initial={{ opacity: 0, x: -60 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.05 }}
+              className="font-black tracking-tight leading-[0.92]"
+              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
+            >
+              Take a deep dive.
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.3 }}
+              className="text-sm hidden sm:block"
+              style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "18rem", textAlign: "right" }}
+            >
+              A scrapbook for the chronically curious.
+            </motion.p>
+          </div>
         </section>
 
         {/* Toggle */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+          transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="flex justify-center pb-10"
         >
           <div
@@ -305,7 +322,7 @@ export default function GalleryPage() {
         </motion.div>
 
         {/* Photo grid */}
-        <section className="px-4 pb-24">
+        <section className="px-8 sm:px-14 lg:px-20 pb-24">
           <div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
             style={{ pointerEvents: isTransitioning ? "none" : undefined }}

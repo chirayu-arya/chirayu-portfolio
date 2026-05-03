@@ -274,7 +274,7 @@ function TrophyPip({ type, count }: { type: keyof TrophyCounts; count: number })
   );
 }
 
-function ProgressBar({ value, color = "#003087" }: { value: number; color?: string }) {
+function ProgressBar({ value, color = "#dc143c" }: { value: number; color?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
   return (
@@ -448,21 +448,21 @@ function CurrentlyPlaying({ game }: { game: LibraryGame }) {
   return (
     <motion.div
       className="relative rounded-3xl overflow-hidden"
-      style={{ border: "1px solid rgba(0,48,135,0.35)", cursor: "pointer" }}
-      whileHover={{ y: -8, scale: 1.015, borderColor: "rgba(0,48,135,0.7)" }}
+      style={{ border: "1px solid rgba(220,20,60,0.35)" }}
+      whileHover={{ y: -8, scale: 1.015, borderColor: "rgba(220,20,60,0.7)" }}
       transition={{ duration: 0.35, ease: EASE }}
     >
       {img && (
         <div className="absolute inset-0">
           <img src={img} alt="" className="w-full h-full object-cover"
             style={{ filter: "blur(32px) brightness(0.25) saturate(1.4)", transform: "scale(1.15)" }} />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(0,16,48,0.85) 0%, rgba(0,0,0,0.92) 100%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(40,0,12,0.85) 0%, rgba(0,0,0,0.92) 100%)" }} />
         </div>
       )}
       <div className="relative z-10 flex flex-col lg:flex-row gap-8 p-8 lg:p-10 items-start lg:items-stretch">
         <div className="flex-shrink-0 flex items-center">
           <div className="relative w-36 h-36 lg:w-40 lg:h-40 rounded-2xl overflow-hidden"
-            style={{ border: "1px solid rgba(0,48,135,0.45)" }}>
+            style={{ border: "1px solid rgba(220,20,60,0.45)" }}>
             {img
               ? <img src={img} alt={game.name} className="w-full h-full object-cover" />
               : <div className="w-full h-full flex items-center justify-center" style={{ background: "#111" }}><span className="text-5xl">🎮</span></div>
@@ -472,7 +472,7 @@ function CurrentlyPlaying({ game }: { game: LibraryGame }) {
         <div className="flex-1 flex flex-col justify-between gap-4">
           {/* Top: eyebrow + title — always pinned to the top */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#003087" }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#dc143c" }}>
               Currently Playing
             </p>
             <h2 className="text-xl lg:text-2xl font-bold leading-tight" style={{ color: "#f5f5f7" }}>
@@ -503,7 +503,7 @@ function CurrentlyPlaying({ game }: { game: LibraryGame }) {
             </div>
             {game.trophy && (
               <div className="flex flex-col gap-2 max-w-sm">
-                <ProgressBar value={pct} color="#003087" />
+                <ProgressBar value={pct} color="#dc143c" />
                 <div className="flex gap-4">
                   {(["platinum", "gold", "silver", "bronze"] as const).map((t) => (
                     <TrophyPip key={t} type={t} count={game.trophy!.earnedTrophies[t]} />
@@ -528,7 +528,6 @@ function RecentCard({ game, index }: { game: LibraryGame; index: number }) {
   return (
     <motion.div
       className="flex-shrink-0 w-44 flex flex-col gap-2"
-      style={{ cursor: "pointer" }}
       initial={{ opacity: 0, x: 16 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-8%" }}
@@ -548,7 +547,7 @@ function RecentCard({ game, index }: { game: LibraryGame; index: number }) {
         <div className="absolute bottom-2 left-2 right-2">
           {pct !== null && (
             <div className="w-full h-0.5 rounded-full mb-1" style={{ background: "rgba(255,255,255,0.15)" }}>
-              <div className="h-0.5 rounded-full" style={{ width: `${pct}%`, background: pct === 100 ? "#B8C5D6" : "#003087" }} />
+              <div className="h-0.5 rounded-full" style={{ width: `${pct}%`, background: pct === 100 ? "#B8C5D6" : "#dc143c" }} />
             </div>
           )}
         </div>
@@ -571,7 +570,7 @@ function LibraryCard({ game, index }: { game: LibraryGame; index: number }) {
   const col = index % 3;
 
   return (
-    <div className="library-card-wrap" style={{ cursor: "pointer" }}>
+    <div className="library-card-wrap">
     <motion.div
       className="group relative rounded-2xl overflow-hidden"
       style={{
@@ -616,9 +615,9 @@ function LibraryCard({ game, index }: { game: LibraryGame; index: number }) {
                 {game.trophy!.earnedTrophies.bronze + game.trophy!.earnedTrophies.silver + game.trophy!.earnedTrophies.gold + game.trophy!.earnedTrophies.platinum}
                 /{game.trophy!.definedTrophies.bronze + game.trophy!.definedTrophies.silver + game.trophy!.definedTrophies.gold + game.trophy!.definedTrophies.platinum} trophies
               </span>
-              <span className="text-xs font-semibold" style={{ color: pct === 100 ? "#B8C5D6" : "#003087" }}>{pct}%</span>
+              <span className="text-xs font-semibold" style={{ color: pct === 100 ? "#B8C5D6" : "#dc143c" }}>{pct}%</span>
             </div>
-            <ProgressBar value={pct} color={pct === 100 ? "#B8C5D6" : "#003087"} />
+            <ProgressBar value={pct} color={pct === 100 ? "#B8C5D6" : "#dc143c"} />
             <div className="flex gap-3">
               {(["platinum", "gold", "silver", "bronze"] as const).map((t) => (
                 <TrophyPip key={t} type={t} count={game.trophy!.earnedTrophies[t]} />
@@ -710,22 +709,15 @@ export default function GamingPage() {
     <main className="min-h-screen" style={{ background: "#000" }}>
       <Nav />
 
-      {/* Background blobs */}
+      {/* Background blobs — crimson */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-        <div className="bg-blob absolute" style={{
-          top: "-15%", left: "-10%", width: "55%", height: "55%",
-          background: "radial-gradient(ellipse, rgba(0,48,135,0.18) 0%, transparent 70%)",
-          willChange: "transform", transform: "translateZ(0)",
+        <div className="bg-blob absolute rounded-full" style={{
+          top: "-25vmax", left: "-20vmax", width: "75vmax", height: "75vmax",
+          background: "radial-gradient(ellipse, rgba(220,20,60,0.32) 0%, transparent 68%)",
         }} />
-        <div className="bg-blob absolute" style={{
-          top: "30%", right: "-10%", width: "45%", height: "45%",
-          background: "radial-gradient(ellipse, rgba(0,64,180,0.12) 0%, transparent 70%)",
-          willChange: "transform", transform: "translateZ(0)",
-        }} />
-        <div className="bg-blob absolute" style={{
-          bottom: "-10%", left: "20%", width: "50%", height: "40%",
-          background: "radial-gradient(ellipse, rgba(0,32,100,0.15) 0%, transparent 70%)",
-          willChange: "transform", transform: "translateZ(0)",
+        <div className="bg-blob absolute rounded-full" style={{
+          bottom: "-25vmax", right: "-15vmax", width: "65vmax", height: "65vmax",
+          background: "radial-gradient(ellipse, rgba(139,0,0,0.28) 0%, transparent 68%)",
         }} />
 
         {/* Physics-driven PS buttons — hidden on mobile via CSS, rAF skipped on touch */}
@@ -734,91 +726,90 @@ export default function GamingPage() {
         </div>
       </div>
 
-      <div className="relative z-10 px-5 sm:px-8 lg:px-16 pt-32 pb-0 max-w-7xl mx-auto">
+      <div className="relative z-10 px-8 sm:px-14 lg:px-20 pt-36 pb-0">
 
         {/* Header */}
-        <div className="mb-12">
-          {/* Eyebrow row */}
-          <motion.div
-            className="flex items-center justify-between mb-4"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
+        <div className="mb-16">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.6, ease: EASE }}
+            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
+            style={{ color: "#86868b" }}
           >
-            {/* Mobile: "Gaming Dashboard" | Desktop: "Gaming Dashboard · PlayStation" */}
-            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#003087" }}>
-              <span className="sm:hidden">Gaming Dashboard</span>
-              <span className="hidden sm:inline">Gaming Dashboard&nbsp;&nbsp;·&nbsp;&nbsp;PlayStation</span>
-            </p>
-            {/* Mobile: Photo Mode button | Desktop: PS button icons */}
-            <a
-              href="https://instagram.com/technonaut.frames"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="sm:hidden flex items-center gap-1.5 flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold"
-              style={{
-                background: "rgba(0,48,135,0.18)",
-                border: "1px solid rgba(0,48,135,0.45)",
-                color: "#f5f5f7",
-              }}
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                <circle cx="12" cy="13" r="4"/>
-              </svg>
-              Photo Mode
-            </a>
-            <div className="hidden sm:block">
-              <PSButtons opacity={0.5} />
-            </div>
-          </motion.div>
+            <span className="sm:hidden">Gaming</span>
+            <span className="hidden sm:inline">Gaming · PlayStation</span>
+          </motion.p>
 
-          {/* Headline row */}
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-end justify-between gap-8">
             <motion.h1
-              className="text-3xl sm:text-6xl lg:text-7xl font-bold leading-none tracking-tight flex items-center gap-3"
-              style={{ color: "#f5f5f7" }}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: EASE, delay: 0.08 }}
+              className="font-black tracking-tight leading-[0.92] flex items-end gap-3 sm:gap-5"
+              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
+              initial={{ opacity: 0, x: -60 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.1, ease: EASE, delay: 0.05 }}
             >
-              {/* Mobile: "Techno_Naut" | Desktop: "I am Techno_Naut!" */}
-              <span className="sm:hidden">Techno_Naut</span>
-              <span className="hidden sm:inline">I am Techno_Naut!</span>
-              {/* PS Plus logo — slightly smaller on mobile */}
-              <img src="/PS-Plus.png" alt="PlayStation Plus" style={{ flexShrink: 0, marginBottom: "0.1em", objectFit: "contain" }} className="w-9 h-9 sm:w-[52px] sm:h-[52px]" />
+              <span>Techno_Naut</span>
+              <img
+                src="/PS-Plus.png"
+                alt="PlayStation Plus"
+                style={{ flexShrink: 0, marginBottom: "0.18em", objectFit: "contain" }}
+                className="w-9 h-9 sm:w-14 sm:h-14 lg:w-16 lg:h-16"
+              />
             </motion.h1>
 
-            {/* Photo Mode — desktop only (mobile is in eyebrow row) */}
             <motion.a
               href="https://instagram.com/technonaut.frames"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-2 flex-shrink-0 px-4 py-2.5 rounded-xl text-sm font-semibold"
+              className="hidden sm:flex items-center gap-2 flex-shrink-0 px-5 py-2.5 rounded-xl text-sm font-semibold"
               style={{
-                background: "rgba(0,48,135,0.18)",
-                border: "1px solid rgba(0,48,135,0.45)",
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.1)",
                 color: "#f5f5f7",
                 cursor: "pointer",
+                marginBottom: "0.4rem",
               }}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: EASE, delay: 0.14 }}
-              whileHover={{ y: -3, background: "rgba(0,48,135,0.35)", borderColor: "rgba(0,48,135,0.75)" }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, ease: EASE, delay: 0.05 }}
+              whileHover={{ y: -3, background: "rgba(220,20,60,0.16)", borderColor: "rgba(220,20,60,0.4)" }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                 <circle cx="12" cy="13" r="4"/>
               </svg>
               Photo Mode
             </motion.a>
           </div>
+
+          {/* Mobile Photo Mode */}
+          <motion.a
+            href="https://instagram.com/technonaut.frames"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="sm:hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold mt-6"
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              color: "#f5f5f7",
+            }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+            Photo Mode
+          </motion.a>
         </div>
 
         {/* Trophy Dashboard */}
         {summary && (
           <motion.div
-            className="mb-10"
+            className="mb-20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.15 }}
@@ -837,26 +828,54 @@ export default function GamingPage() {
         ) : !data ? (
           <Skeleton />
         ) : (
-          <div className="flex flex-col gap-14">
+          <div className="flex flex-col gap-20">
 
             {/* Currently Playing */}
             {currentlyPlayingGames.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: EASE, delay: 0.2 }}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-4"
-              >
-                {currentlyPlayingGames.map((game) => (
-                  <CurrentlyPlaying key={game.titleId} game={game} />
-                ))}
-              </motion.div>
+              <div>
+                <p className="text-xs tracking-[0.22em] uppercase font-medium mb-6" style={{ color: "#86868b" }}>
+                  Currently Playing
+                </p>
+                <motion.h2
+                  initial={{ opacity: 0, x: -40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-8%" }}
+                  transition={{ duration: 1.0, ease: EASE }}
+                  className="font-black tracking-tight leading-[0.92] mb-10"
+                  style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)", color: "#f5f5f7" }}
+                >
+                  What&apos;s on right now.
+                </motion.h2>
+                <motion.div
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-8%" }}
+                  transition={{ duration: 0.8, ease: EASE, delay: 0.2 }}
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+                >
+                  {currentlyPlayingGames.map((game) => (
+                    <CurrentlyPlaying key={game.titleId} game={game} />
+                  ))}
+                </motion.div>
+              </div>
             )}
 
             {/* Recently Played */}
             {recentlyPlayed.length > 0 && (
               <div>
-                <h2 className="text-lg font-semibold mb-5" style={{ color: "#f5f5f7" }}>Recently Played</h2>
+                <p className="text-xs tracking-[0.22em] uppercase font-medium mb-6" style={{ color: "#86868b" }}>
+                  Recently Played
+                </p>
+                <motion.h2
+                  initial={{ opacity: 0, x: -40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-8%" }}
+                  transition={{ duration: 1.0, ease: EASE }}
+                  className="font-black tracking-tight leading-[0.92] mb-10"
+                  style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)", color: "#f5f5f7" }}
+                >
+                  Lately on the controller.
+                </motion.h2>
                 <div className="flex gap-4 overflow-x-auto" style={{ scrollbarWidth: "none", paddingTop: "4px", paddingBottom: "2px", alignItems: "flex-start" }}>
                   {recentlyPlayed.map((g, i) => (
                     <RecentCard key={g.titleId} game={g} index={i} />
@@ -867,31 +886,48 @@ export default function GamingPage() {
 
             {/* Library */}
             <div>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <h2 className="text-lg font-semibold flex items-baseline gap-2" style={{ color: "#f5f5f7" }}>
-                  My Library
-                  <span className="text-sm font-normal" style={{ color: "#515154" }}>
-                    {filteredLibrary.length !== data.library.length
-                      ? `${filteredLibrary.length} of ${data.totalLibraryCount?.toLocaleString() ?? data.library.length} games`
-                      : `${data.totalLibraryCount?.toLocaleString() ?? data.library.length} games`}
-                  </span>
-                </h2>
+              <p className="text-xs tracking-[0.22em] uppercase font-medium mb-6" style={{ color: "#86868b" }}>
+                Library
+              </p>
+              <div className="flex items-end justify-between gap-8 mb-10">
+                <motion.h2
+                  initial={{ opacity: 0, x: -40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-8%" }}
+                  transition={{ duration: 1.0, ease: EASE }}
+                  className="font-black tracking-tight leading-[0.92]"
+                  style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)", color: "#f5f5f7" }}
+                >
+                  Everything I own.
+                </motion.h2>
+                <motion.p
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-8%" }}
+                  transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
+                  className="text-sm hidden sm:block"
+                  style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "16rem", textAlign: "right" }}
+                >
+                  {filteredLibrary.length !== data.library.length
+                    ? `${filteredLibrary.length} of ${data.totalLibraryCount?.toLocaleString() ?? data.library.length} games`
+                    : `${data.totalLibraryCount?.toLocaleString() ?? data.library.length} games in the library.`}
+                </motion.p>
+              </div>
 
-                {/* Search */}
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search games..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full sm:w-64 px-4 py-2 rounded-xl text-sm outline-none"
-                    style={{
-                      background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      color: "#f5f5f7",
-                    }}
-                  />
-                </div>
+              {/* Search */}
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Search games..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full sm:w-72 px-4 py-2.5 rounded-full text-sm outline-none"
+                  style={{
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    color: "#f5f5f7",
+                  }}
+                />
               </div>
 
               {/* Status filter */}

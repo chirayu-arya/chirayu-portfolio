@@ -71,46 +71,55 @@ export default function Featured() {
       {/* Gradient blobs */}
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
         <div
-          className="absolute rounded-full"
+          className="absolute rounded-full bg-blob"
           style={{
             width: "60vmax", height: "60vmax",
             top: "-20vmax", right: "-10vmax",
-            background: "radial-gradient(ellipse, rgba(139,92,246,0.32) 0%, transparent 68%)",
-            filter: "blur(80px)",
+            background: "radial-gradient(ellipse, rgba(220,20,60,0.32) 0%, transparent 68%)",
           }}
         />
         <div
-          className="absolute rounded-full"
+          className="absolute rounded-full bg-blob"
           style={{
             width: "50vmax", height: "50vmax",
             bottom: "-15vmax", left: "-10vmax",
-            background: "radial-gradient(ellipse, rgba(37,99,235,0.28) 0%, transparent 68%)",
-            filter: "blur(80px)",
+            background: "radial-gradient(ellipse, rgba(139,0,0,0.28) 0%, transparent 68%)",
           }}
         />
       </div>
 
       <div className="relative" style={{ zIndex: 1 }}>
         {/* Header */}
-        <div ref={headerRef} className="max-w-6xl mx-auto px-8 mb-12">
+        <div ref={headerRef} className="px-8 sm:px-14 lg:px-20 mb-12">
           <motion.p
             initial={{ opacity: 0 }}
             animate={headerInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-5"
+            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
             style={{ color: "#86868b" }}
           >
             Featured
           </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 24 }}
-            animate={headerInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-            className="font-bold tracking-tight"
-            style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)", color: "#f5f5f7" }}
-          >
-            Work in the wild.
-          </motion.h2>
+          <div className="flex items-end justify-between gap-8">
+            <motion.h2
+              initial={{ opacity: 0, x: -60 }}
+              animate={headerInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.05 }}
+              className="font-black tracking-tight leading-[0.92]"
+              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
+            >
+              Turned 'em eyeballs.
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, x: 20 }}
+              animate={headerInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.3 }}
+              className="text-sm hidden sm:block"
+              style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "18rem", textAlign: "right" }}
+            >
+              Selected moments where my work made it out into the world.
+            </motion.p>
+          </div>
         </div>
 
         {/* Scrollable track */}
@@ -128,9 +137,9 @@ export default function Featured() {
               scrollbarWidth: "none",
               msOverflowStyle: "none",
               paddingBottom: "1rem",
-              paddingLeft: "max(2rem, calc((100vw - 72rem) / 2 + 2rem))",
+              paddingLeft: "clamp(2rem, 5.56vw, 5rem)",
               paddingRight: "2rem",
-              scrollPaddingLeft: "max(2rem, calc((100vw - 72rem) / 2 + 2rem))",
+              scrollPaddingLeft: "clamp(2rem, 5.56vw, 5rem)",
             }}
           >
             {items.map((item) => (

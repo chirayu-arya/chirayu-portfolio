@@ -39,7 +39,7 @@ const SOCIALS = [
     ),
   },
   {
-    href: "https://www.instagram.com/technonaut.frames",
+    href: "https://www.instagram.com/iamchirayuarya",
     label: "Instagram",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -48,7 +48,16 @@ const SOCIALS = [
     ),
   },
   {
-    href: "#",
+    href: "https://medium.com/@chirayuarya21",
+    label: "Medium",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
+      </svg>
+    ),
+  },
+  {
+    href: "https://x.com/AryaChirayu",
     label: "Twitter / X",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -62,12 +71,14 @@ function SocialIcons() {
   return (
     <div style={{ display: "flex", gap: "10px" }}>
       {SOCIALS.map(({ href, label, icon }) => (
-        <a
+        <motion.a
           key={label}
           href={href}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={label}
+          whileHover={{ y: -4 }}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
           style={{
             display: "flex",
             alignItems: "center",
@@ -79,10 +90,20 @@ function SocialIcons() {
             border: "1px solid rgba(255,255,255,0.1)",
             color: "#f5f5f7",
             flexShrink: 0,
+            cursor: "pointer",
+            transition: "background 0.22s ease, border-color 0.22s ease",
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLElement).style.background = "rgba(220,20,60,0.16)";
+            (e.currentTarget as HTMLElement).style.borderColor = "rgba(220,20,60,0.4)";
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.07)";
+            (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
           }}
         >
           {icon}
-        </a>
+        </motion.a>
       ))}
     </div>
   );
@@ -178,7 +199,7 @@ export default function Hero() {
         >
           <motion.div
             className="bg-blob absolute inset-0 rounded-full"
-            style={{ background: "radial-gradient(ellipse, rgba(220,20,60,0.45) 0%, transparent 68%)" }}
+            style={{ background: isMobile ? "radial-gradient(ellipse, rgba(220,20,60,0.82) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(220,20,60,0.45) 0%, transparent 68%)" }}
             animate={isMobile ? {} : { scale: [1, 1.07, 1], x: [0, 18, 0] }}
             transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -194,7 +215,7 @@ export default function Hero() {
         >
           <motion.div
             className="bg-blob absolute inset-0 rounded-full"
-            style={{ background: "radial-gradient(ellipse, rgba(180,0,40,0.38) 0%, transparent 68%)" }}
+            style={{ background: isMobile ? "radial-gradient(ellipse, rgba(180,0,40,0.72) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(180,0,40,0.38) 0%, transparent 68%)" }}
             animate={isMobile ? {} : { scale: [1, 1.1, 1], y: [0, 24, 0] }}
             transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           />
@@ -210,7 +231,7 @@ export default function Hero() {
         >
           <motion.div
             className="bg-blob absolute inset-0 rounded-full"
-            style={{ background: "radial-gradient(ellipse, rgba(139,0,0,0.4) 0%, transparent 68%)" }}
+            style={{ background: isMobile ? "radial-gradient(ellipse, rgba(139,0,0,0.78) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(139,0,0,0.4) 0%, transparent 68%)" }}
             animate={isMobile ? {} : { scale: [1, 1.08, 1], x: [0, -20, 0] }}
             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 5 }}
           />
