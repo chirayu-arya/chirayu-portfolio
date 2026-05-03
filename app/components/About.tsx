@@ -54,64 +54,29 @@ const interests = [
     title: "Gaming",
     currently: "Currently playing",
     detail: "Clair Obscur: Expedition 33",
-    iconBg: "rgba(139,92,246,0.18)",
     glowColor: "#a78bfa",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="7" width="20" height="13" rx="5" />
-        <path d="M7 13h4M9 11v4" />
-        <circle cx="15" cy="12" r="1" fill="#a78bfa" stroke="none" />
-        <circle cx="18" cy="14" r="1" fill="#a78bfa" stroke="none" />
-      </svg>
-    ),
   },
   {
-    title: "Guitar",
-    currently: "Currently playing and listening to",
+    title: "Music",
+    currently: "Currently listening to",
     detail: "Coldplay",
-    iconBg: "rgba(56,189,248,0.15)",
     glowColor: "#7dd3fc",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7dd3fc" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 18V5l12-2v13" />
-        <circle cx="6" cy="18" r="3" />
-        <circle cx="18" cy="16" r="3" />
-      </svg>
-    ),
   },
   {
     title: "Photography",
     currently: "Currently exploring",
     detail: "Virtual Photography",
-    iconBg: "rgba(251,191,36,0.15)",
     glowColor: "#fbbf24",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-        <circle cx="12" cy="13" r="4" />
-      </svg>
-    ),
   },
   {
     title: "Digital Art",
     currently: "Currently working on",
     detail: "NFT NYC Showcase 2026",
-    iconBg: "rgba(251,113,133,0.15)",
     glowColor: "#fb7185",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb7185" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="13.5" cy="6.5" r="1.5" />
-        <circle cx="17.5" cy="10.5" r="1.5" />
-        <circle cx="8.5" cy="7.5" r="1.5" />
-        <circle cx="6.5" cy="12.5" r="1.5" />
-        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
-      </svg>
-    ),
   },
 ];
 
 function InterestCard({ item, inView, delay }: { item: typeof interests[0]; inView: boolean; delay: number }) {
-  const [hovered, setHovered] = useState(false);
   const [entered, setEntered] = useState(false);
   return (
     <motion.div
@@ -119,29 +84,21 @@ function InterestCard({ item, inView, delay }: { item: typeof interests[0]; inVi
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={entered ? { duration: 0.18, ease: "easeOut" } : { duration: 0.6, ease: EASE, delay }}
       onAnimationComplete={() => { if (inView) setEntered(true); }}
-      whileHover={{ y: -5 }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      className="flex flex-row items-center gap-4 rounded-2xl p-4"
       style={{
-        background: hovered ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.04)",
-        border: `1px solid ${hovered ? item.glowColor + "60" : "rgba(255,255,255,0.07)"}`,
-        boxShadow: "none",
-        transition: "border-color 0.2s ease, background 0.2s ease",
+        borderLeft: `2px solid ${item.glowColor}`,
+        paddingLeft: "1rem",
         cursor: "default",
       }}
     >
-      <div
-        className="flex items-center justify-center rounded-xl flex-shrink-0"
-        style={{ width: 40, height: 40, background: item.iconBg }}
-      >
-        {item.icon}
-      </div>
-      <div>
-        <p className="text-sm font-semibold" style={{ color: "#f5f5f7" }}>{item.title}</p>
-        <p className="text-xs mt-0.5" style={{ color: "#86868b" }}>{item.currently}</p>
-        <p className="text-xs font-medium mt-1" style={{ color: "#c7c7cc" }}>{item.detail}</p>
-      </div>
+      <p className="text-xs uppercase tracking-[0.18em] font-medium mb-2" style={{ color: "#515154" }}>
+        {item.currently}
+      </p>
+      <p className="font-bold leading-tight mb-1" style={{ fontSize: "clamp(1.1rem, 1.6vw, 1.4rem)", color: "#f5f5f7" }}>
+        {item.title}
+      </p>
+      <p className="text-sm" style={{ color: "#86868b" }}>
+        {item.detail}
+      </p>
     </motion.div>
   );
 }
@@ -189,11 +146,11 @@ export default function About() {
           About Me
         </motion.p>
 
-        {/* Full-width headline */}
+        {/* Full-width headline — slides in from left */}
         <motion.h2
-          initial={{ opacity: 0, y: 32 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1.0, ease: EASE, delay: 0.1 }}
+          initial={{ opacity: 0, x: -60 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 1.1, ease: EASE, delay: 0.05 }}
           className="font-black tracking-tight leading-[0.92] mb-16 lg:mb-20"
           style={{ fontSize: "clamp(3rem, 7.5vw, 7.5rem)", color: "#f5f5f7" }}
         >
@@ -204,13 +161,13 @@ export default function About() {
         {/* 2-col: bio + portrait */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-20 lg:items-stretch mb-12">
 
-          {/* Left: bio + pills + CTA */}
-          <div className="order-2 lg:order-1 lg:col-span-7 flex flex-col justify-between gap-10 lg:gap-0 lg:pb-4">
+          {/* Left: bio + pills + CTA — cascade down after headline lands */}
+          <div className="order-2 lg:order-1 lg:col-span-7 flex flex-col justify-between gap-10 lg:gap-0">
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 32 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, ease: EASE, delay: 0.3 }}
+              transition={{ duration: 1.0, ease: EASE, delay: 0.5 }}
               className="text-base leading-relaxed"
               style={{ color: "#f5f5f7" }}
             >
@@ -223,9 +180,9 @@ export default function About() {
 
             {/* Tech stack pills */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, ease: EASE, delay: 0.4 }}
+              transition={{ duration: 0.9, ease: EASE, delay: 0.7 }}
               className="flex flex-col items-start gap-3"
             >
               {techStack.map((group) => (
@@ -247,7 +204,7 @@ export default function About() {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, ease: EASE, delay: 0.5 }}
+              transition={{ duration: 0.8, ease: EASE, delay: 0.9 }}
             >
               <a
                 href="/about"
@@ -265,38 +222,37 @@ export default function About() {
             </motion.div>
           </div>
 
-          {/* Right: portrait */}
+          {/* Right: portrait — slides in from right simultaneously with headline */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1.0, ease: EASE, delay: 0.2 }}
-            className="order-1 lg:order-2 lg:col-span-5 mb-10 lg:mb-0"
+            initial={{ opacity: 0, x: 60 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 1.1, ease: EASE, delay: 0.05 }}
+            className="order-1 lg:order-2 lg:col-span-5 mb-10 lg:mb-0 lg:h-full"
           >
             <div
-              className="w-full overflow-hidden"
-              style={{ height: "clamp(300px, 48vh, 520px)" }}
+              className="w-full h-full overflow-hidden"
+              style={{ minHeight: "clamp(300px, 48vh, 520px)" }}
             >
               <img
-                src="/Chirayu Full.png"
+                src="/chirayu-wide.png"
                 alt="Chirayu Arya"
-                className="w-full h-full object-cover"
-                style={{ objectPosition: "center 10%" }}
+                className="w-full h-full object-cover object-top"
               />
             </div>
           </motion.div>
 
         </div>
 
-        {/* Interest cards — full-width 4-col strip */}
+        {/* Interest cards — stagger in last */}
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "2.5rem", marginTop: "0.5rem" }}>
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, ease: EASE, delay: 0.55 }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+            transition={{ duration: 0.8, ease: EASE, delay: 1.0 }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-6"
           >
             {interests.map((item, i) => (
-              <InterestCard key={item.title} item={item} inView={inView} delay={0.55 + i * 0.07} />
+              <InterestCard key={item.title} item={item} inView={inView} delay={1.0 + i * 0.08} />
             ))}
           </motion.div>
         </div>

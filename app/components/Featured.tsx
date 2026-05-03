@@ -75,7 +75,7 @@ export default function Featured() {
           style={{
             width: "60vmax", height: "60vmax",
             top: "-20vmax", right: "-10vmax",
-            background: "radial-gradient(ellipse, rgba(139,92,246,0.32) 0%, transparent 68%)",
+            background: "radial-gradient(ellipse, rgba(220,20,60,0.32) 0%, transparent 68%)",
           }}
         />
         <div
@@ -83,7 +83,7 @@ export default function Featured() {
           style={{
             width: "50vmax", height: "50vmax",
             bottom: "-15vmax", left: "-10vmax",
-            background: "radial-gradient(ellipse, rgba(37,99,235,0.28) 0%, transparent 68%)",
+            background: "radial-gradient(ellipse, rgba(139,0,0,0.28) 0%, transparent 68%)",
           }}
         />
       </div>
@@ -95,20 +95,31 @@ export default function Featured() {
             initial={{ opacity: 0 }}
             animate={headerInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-5"
+            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
             style={{ color: "#86868b" }}
           >
             Featured
           </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 24 }}
-            animate={headerInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-            className="font-bold tracking-tight"
-            style={{ fontSize: "clamp(2.8rem, 5.5vw, 5rem)", color: "#f5f5f7" }}
-          >
-            Work in the wild.
-          </motion.h2>
+          <div className="flex items-end justify-between gap-8">
+            <motion.h2
+              initial={{ opacity: 0, x: -60 }}
+              animate={headerInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.05 }}
+              className="font-black tracking-tight leading-[0.92]"
+              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
+            >
+              Turned 'em eyeballs.
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, x: 20 }}
+              animate={headerInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.3 }}
+              className="text-sm hidden sm:block"
+              style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "18rem", textAlign: "right" }}
+            >
+              Selected moments where my work made it out into the world.
+            </motion.p>
+          </div>
         </div>
 
         {/* Scrollable track */}
