@@ -452,7 +452,7 @@ export default function BookshelfPage() {
   );
 
   return (
-    <main className="min-h-screen" style={{ background: "#000" }}>
+    <main className="relative min-h-screen overflow-x-hidden" style={{ background: "#000" }}>
       <Nav />
       <PageBlobs palette="amber" />
 

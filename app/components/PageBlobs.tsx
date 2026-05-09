@@ -52,7 +52,7 @@ export default function PageBlobs({ palette, startTop = "0" }: PageBlobsProps) {
         left: 0,
         right: 0,
         bottom: 0,
-        zIndex: -1,
+        zIndex: 0,
       }}
     >
       {LAYOUT.map((b, i) => {
