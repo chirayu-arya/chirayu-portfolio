@@ -3,6 +3,7 @@
 import Nav from "../components/Nav";
 import SocialIcons from "../components/SocialIcons";
 import StarField from "../components/StarField";
+import PageBlobs from "../components/PageBlobs";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect, FormEvent } from "react";
 
@@ -170,27 +171,8 @@ function SubscriberCounter() {
   return (
     <section
       ref={ref}
-      className="relative py-24 sm:py-32 px-8 sm:px-14 lg:px-20 overflow-hidden"
-      style={{ isolation: "isolate" }}
+      className="relative py-24 sm:py-32 px-8 sm:px-14 lg:px-20"
     >
-      {/* Crimson corner blobs — top-left + bottom-right */}
-      <div
-        className="bg-blob absolute -top-[18vmax] -left-[18vmax] w-[75vmax] h-[75vmax] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(220,20,60,0.30) 0%, rgba(180,0,40,0.13) 40%, transparent 75%)",
-          zIndex: -1,
-        }}
-      />
-      <div
-        className="bg-blob absolute -bottom-[20vmax] -right-[20vmax] w-[78vmax] h-[78vmax] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139,0,0,0.27) 0%, rgba(180,0,40,0.12) 45%, transparent 78%)",
-          zIndex: -1,
-        }}
-      />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -376,37 +358,19 @@ export default function NewsletterPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-black overflow-x-hidden">
+    <main className="relative min-h-screen bg-black overflow-x-hidden">
       <Nav />
+      <PageBlobs palette="crimson" />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative pt-28 sm:pt-32 lg:pt-36 pb-28 sm:pb-36 px-8 sm:px-14 lg:px-20 overflow-hidden"
-        style={{ isolation: "isolate" }}
+        className="relative pt-28 sm:pt-32 lg:pt-36 pb-28 sm:pb-36 px-8 sm:px-14 lg:px-20"
       >
-        {/* Crimson corner blobs */}
-        <div
-          className="bg-blob absolute -top-[18vmax] -left-[18vmax] w-[85vmax] h-[85vmax] rounded-full pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(220,20,60,0.38) 0%, rgba(180,0,40,0.14) 40%, transparent 75%)",
-            zIndex: -2,
-          }}
-        />
-        <div
-          className="bg-blob absolute -bottom-[22vmax] -right-[22vmax] w-[80vmax] h-[80vmax] rounded-full pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(139,0,0,0.32) 0%, rgba(180,0,40,0.14) 45%, transparent 78%)",
-            zIndex: -2,
-          }}
-        />
-
-        {/* StarField — twinkling stars overlay */}
+        {/* StarField — twinkling stars overlay (hero-scoped) */}
         <div
           className="absolute inset-0 pointer-events-none overflow-hidden"
-          style={{ zIndex: -1 }}
+          style={{ zIndex: 0 }}
         >
           <StarField />
         </div>
@@ -523,27 +487,8 @@ export default function NewsletterPage() {
       {/* ── What's Inside ────────────────────────────────────────────────── */}
       <section
         ref={insideRef}
-        className="relative py-24 sm:py-32 px-8 sm:px-14 lg:px-20 overflow-hidden"
-        style={{ isolation: "isolate" }}
+        className="relative py-24 sm:py-32 px-8 sm:px-14 lg:px-20"
       >
-        {/* Crimson corner blobs — top-right + bottom-left */}
-        <div
-          className="bg-blob absolute -top-[20vmax] -right-[20vmax] w-[80vmax] h-[80vmax] rounded-full pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(180,0,40,0.28) 0%, rgba(139,0,0,0.13) 40%, transparent 75%)",
-            zIndex: -1,
-          }}
-        />
-        <div
-          className="bg-blob absolute -bottom-[22vmax] -left-[22vmax] w-[78vmax] h-[78vmax] rounded-full pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(220,20,60,0.26) 0%, rgba(180,0,40,0.12) 45%, transparent 78%)",
-            zIndex: -1,
-          }}
-        />
-
         <motion.p
           initial={{ opacity: 0, y: 8 }}
           animate={insideInView ? { opacity: 1, y: 0 } : {}}
@@ -658,27 +603,8 @@ export default function NewsletterPage() {
       {/* ── Latest Issues ────────────────────────────────────────────────── */}
       <section
         ref={issuesRef}
-        className="relative py-24 sm:py-32 px-8 sm:px-14 lg:px-20 overflow-hidden"
-        style={{ isolation: "isolate" }}
+        className="relative py-24 sm:py-32 px-8 sm:px-14 lg:px-20"
       >
-        {/* Crimson corner blobs — top-right + bottom-left */}
-        <div
-          className="bg-blob absolute -top-[22vmax] -right-[22vmax] w-[78vmax] h-[78vmax] rounded-full pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(139,0,0,0.28) 0%, rgba(180,0,40,0.12) 42%, transparent 78%)",
-            zIndex: -1,
-          }}
-        />
-        <div
-          className="bg-blob absolute -bottom-[20vmax] -left-[20vmax] w-[80vmax] h-[80vmax] rounded-full pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(220,20,60,0.26) 0%, rgba(180,0,40,0.12) 45%, transparent 78%)",
-            zIndex: -1,
-          }}
-        />
-
         <motion.p
           initial={{ opacity: 0, y: 8 }}
           animate={issuesInView ? { opacity: 1, y: 0 } : {}}

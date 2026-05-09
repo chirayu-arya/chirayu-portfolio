@@ -110,30 +110,9 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative pt-36 pb-20 px-8 sm:px-14 lg:px-20 overflow-hidden"
-      style={{ background: "#000", isolation: "isolate" }}
+      className="relative pt-36 pb-20 px-8 sm:px-14 lg:px-20"
     >
-      {/* Crimson blobs */}
-      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-        <div
-          className="absolute rounded-full bg-blob"
-          style={{
-            width: "70vmax", height: "70vmax",
-            top: "-25vmax", left: "-20vmax",
-            background: "radial-gradient(ellipse, rgba(220,20,60,0.28) 0%, transparent 68%)",
-          }}
-        />
-        <div
-          className="absolute rounded-full bg-blob"
-          style={{
-            width: "55vmax", height: "55vmax",
-            bottom: "-15vmax", right: "-10vmax",
-            background: "radial-gradient(ellipse, rgba(139,0,0,0.22) 0%, transparent 68%)",
-          }}
-        />
-      </div>
-
-      <div ref={ref} className="relative" style={{ zIndex: 1 }}>
+      <div ref={ref} className="relative">
 
         {/* Eyebrow */}
         <motion.p

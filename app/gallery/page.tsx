@@ -2,6 +2,7 @@
 
 import Nav from "../components/Nav";
 import Contact from "../components/Contact";
+import PageBlobs from "../components/PageBlobs";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback } from "react";
 
@@ -225,13 +226,9 @@ export default function GalleryPage() {
 
   return (
     <main style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7", position: "relative", overflow: "hidden" }}>
-      {/* Crimson background blobs */}
-      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-        <div className="bg-blob absolute rounded-full" style={{ width: "80vmax", height: "80vmax", top: "-30vmax", left: "-25vmax", background: "radial-gradient(ellipse, rgba(220,20,60,0.32) 0%, transparent 68%)" }} />
-        <div className="bg-blob absolute rounded-full" style={{ width: "70vmax", height: "70vmax", bottom: "-25vmax", right: "-20vmax", background: "radial-gradient(ellipse, rgba(139,0,0,0.28) 0%, transparent 68%)" }} />
-      </div>
+      <PageBlobs palette="magenta-orange" />
 
-      <div className="relative" style={{ zIndex: 1 }}>
+      <div className="relative">
         <Nav />
 
         {/* Custom "View" cursor pill */}

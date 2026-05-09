@@ -16,11 +16,52 @@
 - Text primary: `#f5f5f7`
 - Text secondary: `#86868b`
 - Text muted: `#515154`
+- Crimson accent: `rgba(220,20,60,...)` primary, `rgba(180,0,40,...)` deep, `rgba(139,0,0,...)` dark
 - No box shadows on cards, badges, or components
-- No em-dashes — use commas, colons, or periods instead
+- No em-dashes (use commas, colons, or periods instead)
 - Hover states: cursor pointer only, no color changes or shadows
 - Animations: Framer Motion with `ease: [0.16, 1, 0.3, 1]`, `useInView` with `once: true, margin: "-8%"`
 - Responsive breakpoint for layout changes: `lg:` (1024px)
+
+## Editorial Design Language (established in design-revamp branch, PR #2)
+The site follows a unified editorial design language across all pages:
+
+**Layout**
+- Full-viewport padding: `px-8 sm:px-14 lg:px-20`. NEVER use `max-w-6xl mx-auto` or `max-w-7xl` containers anymore.
+- Sections use `relative overflow-hidden` with `isolation: "isolate"` for proper blob stacking.
+
+**Typography**
+- Eyebrows: `text-xs tracking-[0.22em] uppercase font-medium mb-10` in `#86868b`
+- Section headlines: `font-black tracking-tight leading-[0.92]` at `clamp(3rem, 7vw, 7rem)` for hero/page-level, `clamp(2.4rem, 5vw, 4.5rem)` for sub-sections
+- All headlines have an asymmetric entry: `initial={{ opacity: 0, x: -60 }}` from the left
+- Right-aligned subtitle counterweight pattern: a short subtitle slides in from the right (`x: 20`) at `delay: 0.3` to balance the headline from the left
+
+**Section header pattern (used everywhere):**
+```jsx
+<motion.p>Eyebrow</motion.p>
+<div className="flex items-end justify-between gap-8">
+  <motion.h2 initial={{ x: -60 }}>Big bold headline.</motion.h2>
+  <motion.p initial={{ x: 20 }} className="hidden sm:block" textAlign: right>
+    Subtitle counterweight.
+  </motion.p>
+</div>
+```
+
+**Blobs (page-level palette system, established in newsletter PR #4)**
+- Each page has ONE seamless background — a single `<PageBlobs palette="..." />` component lives at the page level (not per-section). Section-level blob divs are gone everywhere; sections are transparent and let the page-level canvas show through.
+- Component lives at `app/components/PageBlobs.tsx`. It renders 4 alternating-side blobs distributed vertically across the entire page height, so the background reads as one continuous painted layer.
+- Per-page palettes (current assignments):
+  - **Home (`/`)** — `crimson-purple`, with `startTop="100vh"` so the cinematic hero stays scoped + crimson and the rest of the page gets crimson + vibrant purple unified.
+  - **About (`/about`)** — `navy`
+  - **Gallery (`/gallery`)** — `magenta-orange`
+  - **Newsletter (`/newsletter`)** — `crimson`
+  - **Gaming (`/gaming`)** — `ps-blue` (background only; in-content accents stay crimson)
+  - **Bookshelf (`/bookshelf`)** — `amber`
+- Adding a new page? **Ask the user which palette to use** before building. Either pick one of the existing palettes or add a new one to `PALETTES` in `PageBlobs.tsx`. Always render `<PageBlobs palette="..." />` once near the top of the page.
+- Always use `bg-blob` class on blob divs, never inline `filter: blur()`. The class strips blur on `pointer: coarse` for mobile performance.
+- The home Hero (`app/components/Hero.tsx`) is the only place where blobs are still scoped inside a section, because of its cinematic animated treatment.
+
+**Section naming convention**: refer to sections by their EYEBROW LABEL, not by component name. e.g. "About Me", "At a Glance", "Featured", "Photography", "Connect With Me".
 
 ## Custom CSS (globals.css)
 - `glow-bluepurple` — pulsing blue/purple text shadow animation, used on hero and about headline
@@ -33,10 +74,11 @@
 - `.library-card-wrap` — outer wrapper for /gaming library cards; owns CSS hover lift (`translateY(-8px)`, `transition: 0.32s`). Kept separate from the inner `motion.div` so Framer Motion's inline transform never conflicts with the CSS hover transform (which causes a GPU layer-swap seam mid-animation)
 
 ## Images (public/)
-- `Chirayu Full.png` — main portrait photo, used in home About section and /about hero
-- `Chirayu Reveal.png` — photo revealed on hover under Memoji in home Hero (also used as placeholder in /about 3-photo panel)
+- `Chirayu Full.png` — full portrait, used in /about hero photo stack
+- `chirayu-wide.png` — wide crop, used in home About section (right column)
+- `Chirayu Reveal.png` — photo revealed on hover under Memoji in home Hero (also used in /about photo stack)
 - `Memoji 3.png` — Memoji used in home Hero
-- `Chirayu Square.png` — square crop (used as placeholder in /about 3-photo panel)
+- `Chirayu Square.png` — square crop (used in /about photo stack)
 - `favicon.svg` — original SVG favicon (kept for reference)
 - `Resume.pdf` — resume file, linked from Nav "View Resume" and accessible at /Resume.pdf
 - `PS-Plus.png` — PlayStation Plus logo, used in /gaming headline badge
@@ -46,44 +88,50 @@
 ### `/` (Home — app/page.tsx)
 Components rendered in order: Nav, Hero, About, Featured, Work, Photography, Contact
 
-### `/about` (app/about/page.tsx)
-Sections in order:
-1. Hero — warm gradient blobs (amber/coral/teal), GPU-accelerated (`will-change: transform, translateZ(0)`)
-   - Centered headline: "I believe in infinite possibilities." with `glow-bluepurple` on "infinite possibilities."
-   - 2-col layout below: bio text (col 1-7) | 3 placeholder images (col 8-12, equal height via flex-col + flex-1 + min-h-0)
-   - Full-width centered "Things I love" pills below the grid
-2. Marquee — infinite scrolling logo strip (placeholders, user to supply real logos)
-3. Experience — 2-col grid, `borderBottom` dividers between rows, no divider above first entries
-4. Education — same pattern as Experience
-5. Contact footer
+### `/about` (app/about/page.tsx) — REDESIGNED in design-revamp
+Editorial layout with crimson blobs throughout. Sections:
+1. **Hero** — eyebrow "About", `font-black` headline "I believe in / infinite possibilities." (asymmetric entry from left, no glow effect anymore). 12-col grid: 7-col bio (cascading paragraphs, italic + bold highlights) + 5-col photo stack (3 images stacked vertically using `flex-1 min-h-0` inside a fixed container with `height: clamp(420px, 70vh, 720px)`). "Things I love" pills below the grid, centered, with hairline `borderTop` divider. Pills use crimson hover tint (`rgba(220,20,60,0.12)` bg, `rgba(220,20,60,0.35)` border).
+2. **Associations marquee** — renamed from "Worked with". Eyebrow + scrolling logos. Has top + bottom hairline borders.
+3. **Experience** — eyebrow + `font-black` headline "Roles I've owned." + right-aligned subtitle "Nine roles, five industries, one obsession." Editorial rows via `EditorialRow` component: year (left, small muted) + title + company + dates + description + tag (right, uppercase tracking, muted). Each row has `borderBottom` hairline.
+4. **Education** — same pattern: eyebrow + headline "Where I've learned." + subtitle "Five schools, four countries." Editorial rows. Logo prop on `EditorialRow` is supported but currently unused (school logos were removed since reliable sources weren't found).
+5. **Contact** footer
+
+**Industry tags** (inline per experience item): Construction | SaaS, Construction | Real Estate, HR Tech | SaaS, Crypto | Web 3 | Venture Capital, Crypto | Web 3, Environmental Science | SaaS, Insurance, Blockchain | Crypto | Web 3, UNESCO Initiative.
 
 Bio text: full personal story with italic phrases ("You can carve your own path.", "There's always more than one path.") and bold highlights. Color: `#f5f5f7`.
 
-"Things I love" pills: Photography, Movies, Travel, Music, Writing, Fitness, Design, Cooking, Gaming, Guitar, Vibe-coding (11 pills, 2 rows). Each pill has hover elevation (`whileHover: { y: -4 }`) and background brighten via `onMouseEnter/Leave`. Uses `PillItem` component with `onAnimationComplete` pattern to avoid hover exit delay.
+"Things I love" pills: Photography, Movies, Travel, Music, Writing, Fitness, Design, Cooking, Gaming, Guitar, Vibe-coding (11 pills, 2 rows). `PillItem` uses `onAnimationComplete` pattern to avoid hover exit delay.
 
-### `/gallery` (app/gallery/page.tsx)
-- Headline: "Take a deep dive!" (centered, bold, clamp font size)
-- Centered Photography | Illustrations segmented toggle with animated sliding pill
+### `/gallery` (app/gallery/page.tsx) — REDESIGNED in design-revamp
+- Editorial header: eyebrow "Gallery" + `font-black` headline "Take a deep dive." (asymmetric from left) + right-aligned subtitle "A scrapbook for the chronically curious."
+- Centered Photography | Illustrations segmented toggle with animated sliding pill (centered because it's a UI control, not editorial content)
 - 30 photography cards, 18 illustration cards (placeholder)
-- True double-sided card flip on toggle: each card has front (photo) and back (illustration), rotates 0deg to 180deg with diagonal stagger (top-left to bottom-right, `delay = (row + col) * 0.055s`)
-- Cards: 4:3 aspect ratio, noise texture, hover lift + glow + gradient + text overlay, custom "View" cursor pill
+- True double-sided card flip on toggle: each card has front (photo) and back (illustration), rotates 0deg to 180deg with diagonal stagger (`delay = (row + col) * 0.055s`)
+- Cards: 4:3 aspect ratio, NO rounded corners (sharp-cornered, editorial), noise texture, hover lift + glow + gradient + text overlay, custom "View" cursor pill
 - Lightbox modal on card click
-- Colourful background blobs (purple, pink, blue, teal, amber)
+- Crimson blobs (2 corner-anchored, replacing 5-blob colorful palette)
 - Contact footer at bottom
 
-### `/gaming` (app/gaming/page.tsx) — BUILT 2026-04-25
+### `/gaming` (app/gaming/page.tsx) — BUILT 2026-04-25, REDESIGNED in design-revamp
 Full PlayStation gaming dashboard connected to live PSN API.
 
-**Header (responsive):**
-- Desktop eyebrow: "GAMING DASHBOARD · PLAYSTATION" left-aligned, `PSButtons` component right-aligned (`hidden sm:block`)
-- Mobile eyebrow: "Gaming Dashboard" only (shorter, no PlayStation suffix), Photo Mode button replaces PSButtons (`sm:hidden`)
-- Headline: desktop = "I am Techno_Naut!" (`hidden sm:inline`), mobile = "Techno_Naut" only (`sm:hidden`), both at smaller size (`text-3xl sm:text-6xl lg:text-7xl`)
-- `PS-Plus.png` badge: `w-9 h-9 sm:w-[52px] sm:h-[52px]`, `objectFit: contain`
-- "Photo Mode" button (camera icon): appears right of desktop headline and in mobile eyebrow row, links to `instagram.com/technonaut.frames`
+**Header (editorial, redesigned):**
+- Eyebrow: "Gaming · PlayStation" (desktop) / "Gaming" (mobile), `text-xs tracking-[0.22em] uppercase` in `#86868b`
+- `font-black` headline "Techno_Naut" at `clamp(3rem, 7vw, 7rem)`, asymmetric entry from left
+- `PS-Plus.png` badge inline with the headline, `marginBottom: 0.18em` for visual baseline alignment, `w-9 h-9 sm:w-14 sm:h-14 lg:w-16 lg:h-16`
+- "Photo Mode" button (camera icon, `rounded-xl`): right-aligned, slides in from right with crimson hover tint. Mobile version below the headline (`rounded-lg`).
+- Layout: `flex items-end justify-between` for headline + photo mode button counterweight
+
+**Accent color**: changed from PS blue (`#003087`) to crimson (`#dc143c`) throughout (text, borders, progress bars, hover states). PS blue replaced via sed: `#003087` → `#dc143c`, `rgba(0,48,135, X)` → `rgba(220,20,60, X)`, `rgba(0,16,48, X)` → `rgba(40,0,12, X)`.
+
+**Section headers** (each gets editorial treatment):
+- Currently Playing: eyebrow + `font-black` "What's on right now."
+- Recently Played: eyebrow + `font-black` "Lately on the controller."
+- Library: eyebrow + `font-black` "Everything I own." + right-aligned subtitle with game count
 
 **Background:**
-- 3 PS blue radial gradient blobs (fixed, GPU-accelerated)
-- `PhysicsPSButtons` component: 4 giant PS button SVGs (cross/circle/triangle/square, 160–280px) with real physics — `requestAnimationFrame` loop, elastic circle-circle collision, wall bounce. Velocities: ~1.3–1.7 px/frame. Each has colored `drop-shadow` glow in its own color. Positions driven via `useMotionValue` for zero-overhead rendering.
+- 2 crimson corner-anchored blobs (top-left, bottom-right), replacing 3 PS blue blobs
+- `PhysicsPSButtons` component: 4 giant PS button SVGs (cross/circle/triangle/square, 160–280px) with real physics — kept as-is (signature of the page). `requestAnimationFrame` loop, elastic circle-circle collision, wall bounce. Skipped on `pointer: coarse`.
 
 **Trophy Dashboard (`TrophyDashboard` component):**
 - Left: 160×160 SVG ring animated with `stroke-dashoffset`, gradient (platinum→gold→bronze), level number centered
@@ -97,6 +145,7 @@ Full PlayStation gaming dashboard connected to live PSN API.
 - Layout: `lg:items-stretch` + `justify-between` on content column — "Currently Playing" eyebrow pinned to top, stats pinned to bottom, both cards align uniformly regardless of content
 - `whileHover: { y: -8, scale: 1.015 }` on each card
 - Game name: `text-xl lg:text-2xl`
+- NO `cursor: pointer` on the cards (they're not clickable, would be misleading)
 
 **Recently Played strip:**
 - Games 3–10 from `recentlyPlayed`, horizontal scroll only — no vertical hover movement
@@ -126,14 +175,16 @@ Full PlayStation gaming dashboard connected to live PSN API.
 
 **PSButtons component:** 4 inline SVG PS button icons (cross=blue `#6B8ED6`, circle=red `#C44B4B`, triangle=teal `#4BAE8A`, square=purple `#BA7CC4`), used in eyebrow row at `opacity={0.5}`
 
-### `/bookshelf` (app/bookshelf/page.tsx) — BUILT 2026-04-27
-Personal reading page. Warm amber/sepia design system (same dark bg, but amber blobs and accents instead of blue/purple). No Contact footer.
+### `/bookshelf` (app/bookshelf/page.tsx) — BUILT 2026-04-27, REDESIGNED in design-revamp
+Personal reading page. No Contact footer.
 
 **Sections:**
-1. **Hero** — eyebrow "Bookshelf", headline "The books that built me.", warm subtitle. Amber radial gradient blobs.
-2. **Currently Reading** — 2-col grid of `CurrentlyReadingCard`. Blurred cover as background with sepia overlay, amber progress bar (page-based), quote. Mirrors Currently Playing layout on /gaming.
-3. **All-Time Favourites** — 2-col grid of `AllTimeCard`. Noise texture, amber gradient overlay, "★ All-Time" amber badge, cover + quote with hairline divider.
-4. **Library** — 3-col grid of `LibraryBookCard` with category filter pills (All, Fiction, Non-Fiction, Self-Help, Biography, Psychology, Classics, Mystery).
+1. **Hero** — eyebrow "Bookshelf" + `font-black` headline "My reading list." (asymmetric from left) + right-aligned subtitle "Some shaped how I think. Some I revisit every year. Some I couldn't put down."
+2. **Currently Reading** — eyebrow only (no headline, kept clean). 2-col grid of `CurrentlyReadingCard`. Blurred cover background, amber progress bar (page-based), quote. Amber accents preserved (book-thematic, like PS blue on gaming cards).
+3. **All-Time Favourites** — eyebrow + `font-black` headline "The hall of fame." 2-col grid of `AllTimeCard` with amber accents and "★ All-Time" badge.
+4. **Library** — eyebrow + `font-black` headline "The full shelf." + right-aligned subtitle with book count by category. 3-col grid of `LibraryBookCard` with category filter pills (All, Fiction, Non-Fiction, Self-Help, Biography, Psychology, Classics, Mystery). Amber active state on filter pills.
+
+**Blobs**: 2 crimson corner-anchored (replacing 3 amber/sepia blobs). Amber retained ONLY on book-specific UI elements.
 
 **Book data (hardcoded in page — no API):**
 - Currently Reading: The Let Them Theory (Mel Robbins), Mind Magic (James R. Doty)

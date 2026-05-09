@@ -139,59 +139,10 @@ export default function Photography() {
   return (
     <section
       id="virtual-photography"
-      className="overflow-hidden"
-      style={{ background: "#000", paddingTop: "9rem", paddingBottom: "0", position: "relative", isolation: "isolate" }}
+      style={{ paddingTop: "9rem", paddingBottom: "0", position: "relative" }}
     >
-      {/* Gradient blobs */}
-      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-        {/* Top-left — pink */}
-        <div
-          className="absolute rounded-full bg-blob"
-          style={{
-            width: "55vmax", height: "55vmax",
-            top: "-10vmax", left: "-15vmax",
-            background: "radial-gradient(ellipse, rgba(220,20,60,0.3) 0%, transparent 68%)",
-          }}
-        />
-        {/* Bottom-right — amber */}
-        <div
-          className="absolute rounded-full bg-blob"
-          style={{
-            width: "45vmax", height: "45vmax",
-            bottom: "0", right: "-10vmax",
-            background: "radial-gradient(ellipse, rgba(180,0,40,0.42) 0%, transparent 68%)",
-          }}
-        />
-        {/* Center — purple */}
-        <div
-          className="absolute rounded-full bg-blob"
-          style={{
-            width: "50vmax", height: "50vmax",
-            top: "25%", left: "25%",
-            background: "radial-gradient(ellipse, rgba(220,20,60,0.4) 0%, transparent 60%)",
-          }}
-        />
-        {/* Top-right — sky blue */}
-        <div
-          className="absolute rounded-full bg-blob"
-          style={{
-            width: "40vmax", height: "40vmax",
-            top: "5%", right: "0%",
-            background: "radial-gradient(ellipse, rgba(139,0,0,0.42) 0%, transparent 60%)",
-          }}
-        />
-        {/* Bottom-center — yellow */}
-        <div
-          className="absolute rounded-full bg-blob"
-          style={{
-            width: "42vmax", height: "42vmax",
-            bottom: "5%", left: "25%",
-            background: "radial-gradient(ellipse, rgba(180,0,40,0.4) 0%, transparent 60%)",
-          }}
-        />
-      </div>
       {/* Header */}
-      <div ref={headerRef} className="relative px-8 sm:px-14 lg:px-20 mb-20" style={{ zIndex: 1 }}>
+      <div ref={headerRef} className="relative px-8 sm:px-14 lg:px-20 mb-20">
         <motion.p
           initial={{ opacity: 0 }}
           animate={headerInView ? { opacity: 1 } : {}}
