@@ -3,15 +3,19 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 
+// Pulled from /gallery photography set — varied across categories.
+const VP = "/Gallery/Photography/Virtual%20Photography";
+const RP = "/Gallery/Photography/Real%20Photography";
+
 const polaroids = [
-  { id: 1,  src: "https://picsum.photos/seed/vp01/600/600", rotation: -14, left: "0%",   top: "2%",   fromX: -900, z: 2, w: "22vw", delay: 0     },
-  { id: 2,  src: "https://picsum.photos/seed/vp02/600/600", rotation:  9,  left: "24%",  top: "-3%",  fromX:  900, z: 3, w: "21vw", delay: 0.07  },
-  { id: 3,  src: "https://picsum.photos/seed/vp03/600/600", rotation: -5,  left: "48%",  top: "4%",   fromX: -900, z: 2, w: "22vw", delay: 0.14  },
-  { id: 4,  src: "https://picsum.photos/seed/vp04/600/600", rotation:  17, left: "72%",  top: "-2%",  fromX:  900, z: 1, w: "20vw", delay: 0.04  },
-  { id: 5,  src: "https://picsum.photos/seed/vp05/600/600", rotation: -18, left: "3%",   top: "46%",  fromX: -900, z: 4, w: "23vw", delay: 0.19  },
-  { id: 6,  src: "https://picsum.photos/seed/vp06/600/600", rotation:  7,  left: "27%",  top: "43%",  fromX:  900, z: 3, w: "21vw", delay: 0.11  },
-  { id: 7,  src: "https://picsum.photos/seed/vp07/600/600", rotation: -11, left: "54%",  top: "50%",  fromX: -900, z: 2, w: "20vw", delay: 0.23  },
-  { id: 8,  src: "https://picsum.photos/seed/vp08/600/600", rotation:  13, left: "76%",  top: "45%",  fromX:  900, z: 1, w: "21vw", delay: 0.16  },
+  { id: 1,  src: `${VP}/Expedition%2033/Gustave%20%26%20Sophie%20-%20Chirayu%20Arya.jpg`, rotation: -14, left: "0%",   top: "2%",   fromX: -900, z: 2, w: "22vw", delay: 0     },
+  { id: 2,  src: `${VP}/Ghost%20of%20Yotei/IMG_8852.JPG`,                                   rotation:  9,  left: "24%",  top: "-3%",  fromX:  900, z: 3, w: "21vw", delay: 0.07  },
+  { id: 3,  src: `${VP}/Spider%20Man%202/IMG_7733.JPG`,                                     rotation: -5,  left: "48%",  top: "4%",   fromX: -900, z: 2, w: "22vw", delay: 0.14  },
+  { id: 4,  src: `${VP}/Avatar/IMG_8200.JPG`,                                               rotation:  17, left: "72%",  top: "-2%",  fromX:  900, z: 1, w: "20vw", delay: 0.04  },
+  { id: 5,  src: `${RP}/IMG_6865.jpg`,                                                      rotation: -18, left: "3%",   top: "46%",  fromX: -900, z: 4, w: "23vw", delay: 0.19  },
+  { id: 6,  src: `${VP}/Ghost%20of%20Tsushima/IMG_8519.JPG`,                                rotation:  7,  left: "27%",  top: "43%",  fromX:  900, z: 3, w: "21vw", delay: 0.11  },
+  { id: 7,  src: `${VP}/Expedition%2033/IMG_9360.jpg`,                                      rotation: -11, left: "54%",  top: "50%",  fromX: -900, z: 2, w: "20vw", delay: 0.23  },
+  { id: 8,  src: `${VP}/Spider%20Man%202/IMG_7743.JPG`,                                     rotation:  13, left: "76%",  top: "45%",  fromX:  900, z: 1, w: "21vw", delay: 0.16  },
 ];
 
 // Mobile: same images, simpler tilted grid
