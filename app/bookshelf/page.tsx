@@ -1,6 +1,7 @@
 "use client";
 
 import Nav from "../components/Nav";
+import PageBlobs from "../components/PageBlobs";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useCallback } from "react";
 
@@ -451,20 +452,9 @@ export default function BookshelfPage() {
   );
 
   return (
-    <main className="min-h-screen" style={{ background: "#000" }}>
+    <main className="relative min-h-screen overflow-x-hidden" style={{ background: "#000" }}>
       <Nav />
-
-      {/* Crimson background blobs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-        <div className="bg-blob absolute rounded-full" style={{
-          top: "-30vmax", left: "-25vmax", width: "80vmax", height: "80vmax",
-          background: "radial-gradient(ellipse, rgba(220,20,60,0.32) 0%, transparent 68%)",
-        }} />
-        <div className="bg-blob absolute rounded-full" style={{
-          bottom: "-25vmax", right: "-20vmax", width: "70vmax", height: "70vmax",
-          background: "radial-gradient(ellipse, rgba(139,0,0,0.28) 0%, transparent 68%)",
-        }} />
-      </div>
+      <PageBlobs palette="amber" />
 
       <div className="relative z-10 px-8 sm:px-14 lg:px-20">
 

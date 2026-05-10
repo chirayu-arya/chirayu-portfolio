@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const rockybilly = localFont({
+  src: "./fonts/rockybilly-regular.ttf",
+  variable: "--font-rockybilly",
+  display: "swap",
 });
 
 const siteUrl = "https://chirayuarya.com";
@@ -60,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${rockybilly.variable}`}>
       <head>
         <script
           type="application/ld+json"

@@ -143,7 +143,7 @@ export default function Work() {
   const statsInView = useInView(statsRef, { once: true, margin: "-5%" });
 
   return (
-    <section id="work" className="pt-36 pb-0 px-8 sm:px-14 lg:px-20" style={{ background: "#000" }}>
+    <section id="work" className="relative pt-36 pb-0 px-8 sm:px-14 lg:px-20">
       <div>
         {/* Header */}
         <div ref={ref} className="mb-10">

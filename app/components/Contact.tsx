@@ -56,7 +56,7 @@ export default function Contact() {
   const inView = useInView(ref, { once: true, margin: "-8%" });
 
   return (
-    <section id="contact" className="pt-36 pb-10 px-8 sm:px-14 lg:px-20" style={{ background: "#000" }}>
+    <section id="contact" className="relative pt-36 pb-10 px-8 sm:px-14 lg:px-20">
       <div>
 
         {/* Big CTA */}

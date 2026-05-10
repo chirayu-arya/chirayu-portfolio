@@ -1,6 +1,7 @@
 "use client";
 
 import Nav from "../components/Nav";
+import PageBlobs from "../components/PageBlobs";
 import { motion, useInView, useAnimation, useMotionValue } from "framer-motion";
 import { useRef, useEffect, useState, useMemo } from "react";
 
@@ -706,21 +707,12 @@ export default function GamingPage() {
   ];
 
   return (
-    <main className="min-h-screen" style={{ background: "#000" }}>
+    <main className="relative min-h-screen overflow-x-hidden" style={{ background: "#000" }}>
       <Nav />
+      <PageBlobs palette="ps-blue" />
 
-      {/* Background blobs — crimson */}
+      {/* Physics-driven PS buttons — hidden on mobile via CSS, rAF skipped on touch */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-        <div className="bg-blob absolute rounded-full" style={{
-          top: "-25vmax", left: "-20vmax", width: "75vmax", height: "75vmax",
-          background: "radial-gradient(ellipse, rgba(220,20,60,0.32) 0%, transparent 68%)",
-        }} />
-        <div className="bg-blob absolute rounded-full" style={{
-          bottom: "-25vmax", right: "-15vmax", width: "65vmax", height: "65vmax",
-          background: "radial-gradient(ellipse, rgba(139,0,0,0.28) 0%, transparent 68%)",
-        }} />
-
-        {/* Physics-driven PS buttons — hidden on mobile via CSS, rAF skipped on touch */}
         <div className="physics-ps-buttons">
           <PhysicsPSButtons />
         </div>

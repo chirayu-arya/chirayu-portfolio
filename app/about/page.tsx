@@ -2,6 +2,7 @@
 
 import Nav from "../components/Nav";
 import Contact from "../components/Contact";
+import PageBlobs from "../components/PageBlobs";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 
@@ -260,33 +261,14 @@ export default function AboutPage() {
   const eduInView = useInView(eduRef, { once: true, margin: "-8%" });
 
   return (
-    <main style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7" }}>
+    <main className="relative overflow-x-hidden" style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7" }}>
       <Nav />
+      <PageBlobs palette="navy" />
 
       {/* ── Hero ── */}
       <section
-        className="relative overflow-hidden pt-36 pb-12 px-8 sm:px-14 lg:px-20"
-        style={{ isolation: "isolate" }}
+        className="relative pt-36 pb-12 px-8 sm:px-14 lg:px-20"
       >
-        {/* Crimson blobs */}
-        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-          <div
-            className="bg-blob absolute rounded-full"
-            style={{
-              width: "70vmax", height: "70vmax",
-              top: "-25vmax", right: "-15vmax",
-              background: "radial-gradient(ellipse, rgba(220,20,60,0.28) 0%, transparent 68%)",
-            }}
-          />
-          <div
-            className="bg-blob absolute rounded-full"
-            style={{
-              width: "55vmax", height: "55vmax",
-              bottom: "-15vmax", left: "-10vmax",
-              background: "radial-gradient(ellipse, rgba(139,0,0,0.22) 0%, transparent 68%)",
-            }}
-          />
-        </div>
 
         <div ref={heroRef} className="relative" style={{ zIndex: 1 }}>
 
@@ -421,29 +403,9 @@ export default function AboutPage() {
 
       {/* ── Experience ── */}
       <section
-        className="relative overflow-hidden pt-20 pb-16 px-8 sm:px-14 lg:px-20"
-        style={{ background: "#000", isolation: "isolate" }}
+        className="relative pt-20 pb-16 px-8 sm:px-14 lg:px-20"
       >
-        {/* Crimson blobs */}
-        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-          <div
-            className="bg-blob absolute rounded-full"
-            style={{
-              width: "80vmax", height: "80vmax",
-              top: "-30vmax", left: "-25vmax",
-              background: "radial-gradient(ellipse, rgba(220,20,60,0.32) 0%, transparent 68%)",
-            }}
-          />
-          <div
-            className="bg-blob absolute rounded-full"
-            style={{
-              width: "70vmax", height: "70vmax",
-              bottom: "-25vmax", right: "-20vmax",
-              background: "radial-gradient(ellipse, rgba(139,0,0,0.28) 0%, transparent 68%)",
-            }}
-          />
-        </div>
-        <div ref={expRef} className="relative" style={{ zIndex: 1 }}>
+        <div ref={expRef} className="relative">
           <motion.p
             initial={{ opacity: 0 }}
             animate={expInView ? { opacity: 1 } : {}}
@@ -494,29 +456,9 @@ export default function AboutPage() {
 
       {/* ── Education ── */}
       <section
-        className="relative overflow-hidden pt-24 pb-28 px-8 sm:px-14 lg:px-20"
-        style={{ background: "#000", isolation: "isolate" }}
+        className="relative pt-24 pb-28 px-8 sm:px-14 lg:px-20"
       >
-        {/* Crimson blobs */}
-        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-          <div
-            className="bg-blob absolute rounded-full"
-            style={{
-              width: "80vmax", height: "80vmax",
-              top: "-30vmax", right: "-25vmax",
-              background: "radial-gradient(ellipse, rgba(180,0,40,0.32) 0%, transparent 68%)",
-            }}
-          />
-          <div
-            className="bg-blob absolute rounded-full"
-            style={{
-              width: "70vmax", height: "70vmax",
-              bottom: "-25vmax", left: "-20vmax",
-              background: "radial-gradient(ellipse, rgba(220,20,60,0.28) 0%, transparent 68%)",
-            }}
-          />
-        </div>
-        <div ref={eduRef} className="relative" style={{ zIndex: 1 }}>
+        <div ref={eduRef} className="relative">
           <motion.p
             initial={{ opacity: 0 }}
             animate={eduInView ? { opacity: 1 } : {}}

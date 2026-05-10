@@ -10,6 +10,7 @@ const professionalItems = [
 ];
 
 const interestItems = [
+  { label: "Newsletter", href: "/newsletter" },
   { label: "Gaming", href: "/gaming" },
   { label: "Bookshelf", href: "/bookshelf" },
 ];

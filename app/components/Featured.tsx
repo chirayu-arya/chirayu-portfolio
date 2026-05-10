@@ -65,30 +65,10 @@ export default function Featured() {
   return (
     <section
       id="featured"
-      className="relative overflow-hidden"
-      style={{ background: "#000", paddingTop: "9rem", paddingBottom: "6rem", isolation: "isolate" }}
+      className="relative"
+      style={{ paddingTop: "9rem", paddingBottom: "6rem" }}
     >
-      {/* Gradient blobs */}
-      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-        <div
-          className="absolute rounded-full bg-blob"
-          style={{
-            width: "60vmax", height: "60vmax",
-            top: "-20vmax", right: "-10vmax",
-            background: "radial-gradient(ellipse, rgba(220,20,60,0.32) 0%, transparent 68%)",
-          }}
-        />
-        <div
-          className="absolute rounded-full bg-blob"
-          style={{
-            width: "50vmax", height: "50vmax",
-            bottom: "-15vmax", left: "-10vmax",
-            background: "radial-gradient(ellipse, rgba(139,0,0,0.28) 0%, transparent 68%)",
-          }}
-        />
-      </div>
-
-      <div className="relative" style={{ zIndex: 1 }}>
+      <div className="relative">
         {/* Header */}
         <div ref={headerRef} className="px-8 sm:px-14 lg:px-20 mb-12">
           <motion.p
