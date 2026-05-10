@@ -71,7 +71,7 @@ const interests = [
   {
     title: "Digital Art",
     currently: "Currently working on",
-    detail: "NFT NYC Showcase 2026",
+    detail: "Times Square Showcase 2026",
     glowColor: "#fb7185",
   },
 ];

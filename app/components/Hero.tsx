@@ -33,7 +33,7 @@ function TapeContent({ rotate = -5, padding = "11px 0" }: { rotate?: number; pad
     >
       <div
         className="animate-marquee flex"
-        style={{ width: "max-content", animationDuration: "22s" }}
+        style={{ width: "max-content", animationDuration: "40s" }}
       >
         {TAPE_LOOP.map((item, i) => (
           <span
@@ -108,11 +108,9 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 2.8, delay: 0.1 }}
         >
-          <motion.div
+          <div
             className="bg-blob absolute inset-0 rounded-full"
             style={{ background: isMobile ? "radial-gradient(ellipse, rgba(220,20,60,0.82) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(220,20,60,0.45) 0%, transparent 68%)" }}
-            animate={isMobile ? {} : { scale: [1, 1.07, 1], x: [0, 18, 0] }}
-            transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
           />
         </motion.div>
 
@@ -124,11 +122,9 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 2.8, delay: 0.35 }}
         >
-          <motion.div
+          <div
             className="bg-blob absolute inset-0 rounded-full"
             style={{ background: isMobile ? "radial-gradient(ellipse, rgba(180,0,40,0.72) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(180,0,40,0.38) 0%, transparent 68%)" }}
-            animate={isMobile ? {} : { scale: [1, 1.1, 1], y: [0, 24, 0] }}
-            transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           />
         </motion.div>
 
@@ -140,11 +136,9 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 2.8, delay: 0.6 }}
         >
-          <motion.div
+          <div
             className="bg-blob absolute inset-0 rounded-full"
             style={{ background: isMobile ? "radial-gradient(ellipse, rgba(139,0,0,0.78) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(139,0,0,0.4) 0%, transparent 68%)" }}
-            animate={isMobile ? {} : { scale: [1, 1.08, 1], x: [0, -20, 0] }}
-            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 5 }}
           />
         </motion.div>
 

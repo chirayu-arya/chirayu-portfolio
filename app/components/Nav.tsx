@@ -10,15 +10,18 @@ const professionalItems = [
 ];
 
 const interestItems = [
-  { label: "Newsletter", href: "/newsletter" },
   { label: "Gaming", href: "/gaming" },
-  { label: "Bookshelf", href: "/bookshelf" },
+  { label: "Books", href: "/bookshelf" },
+];
+
+const communityItems = [
+  { label: "Newsletter", href: "/newsletter" },
 ];
 
 // Desktop — heavy blur is fine on desktop GPUs
 const glassStyle = {
-  backdropFilter: "blur(64px) saturate(2.2) brightness(1.08)",
-  WebkitBackdropFilter: "blur(64px) saturate(2.2) brightness(1.08)",
+  backdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
+  WebkitBackdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
   background:
     "linear-gradient(135deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.01) 100%), rgba(12,12,14,0.28)",
   border: "1px solid rgba(255,255,255,0.09)",
@@ -27,8 +30,8 @@ const glassStyle = {
 };
 
 const dropdownGlassStyle = {
-  backdropFilter: "blur(64px) saturate(2.2) brightness(1.08)",
-  WebkitBackdropFilter: "blur(64px) saturate(2.2) brightness(1.08)",
+  backdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
+  WebkitBackdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
   background:
     "linear-gradient(135deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.01) 100%), rgba(12,12,14,0.82)",
   border: "1px solid rgba(255,255,255,0.09)",
@@ -87,30 +90,69 @@ const NavColumn = ({ label, items, startDelay, onClose }: {
   </div>
 );
 
-const WorkDropdownContent = ({ onClose, showGetInTouch }: { onClose?: () => void; showGetInTouch?: boolean }) => (
-  <div className="flex flex-col gap-1">
-    <div className="flex gap-1">
-      <NavColumn label="Professional" items={professionalItems} startDelay={0} onClose={onClose} />
-      <div className="w-px mx-1 self-stretch" style={{ background: "rgba(255,255,255,0.07)" }} />
-      <NavColumn label="Interest Areas" items={interestItems} startDelay={0.06} onClose={onClose} />
+const WorkDropdownContent = ({ onClose }: { onClose?: () => void }) => (
+  <div className="flex gap-1">
+    <NavColumn label="Professional" items={professionalItems} startDelay={0} onClose={onClose} />
+    <div className="w-px mx-1 self-stretch" style={{ background: "rgba(255,255,255,0.07)" }} />
+    <NavColumn label="Interest Areas" items={interestItems} startDelay={0.06} onClose={onClose} />
+    <div className="w-px mx-1 self-stretch" style={{ background: "rgba(255,255,255,0.07)" }} />
+    <NavColumn label="Community" items={communityItems} startDelay={0.12} onClose={onClose} />
+  </div>
+);
+
+// Mobile-only — vertical stack of right-aligned categories
+const MobileNavColumn = ({ label, items, startDelay, onClose }: {
+  label: string;
+  items: { label: string; href: string }[];
+  startDelay: number;
+  onClose?: () => void;
+}) => (
+  <div className="flex flex-col items-end">
+    <p
+      className="px-2 pb-1 pt-1 text-[10px] font-semibold tracking-[0.16em] uppercase"
+      style={{ color: "#515154" }}
+    >
+      {label}
+    </p>
+    {items.map((item, i) => (
+      <motion.a
+        key={item.label}
+        href={item.href}
+        initial={{ opacity: 0, x: 6 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: startDelay + i * 0.03, duration: 0.2 }}
+        className="block px-3 py-2 rounded-full text-sm text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap text-right"
+        onClick={onClose}
+      >
+        {item.label}
+      </motion.a>
+    ))}
+  </div>
+);
+
+const MobileWorkDropdownContent = ({ onClose }: { onClose?: () => void }) => (
+  <div className="flex flex-col gap-3 py-1">
+    <MobileNavColumn label="Professional" items={professionalItems} startDelay={0} onClose={onClose} />
+    <div className="h-px self-stretch" style={{ background: "rgba(255,255,255,0.07)" }} />
+    <MobileNavColumn label="Interest Areas" items={interestItems} startDelay={0.06} onClose={onClose} />
+    <div className="h-px self-stretch" style={{ background: "rgba(255,255,255,0.07)" }} />
+    <MobileNavColumn label="Community" items={communityItems} startDelay={0.12} onClose={onClose} />
+    <div className="h-px self-stretch" style={{ background: "rgba(255,255,255,0.07)" }} />
+    <div className="flex justify-end pt-1">
+      <motion.a
+        href="/Resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        initial={{ opacity: 0, x: 6 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.18, duration: 0.2 }}
+        className="inline-block px-4 py-2 rounded-full text-sm font-semibold cursor-pointer whitespace-nowrap"
+        style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
+        onClick={onClose}
+      >
+        View Resume
+      </motion.a>
     </div>
-    {showGetInTouch && (
-      <div className="pt-1" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
-        <motion.a
-          href="/Resume.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          initial={{ opacity: 0, x: -6 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.15, duration: 0.2 }}
-          className="inline-block px-4 py-2 rounded-full text-sm font-semibold cursor-pointer whitespace-nowrap mx-1 mt-1"
-          style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
-          onClick={onClose}
-        >
-          View Resume
-        </motion.a>
-      </div>
-    )}
   </div>
 );
 
@@ -283,7 +325,7 @@ export default function Nav() {
               className="mt-2 rounded-2xl p-2"
               style={mobileDropdownStyle}
             >
-              <WorkDropdownContent onClose={() => setMenuOpen(false)} showGetInTouch />
+              <MobileWorkDropdownContent onClose={() => setMenuOpen(false)} />
             </motion.div>
           )}
         </AnimatePresence>

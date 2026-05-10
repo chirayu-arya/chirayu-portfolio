@@ -62,14 +62,14 @@ const projects = [
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
-function ProjectRow({ project, index, inView }: { project: (typeof projects)[0]; index: number; inView: boolean }) {
+function ProjectRow({ project, index, inView, isLast }: { project: (typeof projects)[0]; index: number; inView: boolean; isLast?: boolean }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -32 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 1.0, ease: EASE, delay: 0.4 + index * 0.12 }}
       className="group cursor-pointer flex items-start gap-6 sm:gap-12 py-8 sm:py-10"
-      style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+      style={{ borderBottom: isLast ? "none" : "1px solid rgba(255,255,255,0.07)" }}
     >
       {/* Thumbnail */}
       <div
@@ -183,7 +183,7 @@ export default function Work() {
         {/* Editorial rows */}
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
           {projects.map((project, i) => (
-            <ProjectRow key={project.index} project={project} index={i} inView={inView} />
+            <ProjectRow key={project.index} project={project} index={i} inView={inView} isLast={i === projects.length - 1} />
           ))}
         </div>
 
@@ -204,7 +204,7 @@ export default function Work() {
               initial={{ opacity: 0, y: 20 }}
               animate={statsInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, ease: EASE, delay: 0.1 + i * 0.1 }}
-              className="flex flex-col pt-8 pb-4 px-4 min-w-0"
+              className="flex flex-col items-center text-center pt-8 pb-4 px-4 min-w-0"
               style={{ borderLeft: i === 0 ? "none" : "1px solid rgba(255,255,255,0.07)" }}
             >
               <div
