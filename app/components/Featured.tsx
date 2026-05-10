@@ -38,13 +38,6 @@ const items: FeaturedItem[] = [
     youtube: "qDZOsjGx39k",
     link: "https://www.youtube.com/watch?v=qDZOsjGx39k",
   },
-  {
-    id: 4,
-    src: "https://picsum.photos/seed/feat04/900/600",
-    note: "An interview on living life on my own terms",
-    date: "June 2021",
-    link: "https://www.eatmy.news/2021/06/chirayu-arya-i-am-living-my-life-at.html",
-  },
 ];
 
 export default function Featured() {
