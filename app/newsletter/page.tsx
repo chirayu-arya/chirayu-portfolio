@@ -277,13 +277,15 @@ function SubscribeForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@email.com"
+              placeholder="Drop your email here..."
               disabled={status === "loading"}
               className="flex-1 px-5 py-3.5 rounded-full text-sm sm:text-base outline-none transition-colors duration-200 disabled:opacity-50"
               style={{
                 background: "rgba(255,255,255,0.04)",
                 border: "1px solid rgba(255,255,255,0.12)",
                 color: "#f5f5f7",
+                backdropFilter: "blur(34px)",
+                WebkitBackdropFilter: "blur(34px)",
               }}
               onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(220,20,60,0.5)")}
               onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
@@ -292,7 +294,7 @@ function SubscribeForm() {
               type="submit"
               disabled={status === "loading"}
               className="px-7 py-3.5 rounded-full text-sm sm:text-base font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85 disabled:opacity-60 disabled:cursor-wait whitespace-nowrap"
-              style={{ background: "#dc143c", color: "#f5f5f7" }}
+              style={{ background: "#a00d28", color: "#ffffff" }}
             >
               {status === "loading" ? "Subscribing" : "Subscribe"}
             </button>
@@ -338,6 +340,12 @@ export default function NewsletterPage() {
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [postsLoaded, setPostsLoaded] = useState(false);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), 100);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -359,13 +367,22 @@ export default function NewsletterPage() {
 
   return (
     <main className="relative min-h-screen bg-black overflow-x-hidden">
+      {/* Cinematic black overlay — lifts on load */}
+      <motion.div
+        className="fixed inset-0 bg-black pointer-events-none"
+        style={{ zIndex: 999 }}
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 0 }}
+        transition={{ duration: 1.0, delay: 0.3, ease: "easeInOut" }}
+      />
+
       <Nav />
       <PageBlobs palette="crimson" />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative pt-28 sm:pt-32 lg:pt-36 pb-28 sm:pb-36 px-8 sm:px-14 lg:px-20"
+        className="relative px-8 sm:px-14 lg:px-20"
       >
         {/* StarField — twinkling stars overlay (hero-scoped) */}
         <div
@@ -375,73 +392,77 @@ export default function NewsletterPage() {
           <StarField />
         </div>
 
-        {/* Eyebrow — centered */}
-        <motion.p
-          initial={{ opacity: 0, y: 8 }}
-          animate={heroInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: EASE }}
-          className="text-xs tracking-[0.22em] uppercase font-medium text-center"
-          style={{ color: "#86868b" }}
-        >
-          Newsletter by Chirayu Arya
-        </motion.p>
+        {/* CTA block — fills full viewport height */}
+        <div className="min-h-[100svh] flex flex-col justify-center pt-28 sm:pt-32 lg:pt-36 pb-12 sm:pb-16">
+          {/* Eyebrow — centered */}
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            transition={{ duration: 0.9, ease: EASE, delay: 1.0 }}
+            className="text-xs tracking-[0.22em] uppercase font-medium text-center"
+            style={{ color: "#86868b" }}
+          >
+            Newsletter by Chirayu Arya
+          </motion.p>
 
-        {/* "Unscripted" — Rockybilly, full-width fluid, centered */}
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={heroInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, ease: EASE, delay: 0.15 }}
-          className="mt-28 sm:mt-36 lg:mt-48 text-center select-none"
-          style={{
-            fontFamily: "var(--font-rockybilly)",
-            color: "#f5f5f7",
-            fontSize: "clamp(3rem, 13vw, 13.5rem)",
-            lineHeight: 1.1,
-            paddingBottom: "0.08em",
-          }}
-        >
-          Unscripted
-        </motion.h1>
+          {/* "Unscripted" — Rockybilly, full-width fluid, centered */}
+          <motion.h1
+            initial={{ opacity: 0, y: 36, scale: 0.96 }}
+            animate={ready ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 36, scale: 0.96 }}
+            transition={{ duration: 1.4, ease: EASE, delay: 1.4 }}
+            className="mt-24 sm:mt-32 lg:mt-44 text-center select-none"
+            style={{
+              fontFamily: "var(--font-rockybilly)",
+              color: "#f5f5f7",
+              fontSize: "clamp(1.5rem, calc(12.5vw - 0.5rem), 12.5rem)",
+              lineHeight: 1.1,
+              paddingBottom: "0.08em",
+            }}
+          >
+            Unscripted
+          </motion.h1>
 
-        {/* Subscribe + socials block — centered */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={heroInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: EASE, delay: 0.4 }}
-          className="mt-12 sm:mt-14 lg:mt-16 flex flex-col items-center gap-8"
-        >
-          <SubscribeForm />
+          {/* Subscribe + socials block — centered */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 1.0, ease: EASE, delay: 2.4 }}
+            className="mt-20 sm:mt-24 lg:mt-20 flex flex-col items-center gap-12 sm:gap-14 lg:gap-10"
+          >
+            <SubscribeForm />
 
-          <div className="flex justify-center pt-2">
-            <SocialIcons />
-          </div>
-        </motion.div>
+            <div className="flex justify-center pt-2">
+              <SocialIcons />
+            </div>
+          </motion.div>
+        </div>
 
         {/* Premise — headline + multi-paragraph body, left-aligned */}
-        <motion.h2
-          initial={{ opacity: 0, x: -60 }}
-          animate={heroInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 1, ease: EASE, delay: 0.6 }}
-          className="mt-20 sm:mt-24 lg:mt-28 font-black tracking-tight leading-[0.92] whitespace-normal lg:whitespace-nowrap"
-          style={{
-            fontSize: "clamp(3rem, 7vw, 7rem)",
-            color: "#f5f5f7",
-          }}
-        >
-          No one handed us a script.
-        </motion.h2>
+        <div className="pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-28 lg:pb-36">
+          <motion.h2
+            initial={{ opacity: 0, x: -60 }}
+            animate={heroInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 1, ease: EASE, delay: 0.6 }}
+            className="font-black tracking-tight leading-[0.92] whitespace-normal lg:whitespace-nowrap"
+            style={{
+              fontSize: "clamp(3rem, 7vw, 7rem)",
+              color: "#f5f5f7",
+            }}
+          >
+            No one handed us a script.
+          </motion.h2>
 
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={heroInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: EASE, delay: 0.7 }}
-          className="mt-6 sm:mt-7 text-base sm:text-lg lg:text-xl"
-          style={{ color: "#86868b", textWrap: "pretty" }}
-        >
-          A biweekly letter for students, job seekers, and purpose seekers figuring it out without one.
-        </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={heroInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: EASE, delay: 0.7 }}
+            className="mt-6 sm:mt-7 text-base sm:text-lg lg:text-xl"
+            style={{ color: "#86868b", textWrap: "pretty" }}
+          >
+            A biweekly letter for students, job seekers, and purpose seekers figuring it out without one.
+          </motion.p>
 
-        <div className="mt-20 sm:mt-24 lg:mt-28 flex flex-col gap-5 sm:gap-6">
+          <div className="mt-8 sm:mt-20 lg:mt-28 flex flex-col gap-5 sm:gap-6">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={heroInView ? { opacity: 1, y: 0 } : {}}
@@ -481,6 +502,7 @@ export default function NewsletterPage() {
           >
             This is a biweekly letter for the path nobody handed you a map for. No playbook, because there isn&rsquo;t one to hand out. No filler, because your inbox is already full enough. Just the things worth saying when there&rsquo;s finally something honest worth saying, and a small reminder that the version of you who figures it out is closer than it feels right now.
           </motion.p>
+        </div>
         </div>
       </section>
 
