@@ -1,0 +1,32 @@
+name: Refresh newsletter subscriber count
+
+# Hits /api/newsletter/stats every 5 minutes so the cached subscriber
+# count revalidates from Beehiiv even when the site has no live traffic.
+# Vercel Hobby plan doesn't allow sub-daily crons, so GitHub Actions
+# handles the schedule instead.
+
+on:
+  schedule:
+    # Every 5 minutes. GitHub Actions has a 5-minute minimum and may
+    # delay runs during high load — typical lag is under a minute.
+    - cron: "*/5 * * * *"
+  # Allow manual runs from the Actions tab if you ever need a fresh push.
+  workflow_dispatch:
+
+# Don't pile up runs if a previous one is somehow still going.
+concurrency:
+  group: refresh-newsletter-stats
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Ping /api/newsletter/stats
+        run: |
+          curl --silent --show-error --fail \
+            --max-time 30 \
+            --output /dev/null \
+            --write-out "HTTP %{http_code} in %{time_total}s\n" \
+            "https://chirayuarya.com/api/newsletter/stats"
