@@ -11,9 +11,9 @@ export default function Home() {
   return (
     <main className="relative bg-black overflow-x-hidden">
       <Nav />
+      {/* Page blobs span the full page height (every 15%); rendered first so DOM order keeps them behind sections */}
+      <PageBlobs palette="crimson-purple" startTop="0" />
       <Hero />
-      {/* Hero is scoped + crimson; everything below gets crimson + vibrant purple */}
-      <PageBlobs palette="crimson-purple" startTop="100vh" />
       <About />
       <Featured />
       <Work />

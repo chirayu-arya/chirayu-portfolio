@@ -21,13 +21,21 @@ const PALETTES: Record<string, ColorTriple> = {
 
 export type Palette = keyof typeof PALETTES;
 
-// Vertical layout of the four blobs across the page height. Each one alternates
-// sides so the eye reads a soft zig-zag down the canvas.
+// Vertical layout — first blob at 5%, then 15% increments (7 total),
+// alternating sides so the eye reads a soft zig-zag down the canvas.
+// All blobs share the same intensity (0.40 core / 0.18 mid) for a uniform
+// page-level feel.
+const CORE_ALPHA = 0.40;
+const MID_ALPHA = 0.18;
+
 const LAYOUT = [
-  { top: "0%", side: "left" as const, size: "75vmax", offset: "-18vmax", coreAlpha: 0.34, midAlpha: 0.14, colorIdx: 0 },
-  { top: "28%", side: "right" as const, size: "78vmax", offset: "-20vmax", coreAlpha: 0.28, midAlpha: 0.12, colorIdx: 1 },
-  { top: "58%", side: "left" as const, size: "80vmax", offset: "-22vmax", coreAlpha: 0.30, midAlpha: 0.13, colorIdx: 2 },
-  { top: "85%", side: "right" as const, size: "75vmax", offset: "-18vmax", coreAlpha: 0.26, midAlpha: 0.11, colorIdx: 0 },
+  { top: "5%", side: "left" as const, size: "70vmax", offset: "-18vmax", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 0 },
+  { top: "20%", side: "right" as const, size: "72vmax", offset: "-20vmax", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 1 },
+  { top: "35%", side: "left" as const, size: "75vmax", offset: "-20vmax", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 2 },
+  { top: "50%", side: "right" as const, size: "72vmax", offset: "-18vmax", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 0 },
+  { top: "65%", side: "left" as const, size: "75vmax", offset: "-20vmax", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 1 },
+  { top: "80%", side: "right" as const, size: "70vmax", offset: "-18vmax", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 2 },
+  { top: "95%", side: "left" as const, size: "75vmax", offset: "-20vmax", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 0 },
 ];
 
 interface PageBlobsProps {
