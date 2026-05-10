@@ -1,29 +1,21 @@
 import { NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 
-// Always run as a dynamic function. Without this, Next.js / Vercel's CDN can
-// statically cache the response and never call the route again.
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-let cached: { count: number; ts: number } | null = null;
-const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+// Subscriber count, cached in Next.js Data Cache and shared across all
+// function instances on Vercel. Revalidates every 5 minutes — and a cron
+// (vercel.json) hits this route every 5 minutes to keep it warm even when
+// no real visitors are around.
+const REVALIDATE_SECONDS = 300;
 
-// GET — returns the active subscriber count from Beehiiv.
-// Pulls `data.stats.active_subscriptions` from the publication endpoint.
-// (The /subscriptions endpoint uses cursor pagination and has no total field.)
-export async function GET() {
-  if (cached && Date.now() - cached.ts < CACHE_TTL) {
-    return jsonNoStore({ count: cached.count, fromCache: true });
-  }
+const fetchActiveSubscribers = unstable_cache(
+  async (): Promise<number> => {
+    const apiKey = process.env.BEEHIIV_API_KEY;
+    const pubId = process.env.BEEHIIV_PUBLICATION_ID;
+    if (!apiKey || !pubId) return 0;
 
-  const apiKey = process.env.BEEHIIV_API_KEY;
-  const pubId = process.env.BEEHIIV_PUBLICATION_ID;
-
-  if (!apiKey || !pubId) {
-    return jsonNoStore({ count: 0, error: "not_configured" });
-  }
-
-  try {
     const url = new URL(`https://api.beehiiv.com/v2/publications/${pubId}`);
     url.searchParams.append("expand[]", "stats");
 
@@ -33,18 +25,23 @@ export async function GET() {
     });
 
     if (!res.ok) {
-      console.error("Beehiiv publication fetch failed:", res.status);
-      return jsonNoStore({ count: cached?.count ?? 0, error: "upstream_error" });
+      throw new Error(`Beehiiv responded ${res.status}`);
     }
 
     const json = await res.json();
-    const count = Number(json?.data?.stats?.active_subscriptions ?? 0);
+    return Number(json?.data?.stats?.active_subscriptions ?? 0);
+  },
+  ["beehiiv-active-subscribers"],
+  { revalidate: REVALIDATE_SECONDS, tags: ["beehiiv-stats"] }
+);
 
-    cached = { count, ts: Date.now() };
+export async function GET() {
+  try {
+    const count = await fetchActiveSubscribers();
     return jsonNoStore({ count });
   } catch (err) {
     console.error("Beehiiv stats error:", err);
-    return jsonNoStore({ count: cached?.count ?? 0, error: "network_error" });
+    return jsonNoStore({ count: 0, error: "upstream_error" });
   }
 }
 
