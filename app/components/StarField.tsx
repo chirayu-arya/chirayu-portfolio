@@ -104,6 +104,9 @@ export default function StarField() {
       /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
       "ontouchstart" in window;
 
+    // ── Visibility flag — flipped by IntersectionObserver, used to skip rAF work when offscreen ──
+    let visible = true;
+
     const resize = () => {
       const el = canvas.parentElement;
       if (!el) return;
@@ -117,6 +120,15 @@ export default function StarField() {
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(canvas.parentElement!);
+
+    // ── Pause heavy canvas work when the hero (parent) is offscreen ──
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+      },
+      { rootMargin: "200px" }
+    );
+    io.observe(canvas.parentElement!);
 
     // ── Desktop: mouse drives proximity glow only (no parallax) ──
     const onMouseMove = (e: MouseEvent) => {
@@ -195,6 +207,9 @@ export default function StarField() {
     };
 
     const draw = (now: number) => {
+      // Skip canvas work entirely when hero is offscreen — saves ~2-3ms per frame
+      if (!visible) { rafRef.current = requestAnimationFrame(draw); return; }
+
       const { w, h } = sizeRef.current;
       if (!w || !h) { rafRef.current = requestAnimationFrame(draw); return; }
 
@@ -304,6 +319,7 @@ export default function StarField() {
     return () => {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
+      io.disconnect();
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("scroll", onScroll);
       cleanupOrientation();
