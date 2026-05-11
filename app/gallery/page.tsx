@@ -121,6 +121,15 @@ function CardFace({
           loading="lazy"
           className="absolute inset-0 w-full h-full object-cover"
           draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
+          style={{
+            WebkitUserSelect: "none",
+            userSelect: "none",
+            WebkitTouchCallout: "none",
+            // @ts-expect-error vendor-prefixed property not in CSS types
+            WebkitUserDrag: "none",
+          }}
         />
       ) : (
         <div
@@ -213,6 +222,8 @@ function CardSlot({
       onMouseMove={(e) => { if (hasActive) onMouseMove(e); }}
       onMouseLeave={() => { setHovered(false); onCursorLeave(); }}
       onClick={() => { if (activePhoto) onSelect(activePhoto); }}
+      onContextMenu={(e) => e.preventDefault()}
+      onDragStart={(e) => e.preventDefault()}
     >
       {/* Flipper */}
       <motion.div
@@ -266,7 +277,10 @@ export default function GalleryPage() {
   const [cursorVisible, setCursorVisible] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [imgRect, setImgRect] = useState<{ w: number; h: number } | null>(null);
-  const lightboxImgRef = useRef<HTMLImageElement>(null);
+  const lightboxCanvasRef = useRef<HTMLCanvasElement>(null);
+  const loadedImgRef = useRef<HTMLImageElement | null>(null);
+  const blackoutTimerRef = useRef<number | null>(null);
+  const blackoutOverlayRef = useRef<HTMLDivElement>(null);
 
   function switchTab(tab: Tab) {
     if (tab === activeTab || isTransitioning) return;
@@ -285,50 +299,347 @@ export default function GalleryPage() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  // Detect touch device once on mount — used to hide the desktop "View" cursor pill
+  // Detect touch device once on mount — hides the desktop "View" cursor pill
   useEffect(() => {
     setIsTouchDevice(window.matchMedia("(pointer: coarse)").matches);
   }, []);
 
-  // Reset measured lightbox image dimensions whenever the selection changes
+  // Reset measured lightbox dimensions + loaded image when selection clears
   useEffect(() => {
-    if (!selected) setImgRect(null);
+    if (!selected) {
+      setImgRect(null);
+      loadedImgRef.current = null;
+    }
   }, [selected]);
 
-  // Re-measure the lightbox image on viewport resize so the wrapper stays
-  // locked to the image's rendered width across breakpoints
+  // Re-measure the lightbox canvas on viewport resize so the wrapper stays
+  // locked to the canvas's rendered width across breakpoints
   useEffect(() => {
     if (!selected) return;
     const handler = () => {
-      const img = lightboxImgRef.current;
-      if (img && img.offsetWidth > 0) {
-        setImgRect({ w: img.offsetWidth, h: img.offsetHeight });
+      const c = lightboxCanvasRef.current;
+      if (c && c.offsetWidth > 0) {
+        setImgRect({ w: c.offsetWidth, h: c.offsetHeight });
       }
     };
     window.addEventListener("resize", handler);
     return () => window.removeEventListener("resize", handler);
   }, [selected]);
 
+  // === Canvas-based lightbox renderer ===
+  // Paints the loaded image to the lightbox canvas. When `withWatermark`
+  // is true, tiles a diagonal "© Chirayu Arya" overlay across the bitmap.
+  // The watermark is drawn synchronously inside the `contextmenu` handler
+  // so the browser's "Save image as…" action samples the watermarked
+  // pixel buffer instead of the clean original.
+  const drawCanvas = useCallback((withWatermark: boolean) => {
+    const canvas = lightboxCanvasRef.current;
+    const img = loadedImgRef.current;
+    if (!canvas || !img || !img.complete) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    if (canvas.width !== img.naturalWidth) canvas.width = img.naturalWidth;
+    if (canvas.height !== img.naturalHeight) canvas.height = img.naturalHeight;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+    if (withWatermark) {
+      const w = canvas.width;
+      const h = canvas.height;
+      const baseSize = Math.min(w, h);
+      const fontSize = Math.max(40, baseSize / 18);
+      ctx.save();
+      ctx.translate(w / 2, h / 2);
+      ctx.rotate(-Math.PI / 6); // ~-30°
+      ctx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.lineWidth = Math.max(2, fontSize / 16);
+      ctx.strokeStyle = "rgba(0,0,0,0.5)";
+      ctx.fillStyle = "rgba(245,245,247,0.65)";
+      const text = "© Chirayu Arya · chirayuarya.com";
+      const stepX = fontSize * 14;
+      const stepY = fontSize * 7;
+      const diag = Math.ceil(Math.sqrt(w * w + h * h)) + stepX;
+      for (let y = -diag; y < diag; y += stepY) {
+        for (let x = -diag; x < diag; x += stepX) {
+          ctx.strokeText(text, x, y);
+          ctx.fillText(text, x, y);
+        }
+      }
+      ctx.restore();
+    }
+  }, []);
+
+  // Load the selected image into an off-DOM Image, paint it to the canvas,
+  // and measure the canvas's rendered size for the wrapper.
+  useEffect(() => {
+    if (!selected) return;
+    let cancelled = false;
+    const img = new Image();
+    img.onload = () => {
+      if (cancelled) return;
+      loadedImgRef.current = img;
+      requestAnimationFrame(() => {
+        if (cancelled) return;
+        drawCanvas(false);
+        const c = lightboxCanvasRef.current;
+        if (c && c.offsetWidth > 0) {
+          setImgRect({ w: c.offsetWidth, h: c.offsetHeight });
+        }
+      });
+    };
+    img.src = selected.src;
+    return () => {
+      cancelled = true;
+      img.onload = null;
+    };
+  }, [selected, drawCanvas]);
+
+  const handleCanvasContextMenu = useCallback(() => {
+    // Synchronously stamp the watermark into the canvas bitmap before the
+    // browser's native "Save image as…" menu samples the pixels.
+    drawCanvas(true);
+  }, [drawCanvas]);
+
+  const handleCanvasMouseLeave = useCallback(() => {
+    // Revert to clean view once the pointer leaves the canvas.
+    drawCanvas(false);
+  }, [drawCanvas]);
+
+  // === Screenshot deterrents ===
+  // Imperative blackout — flips a pre-mounted overlay <div> directly via ref
+  // instead of going through React's render loop. Skips reconciliation and
+  // paints in the same frame as the triggering keydown, giving us the best
+  // shot at beating the OS screenshot capture.
+  const startHideTimer = useCallback(() => {
+    if (blackoutTimerRef.current !== null) {
+      window.clearTimeout(blackoutTimerRef.current);
+    }
+    blackoutTimerRef.current = window.setTimeout(() => {
+      const node = blackoutOverlayRef.current;
+      if (node) node.style.display = "none";
+      blackoutTimerRef.current = null;
+    }, 2000);
+  }, []);
+
+  const triggerBlackout = useCallback(() => {
+    const el = blackoutOverlayRef.current;
+    if (el) el.style.display = "flex";
+    startHideTimer();
+  }, [startHideTimer]);
+
+  useEffect(() => {
+    const isBlackoutShowing = () => {
+      const el = blackoutOverlayRef.current;
+      return el !== null && el.style.display !== "none";
+    };
+
+    // Codes that signal a real screenshot/save shortcut. macOS intercepts
+    // Shift+Digit3/4/5 at the OS level so those keydowns *never* arrive in
+    // the browser — we catch them indirectly via the Cmd/Shift modifier
+    // press below, and they stay because the digit never arrives to
+    // "cancel" the blackout.
+    const SCREENSHOT_CODES = new Set(["Digit3", "Digit4", "Digit5", "KeyS", "KeyP"]);
+
+    const cancelBlackout = () => {
+      const el = blackoutOverlayRef.current;
+      if (el && el.style.display !== "none") {
+        el.style.display = "none";
+      }
+      if (blackoutTimerRef.current !== null) {
+        window.clearTimeout(blackoutTimerRef.current);
+        blackoutTimerRef.current = null;
+      }
+    };
+
+    const onKeydown = (e: KeyboardEvent) => {
+      // Modifier keys themselves (Shift / Cmd / Ctrl / Alt) — trigger
+      // blackout proactively. We don't yet know if this is the start of a
+      // screenshot combo (Cmd+Shift+3) or a benign one (Cmd+T) — we'll
+      // decide when the follow-up key arrives.
+      if (e.key === "Shift" || e.key === "Meta" || e.key === "Control" || e.key === "Alt") {
+        triggerBlackout();
+        return;
+      }
+      // Follow-up key while a modifier is held — decide.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+        if (SCREENSHOT_CODES.has(e.code)) {
+          // Real screenshot/save key — keep the blackout (re-trigger).
+          triggerBlackout();
+        } else {
+          // Benign shortcut (Cmd+T, Cmd+R, Cmd+Shift+], typed capital
+          // letter, etc.) — cancel the blackout we just triggered.
+          cancelBlackout();
+        }
+      }
+    };
+    const onKeyup = (e: KeyboardEvent) => {
+      // PrintScreen on Windows often only fires keyup
+      if (e.key === "PrintScreen" || e.code === "PrintScreen") {
+        triggerBlackout();
+      }
+    };
+    // Freeze the overlay on — no auto-hide timer. Used when another app
+    // has likely stolen focus (Screenshot.app, Snipping Tool, region-
+    // select crosshair, screen recorders) and the page is still visible
+    // behind it. Held until focus returns.
+    const freezeBlackout = () => {
+      const el = blackoutOverlayRef.current;
+      if (el) el.style.display = "flex";
+      if (blackoutTimerRef.current !== null) {
+        window.clearTimeout(blackoutTimerRef.current);
+        blackoutTimerRef.current = null;
+      }
+    };
+
+    // mouseleave — only trigger when cursor exits *downward* (toward the
+    // Dock, where Launchpad / Screenshot.app icons live) or sideways.
+    // Exits *upward* are ignored because that's where the URL bar, tabs,
+    // and browser chrome live — those are normal browser actions.
+    // We freeze (no auto-fade) on exit; mouseenter below decides whether
+    // to start the 2s fade based on whether anything overlaying us has
+    // taken focus.
+    const onMouseLeave = (e: MouseEvent) => {
+      if (e.relatedTarget !== null) return;
+      const clientY = e.clientY;
+      const clientX = e.clientX;
+      const downward = clientY >= window.innerHeight - 1;
+      const sideways = clientX <= 0 || clientX >= window.innerWidth - 1;
+      if (downward || sideways) freezeBlackout();
+    };
+
+    // mouseenter — cursor returned to the page. If the browser still has
+    // focus (no Screenshot.app / Spotlight / other overlay actively stole
+    // it), start the 2s fade. If focus is gone, leave it frozen — the
+    // onFocus handler will start the fade once focus returns.
+    const onMouseEnter = () => {
+      if (
+        isBlackoutShowing() &&
+        blackoutTimerRef.current === null &&
+        document.hasFocus()
+      ) {
+        startHideTimer();
+      }
+    };
+
+    // When the tab becomes hidden (Cmd+T to a new tab, clicking another
+    // tab, etc.), forcibly clear any blackout that may have just been
+    // painted by an incidental blur/poll firing in the brief window
+    // between focus loss and visibility change. This is what was leaving
+    // the overlay "stuck" — by the time the tab came back, we'd already
+    // have shown the overlay with no timer.
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        cancelBlackout();
+      }
+    };
+
+    // When focus returns, start the standard 2s fade timer
+    const onFocus = () => {
+      if (isBlackoutShowing() && blackoutTimerRef.current === null) {
+        startHideTimer();
+      }
+    };
+
+    // Capture phase + window AND document listeners so we beat any
+    // intermediate handlers that might stopPropagation.
+    window.addEventListener("keydown", onKeydown, { capture: true });
+    document.addEventListener("keydown", onKeydown, { capture: true });
+    window.addEventListener("keyup", onKeyup, { capture: true });
+    document.addEventListener("keyup", onKeyup, { capture: true });
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("mouseleave", onMouseLeave);
+    document.addEventListener("mouseout", onMouseLeave);
+    document.addEventListener("mouseenter", onMouseEnter);
+    document.addEventListener("mouseover", onMouseEnter);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    // rAF-based focus polling — catches apps (Launchpad, Mission Control,
+    // Screenshot.app toolbar) that take focus without firing a reliable
+    // blur event on the browser window. Polling every animation frame
+    // (~16ms) instead of setInterval(200ms) closes the window where a
+    // user could click "capture" before the blackout paints.
+    let lastHasFocus = typeof document !== "undefined" ? document.hasFocus() : true;
+    let pollRaf = 0;
+    const poll = () => {
+      const now = document.hasFocus();
+      if (now !== lastHasFocus) {
+        lastHasFocus = now;
+        if (!now && !document.hidden) {
+          freezeBlackout();
+        } else if (now && isBlackoutShowing() && blackoutTimerRef.current === null) {
+          startHideTimer();
+        }
+      }
+      pollRaf = requestAnimationFrame(poll);
+    };
+    pollRaf = requestAnimationFrame(poll);
+
+    return () => {
+      window.removeEventListener("keydown", onKeydown, { capture: true } as EventListenerOptions);
+      document.removeEventListener("keydown", onKeydown, { capture: true } as EventListenerOptions);
+      window.removeEventListener("keyup", onKeyup, { capture: true } as EventListenerOptions);
+      document.removeEventListener("keyup", onKeyup, { capture: true } as EventListenerOptions);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("mouseleave", onMouseLeave);
+      document.removeEventListener("mouseout", onMouseLeave);
+      document.removeEventListener("mouseenter", onMouseEnter);
+      document.removeEventListener("mouseover", onMouseEnter);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      cancelAnimationFrame(pollRaf);
+    };
+  }, [triggerBlackout, startHideTimer]);
+
+  useEffect(() => () => {
+    if (blackoutTimerRef.current !== null) {
+      window.clearTimeout(blackoutTimerRef.current);
+    }
+  }, []);
+
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (isTouchDevice) return;
     setCursorPos({ x: e.clientX, y: e.clientY });
   }, [isTouchDevice]);
 
-  const handleLightboxImgLoad = useCallback(
-    (e: React.SyntheticEvent<HTMLImageElement>) => {
-      const img = e.currentTarget;
-      // Defer one frame so the browser has finished applying max-width/height layout
-      requestAnimationFrame(() => {
-        if (img.offsetWidth > 0) {
-          setImgRect({ w: img.offsetWidth, h: img.offsetHeight });
-        }
-      });
-    },
-    []
-  );
-
   return (
-    <main style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7", position: "relative", overflow: "hidden" }}>
+    <main
+      className="gallery-protected gallery-no-print"
+      style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7", position: "relative", overflow: "hidden" }}
+    >
+      {/* Anti-save / anti-screenshot CSS (scoped to this page) */}
+      <style>{`
+        .gallery-protected,
+        .gallery-protected * {
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+        .gallery-protected img,
+        .gallery-protected canvas {
+          -webkit-user-drag: none;
+          user-drag: none;
+        }
+        @media print {
+          .gallery-no-print { visibility: hidden !important; }
+        }
+      `}</style>
+
+      {/* Instant blackout overlay — always mounted, toggled imperatively via
+          ref in the keydown handler so the paint happens in the same frame
+          as the screenshot shortcut (no React reconciliation in the path). */}
+      <div
+        ref={blackoutOverlayRef}
+        className="fixed inset-0 items-center justify-center"
+        style={{ background: "#000", zIndex: 99999, display: "none" }}
+        aria-hidden
+      >
+        <p style={{ color: "#86868b", fontSize: "0.78rem", letterSpacing: "0.22em", textTransform: "uppercase", fontWeight: 500 }}>
+          Screenshot protection active
+        </p>
+      </div>
+
       <PageBlobs palette="magenta-orange" />
 
       <div className="relative">
@@ -492,15 +803,17 @@ export default function GalleryPage() {
                   ×
                 </button>
 
-                {/* Image — sizes to its natural aspect ratio within viewport bounds */}
+                {/* Canvas — renders the image at full natural resolution.
+                    On right-click we stamp a diagonal "© Chirayu Arya"
+                    watermark into the bitmap before the browser samples
+                    pixels for "Save image as…". Reverts on mouseleave. */}
                 <div className="relative" style={{ background: "#0a0a0a" }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    ref={lightboxImgRef}
-                    src={selected.src}
-                    alt={selected.title}
-                    draggable={false}
-                    onLoad={handleLightboxImgLoad}
+                  <canvas
+                    ref={lightboxCanvasRef}
+                    onContextMenu={handleCanvasContextMenu}
+                    onMouseLeave={handleCanvasMouseLeave}
+                    aria-label={selected.title}
+                    role="img"
                     style={{
                       display: "block",
                       maxWidth: "calc(100vw - 64px)",
