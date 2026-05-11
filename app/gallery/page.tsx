@@ -4,7 +4,7 @@ import Nav from "../components/Nav";
 import Contact from "../components/Contact";
 import PageBlobs from "../components/PageBlobs";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 type Tab = "photography" | "illustrations";
 
@@ -264,6 +264,9 @@ export default function GalleryPage() {
   const [selected, setSelected] = useState<Photo | null>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [cursorVisible, setCursorVisible] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [imgRect, setImgRect] = useState<{ w: number; h: number } | null>(null);
+  const lightboxImgRef = useRef<HTMLImageElement>(null);
 
   function switchTab(tab: Tab) {
     if (tab === activeTab || isTransitioning) return;
@@ -282,9 +285,47 @@ export default function GalleryPage() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    setCursorPos({ x: e.clientX, y: e.clientY });
+  // Detect touch device once on mount — used to hide the desktop "View" cursor pill
+  useEffect(() => {
+    setIsTouchDevice(window.matchMedia("(pointer: coarse)").matches);
   }, []);
+
+  // Reset measured lightbox image dimensions whenever the selection changes
+  useEffect(() => {
+    if (!selected) setImgRect(null);
+  }, [selected]);
+
+  // Re-measure the lightbox image on viewport resize so the wrapper stays
+  // locked to the image's rendered width across breakpoints
+  useEffect(() => {
+    if (!selected) return;
+    const handler = () => {
+      const img = lightboxImgRef.current;
+      if (img && img.offsetWidth > 0) {
+        setImgRect({ w: img.offsetWidth, h: img.offsetHeight });
+      }
+    };
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, [selected]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (isTouchDevice) return;
+    setCursorPos({ x: e.clientX, y: e.clientY });
+  }, [isTouchDevice]);
+
+  const handleLightboxImgLoad = useCallback(
+    (e: React.SyntheticEvent<HTMLImageElement>) => {
+      const img = e.currentTarget;
+      // Defer one frame so the browser has finished applying max-width/height layout
+      requestAnimationFrame(() => {
+        if (img.offsetWidth > 0) {
+          setImgRect({ w: img.offsetWidth, h: img.offsetHeight });
+        }
+      });
+    },
+    []
+  );
 
   return (
     <main style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7", position: "relative", overflow: "hidden" }}>
@@ -293,24 +334,26 @@ export default function GalleryPage() {
       <div className="relative">
         <Nav />
 
-        {/* Custom "View" cursor pill */}
-        <div
-          className="fixed pointer-events-none z-[60]"
-          style={{
-            left: cursorPos.x,
-            top: cursorPos.y,
-            transform: "translate(-50%, -50%)",
-            opacity: cursorVisible ? 1 : 0,
-            transition: "opacity 0.15s ease",
-          }}
-        >
+        {/* Custom "View" cursor pill — desktop / mouse only */}
+        {!isTouchDevice && (
           <div
-            className="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap"
-            style={{ background: "#f5f5f7", color: "#000" }}
+            className="fixed pointer-events-none z-[60]"
+            style={{
+              left: cursorPos.x,
+              top: cursorPos.y,
+              transform: "translate(-50%, -50%)",
+              opacity: cursorVisible ? 1 : 0,
+              transition: "opacity 0.15s ease",
+            }}
           >
-            View
+            <div
+              className="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap"
+              style={{ background: "#f5f5f7", color: "#000" }}
+            >
+              View
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Page header */}
         <section className="pt-36 pb-12 px-8 sm:px-14 lg:px-20">
@@ -392,9 +435,9 @@ export default function GalleryPage() {
                 i={i}
                 activeTab={activeTab}
                 onSelect={setSelected}
-                onCursorEnter={() => setCursorVisible(true)}
+                onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
                 onMouseMove={handleMouseMove}
-                onCursorLeave={() => setCursorVisible(false)}
+                onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
               />
             ))}
           </div>
@@ -425,9 +468,11 @@ export default function GalleryPage() {
                 style={{
                   background: "#111",
                   border: "1px solid rgba(255,255,255,0.08)",
-                  width: "fit-content",
+                  // Lock wrapper width to the image's actual rendered width once measured
+                  // so portrait artwork doesn't get padded out by the info text below.
+                  width: imgRect ? `${imgRect.w}px` : "fit-content",
                   maxWidth: "calc(100vw - 64px)",
-                  minWidth: "min(320px, calc(100vw - 64px))",
+                  minWidth: imgRect ? undefined : "min(320px, calc(100vw - 64px))",
                   maxHeight: "calc(100vh - 64px)",
                 }}
                 onClick={e => e.stopPropagation()}
@@ -451,9 +496,11 @@ export default function GalleryPage() {
                 <div className="relative" style={{ background: "#0a0a0a" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
+                    ref={lightboxImgRef}
                     src={selected.src}
                     alt={selected.title}
                     draggable={false}
+                    onLoad={handleLightboxImgLoad}
                     style={{
                       display: "block",
                       maxWidth: "calc(100vw - 64px)",
