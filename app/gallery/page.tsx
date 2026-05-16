@@ -15,6 +15,8 @@ type Photo = {
   category: string;
   description: string;
   src: string;
+  w: number;
+  h: number;
 };
 
 const VP = "/Gallery/Photography/Virtual%20Photography";
@@ -23,98 +25,120 @@ const ILL = "/Gallery/Illustrations";
 const VIRTUAL_DESC = "Clicked on Playstation 5.";
 const ILLUS_TOOL = "Made on Procreate, on iPad Pro, with Apple Pencil Pro.";
 
-// Photography — 49 items, interleaved so the same game rarely sits next to itself.
-// Expedition 33 makes up 28/49 shots, so a few same-game neighbors are mathematically unavoidable.
 const PHOTOGRAPHY: Photo[] = [
-  { id: 1, tab: "photography", title: "Together at 33", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Gustave%20%26%20Sophie%20-%20Chirayu%20Arya.jpg` },
-  { id: 2, tab: "photography", title: "Lumière Glance", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_7685.jpg` },
-  { id: 3, tab: "photography", title: "Stillness Beneath the Falls", category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8199.JPG` },
-  { id: 4, tab: "photography", title: "Through the Veil", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_7858.jpg` },
-  { id: 5, tab: "photography", title: "The Wildflower Ride", category: "Ghost of Yōtei", description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8852.JPG` },
-  { id: 6, tab: "photography", title: "The First Spark", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8255.jpg` },
-  { id: 7, tab: "photography", title: "Symbiote Showdown", category: "Marvel's Spider-Man 2", description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7733.JPG` },
-  { id: 8, tab: "photography", title: "The Quiet Heir", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8367%202.jpg` },
-  { id: 9, tab: "photography", title: "After the Battle", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8381%203.JPG` },
-  { id: 10, tab: "photography", title: "Plains Lily", category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8200.JPG` },
-  { id: 11, tab: "photography", title: "Into the Light", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8392%202.JPG` },
-  { id: 12, tab: "photography", title: "Ginkgo Storm", category: "Ghost of Yōtei", description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8858.JPG` },
-  { id: 13, tab: "photography", title: "Plumed Sentinel", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8564.JPG` },
-  { id: 14, tab: "photography", title: "Moonrise Over the Sea", category: "Real Photography", description: "Shot on iPhone 16 Pro.", src: `${RP}/IMG_6865.jpg` },
-  { id: 15, tab: "photography", title: "Cloaked in Gold", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8582.JPG` },
-  { id: 16, tab: "photography", title: "Defiant Stand", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8607.JPG` },
-  { id: 17, tab: "photography", title: "Through the Ferns", category: "Ghost of Yōtei", description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8867.JPG` },
-  { id: 18, tab: "photography", title: "The Approach", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8643.jpg` },
-  { id: 19, tab: "photography", title: "Venom Rising", category: "Marvel's Spider-Man 2", description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7735.JPG` },
-  { id: 20, tab: "photography", title: "Petals at Midnight", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8652.jpg` },
-  { id: 21, tab: "photography", title: "Roots of Pandora", category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8204.JPG` },
-  { id: 22, tab: "photography", title: "The Last Bloom", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8682.jpg` },
-  { id: 23, tab: "photography", title: "Beneath the 33", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8690.JPG` },
-  { id: 24, tab: "photography", title: "Bluebell Stand", category: "Ghost of Yōtei", description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8869.JPG` },
-  { id: 25, tab: "photography", title: "Faceless Watcher", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8699.JPG` },
-  { id: 26, tab: "photography", title: "Skyline Patrol", category: "Marvel's Spider-Man 2", description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7739.JPG` },
-  { id: 27, tab: "photography", title: "Strings by Firelight", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8812.JPG` },
-  { id: 28, tab: "photography", title: "Lantern Watch", category: "Ghost of Tsushima", description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Tsushima/IMG_8519.JPG` },
-  { id: 29, tab: "photography", title: "The Cradle", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9171.jpg` },
-  { id: 30, tab: "photography", title: "Three of Us", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9172.jpg` },
-  { id: 31, tab: "photography", title: "Sun Through the Canopy", category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8205.JPG` },
-  { id: 32, tab: "photography", title: "The Officer", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9332.JPG` },
-  { id: 33, tab: "photography", title: "Camp at Dusk", category: "Ghost of Yōtei", description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8871.JPG` },
-  { id: 34, tab: "photography", title: "Burning Forward", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9338.jpg` },
-  { id: 35, tab: "photography", title: "Aerial Confrontation", category: "Marvel's Spider-Man 2", description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7743.JPG` },
-  { id: 36, tab: "photography", title: "Patchwork Idol", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9343.JPG` },
-  { id: 37, tab: "photography", title: "Cliffside Conversation", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9360.jpg` },
-  { id: 38, tab: "photography", title: "A Quiet Moment", category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8210.JPG` },
-  { id: 39, tab: "photography", title: "Ember Stare", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9436.JPG` },
-  { id: 40, tab: "photography", title: "Resting Companions", category: "Ghost of Yōtei", description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8901.JPG` },
-  { id: 41, tab: "photography", title: "First Meeting", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9452.jpg` },
-  { id: 42, tab: "photography", title: "Wings of Dread", category: "Marvel's Spider-Man 2", description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7745.JPG` },
-  { id: 43, tab: "photography", title: "Behind the Mask", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9457.JPG` },
-  { id: 44, tab: "photography", title: "Pilgrim Mound", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9492.jpg` },
-  { id: 45, tab: "photography", title: "Maple Strike", category: "Ghost of Yōtei", description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8948.JPG` },
-  { id: 46, tab: "photography", title: "The Last Embrace", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9497.jpg` },
-  { id: 47, tab: "photography", title: "The Final Grip", category: "Marvel's Spider-Man 2", description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7746.JPG` },
-  { id: 48, tab: "photography", title: "Festival Day", category: "Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Post%203.png` },
-  { id: 49, tab: "photography", title: "Crimson Path", category: "Ghost of Yōtei", description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8978.JPG` },
+  { id: 1,  tab: "photography", w: 3840, h: 2160, title: "Together at 33",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Gustave%20%26%20Sophie%20-%20Chirayu%20Arya.jpg` },
+  { id: 2,  tab: "photography", w: 3840, h: 2160, title: "Lumière Glance",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_7685.jpg` },
+  { id: 3,  tab: "photography", w: 3814, h: 2145, title: "Stillness Beneath the Falls", category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8199.JPG` },
+  { id: 4,  tab: "photography", w: 3840, h: 2160, title: "Through the Veil",         category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_7858.jpg` },
+  { id: 5,  tab: "photography", w: 3840, h: 2160, title: "The Wildflower Ride",      category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8852.JPG` },
+  { id: 6,  tab: "photography", w: 2157, h: 2876, title: "The First Spark",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8255.jpg` },
+  { id: 7,  tab: "photography", w: 3840, h: 2160, title: "Symbiote Showdown",        category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7733.JPG` },
+  { id: 8,  tab: "photography", w: 2071, h: 2761, title: "The Quiet Heir",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8367%202.jpg` },
+  { id: 9,  tab: "photography", w: 2157, h: 3834, title: "After the Battle",         category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8381%203.JPG` },
+  { id: 10, tab: "photography", w: 2305, h: 1297, title: "Plains Lily",              category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8200.JPG` },
+  { id: 11, tab: "photography", w: 1683, h: 2992, title: "Into the Light",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8392%202.JPG` },
+  { id: 12, tab: "photography", w: 1844, h: 3278, title: "Ginkgo Storm",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8858.JPG` },
+  { id: 13, tab: "photography", w: 1682, h: 2243, title: "Plumed Sentinel",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8564.JPG` },
+  { id: 14, tab: "photography", w: 1866, h: 3317, title: "Moonrise Over the Sea",    category: "Real Photography",             description: "Shot on iPhone 16 Pro.", src: `${RP}/IMG_6865.jpg` },
+  { id: 15, tab: "photography", w: 1882, h: 2510, title: "Cloaked in Gold",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8582.JPG` },
+  { id: 16, tab: "photography", w: 3610, h: 2031, title: "Defiant Stand",            category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8607.JPG` },
+  { id: 17, tab: "photography", w: 2160, h: 3840, title: "Through the Ferns",        category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8867.JPG` },
+  { id: 18, tab: "photography", w: 1971, h: 2628, title: "The Approach",             category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8643.jpg` },
+  { id: 19, tab: "photography", w: 3840, h: 2160, title: "Venom Rising",             category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7735.JPG` },
+  { id: 20, tab: "photography", w: 2157, h: 2876, title: "Petals at Midnight",       category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8652.jpg` },
+  { id: 21, tab: "photography", w: 3840, h: 2160, title: "Roots of Pandora",         category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8204.JPG` },
+  { id: 22, tab: "photography", w: 3840, h: 2160, title: "The Last Bloom",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8682.jpg` },
+  { id: 23, tab: "photography", w: 2109, h: 2812, title: "Beneath the 33",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8690.JPG` },
+  { id: 24, tab: "photography", w: 2160, h: 3840, title: "Bluebell Stand",           category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8869.JPG` },
+  { id: 25, tab: "photography", w: 1811, h: 2415, title: "Faceless Watcher",         category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8699.JPG` },
+  { id: 26, tab: "photography", w: 3840, h: 2160, title: "Skyline Patrol",           category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7739.JPG` },
+  { id: 27, tab: "photography", w: 1978, h: 3517, title: "Strings by Firelight",     category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8812.JPG` },
+  { id: 28, tab: "photography", w: 1506, h: 2008, title: "Lantern Watch",            category: "Ghost of Tsushima",            description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Tsushima/IMG_8519.JPG` },
+  { id: 29, tab: "photography", w: 1954, h: 2606, title: "The Cradle",               category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9171.jpg` },
+  { id: 30, tab: "photography", w: 1991, h: 2655, title: "Three of Us",              category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9172.jpg` },
+  { id: 31, tab: "photography", w: 3840, h: 2160, title: "Sun Through the Canopy",   category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8205.JPG` },
+  { id: 32, tab: "photography", w: 3840, h: 2160, title: "The Officer",              category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9332.JPG` },
+  { id: 33, tab: "photography", w: 1601, h: 2135, title: "Camp at Dusk",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8871.JPG` },
+  { id: 34, tab: "photography", w: 1860, h: 2480, title: "Burning Forward",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9338.jpg` },
+  { id: 35, tab: "photography", w: 3840, h: 2160, title: "Aerial Confrontation",     category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7743.JPG` },
+  { id: 36, tab: "photography", w: 3840, h: 2160, title: "Patchwork Idol",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9343.JPG` },
+  { id: 37, tab: "photography", w: 2160, h: 2700, title: "Cliffside Conversation",   category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9360.jpg` },
+  { id: 38, tab: "photography", w: 3840, h: 2160, title: "A Quiet Moment",           category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8210.JPG` },
+  { id: 39, tab: "photography", w: 1971, h: 3504, title: "Ember Stare",              category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9436.JPG` },
+  { id: 40, tab: "photography", w: 1601, h: 2135, title: "Resting Companions",       category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8901.JPG` },
+  { id: 41, tab: "photography", w: 2160, h: 2880, title: "First Meeting",            category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9452.jpg` },
+  { id: 42, tab: "photography", w: 3840, h: 2160, title: "Wings of Dread",           category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7745.JPG` },
+  { id: 43, tab: "photography", w: 3840, h: 2160, title: "Behind the Mask",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9457.JPG` },
+  { id: 44, tab: "photography", w: 2157, h: 2876, title: "Pilgrim Mound",            category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9492.jpg` },
+  { id: 45, tab: "photography", w: 1914, h: 3402, title: "Maple Strike",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8948.JPG` },
+  { id: 46, tab: "photography", w: 2157, h: 2876, title: "The Last Embrace",         category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9497.jpg` },
+  { id: 47, tab: "photography", w: 3840, h: 2160, title: "The Final Grip",           category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7746.JPG` },
+  { id: 48, tab: "photography", w: 1344, h: 756,  title: "Festival Day",             category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Post%203.png` },
+  { id: 49, tab: "photography", w: 3840, h: 2160, title: "Crimson Path",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8978.JPG` },
 ];
 
 const ILLUSTRATIONS: Photo[] = [
-  { id: 1, tab: "illustrations", title: "Aurora", category: ILLUS_TOOL, description: "A woman's face peers through a tropical canopy, framed by deep blues and warm coral leaves.", src: `${ILL}/Aurora%20-%20Chirayu%20Arya.PNG` },
-  { id: 2, tab: "illustrations", title: "Chromatic Enigma", category: ILLUS_TOOL, description: "A surreal kiss between two figures in violet and crimson, faces fragmented into bold colour blocks.", src: `${ILL}/Chromatic%20Enigma.PNG` },
-  { id: 3, tab: "illustrations", title: "Citrus Muse", category: ILLUS_TOOL, description: "A woman cradling a sliced orange, eyelids painted with the same glowing pulp.", src: `${ILL}/Citrus%20Muse.PNG` },
-  { id: 4, tab: "illustrations", title: "Contour", category: ILLUS_TOOL, description: "An upturned face caught mid-breath, eyes pooling with colour and light.", src: `${ILL}/Contour.PNG` },
-  { id: 5, tab: "illustrations", title: "Emerald Reflections", category: ILLUS_TOOL, description: "A weathered green statue rendered in painterly strokes against a soft brown gradient.", src: `${ILL}/Emerald%20Reflections.png` },
-  { id: 6, tab: "illustrations", title: "Golden Reverie", category: ILLUS_TOOL, description: "A face dripping with molten honey, lips parted in quiet awe.", src: `${ILL}/Golden%20Reverie.PNG` },
-  { id: 7, tab: "illustrations", title: "Scarlet Pout", category: ILLUS_TOOL, description: "A close-up portrait, red sunglasses askew over glossy crimson lips.", src: `${ILL}/Scarlet%20Pout.PNG` },
-  { id: 8, tab: "illustrations", title: "Sunlit Chapters", category: ILLUS_TOOL, description: "A woman lounging poolside, half-asleep behind a pink magazine titled 'All About Miami'.", src: `${ILL}/Sunlit%20Chapters.PNG` },
-  { id: 9, tab: "illustrations", title: "Veiled Petals", category: ILLUS_TOOL, description: "A blindfolded woman crowned in tangled flowers, lips parted toward the warm horizon.", src: `${ILL}/Veiled%20Petals.PNG` },
+  { id: 1, tab: "illustrations", w: 2732, h: 2048, title: "Aurora",             category: ILLUS_TOOL, description: "A woman's face peers through a tropical canopy, framed by deep blues and warm coral leaves.", src: `${ILL}/Aurora%20-%20Chirayu%20Arya.PNG` },
+  { id: 2, tab: "illustrations", w: 2048, h: 2732, title: "Chromatic Enigma",   category: ILLUS_TOOL, description: "A surreal kiss between two figures in violet and crimson, faces fragmented into bold colour blocks.", src: `${ILL}/Chromatic%20Enigma.PNG` },
+  { id: 3, tab: "illustrations", w: 2048, h: 2732, title: "Citrus Muse",        category: ILLUS_TOOL, description: "A woman cradling a sliced orange, eyelids painted with the same glowing pulp.", src: `${ILL}/Citrus%20Muse.PNG` },
+  { id: 4, tab: "illustrations", w: 2048, h: 2732, title: "Contour",            category: ILLUS_TOOL, description: "An upturned face caught mid-breath, eyes pooling with colour and light.", src: `${ILL}/Contour.PNG` },
+  { id: 5, tab: "illustrations", w: 2048, h: 2732, title: "Emerald Reflections",category: ILLUS_TOOL, description: "A weathered green statue rendered in painterly strokes against a soft brown gradient.", src: `${ILL}/Emerald%20Reflections.png` },
+  { id: 6, tab: "illustrations", w: 2048, h: 2732, title: "Golden Reverie",     category: ILLUS_TOOL, description: "A face dripping with molten honey, lips parted in quiet awe.", src: `${ILL}/Golden%20Reverie.PNG` },
+  { id: 7, tab: "illustrations", w: 2048, h: 2732, title: "Scarlet Pout",       category: ILLUS_TOOL, description: "A close-up portrait, red sunglasses askew over glossy crimson lips.", src: `${ILL}/Scarlet%20Pout.PNG` },
+  { id: 8, tab: "illustrations", w: 2048, h: 2732, title: "Sunlit Chapters",    category: ILLUS_TOOL, description: "A woman lounging poolside, half-asleep behind a pink magazine titled 'All About Miami'.", src: `${ILL}/Sunlit%20Chapters.PNG` },
+  { id: 9, tab: "illustrations", w: 2048, h: 2732, title: "Veiled Petals",      category: ILLUS_TOOL, description: "A blindfolded woman crowned in tangled flowers, lips parted toward the warm horizon.", src: `${ILL}/Veiled%20Petals.PNG` },
 ];
-
-const COLS = 3;
-const MAX_SLOTS = Math.max(PHOTOGRAPHY.length, ILLUSTRATIONS.length);
 
 const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
-function getDiagDelay(i: number): number {
-  return (Math.floor(i / COLS) + (i % COLS)) * 0.055;
-}
-
-function CardFace({
+function GalleryCard({
   photo,
-  hovered,
+  delay,
+  isTouchDevice,
+  onSelect,
+  onCursorEnter,
+  onMouseMove,
+  onCursorLeave,
 }: {
-  photo: Photo | null;
-  hovered: boolean;
+  photo: Photo;
+  delay: number;
+  isTouchDevice: boolean;
+  onSelect: (p: Photo) => void;
+  onCursorEnter: () => void;
+  onMouseMove: (e: React.MouseEvent) => void;
+  onCursorLeave: () => void;
 }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <div
-      className="absolute inset-0 overflow-hidden"
-      style={{
-        background: "#0a0a0a",
-        border: "1px solid rgba(255,255,255,0.05)",
+    <motion.div
+      className={`break-inside-avoid ${isTouchDevice ? "" : "cursor-none"}`}
+      style={{ marginBottom: "12px" }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        delay,
+        duration: 0.55,
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       }}
+      whileHover={{ y: -6, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }}
+      onMouseEnter={() => { setHovered(true); onCursorEnter(); }}
+      onMouseMove={onMouseMove}
+      onMouseLeave={() => { setHovered(false); onCursorLeave(); }}
+      onClick={() => onSelect(photo)}
+      onContextMenu={(e) => e.preventDefault()}
+      onDragStart={(e) => e.preventDefault()}
     >
-      {photo ? (
-        // eslint-disable-next-line @next/next/no-img-element
+      <div
+        style={{
+          aspectRatio: `${photo.w} / ${photo.h}`,
+          position: "relative",
+          overflow: "hidden",
+          background: "#0a0a0a",
+          border: "1px solid rgba(255,255,255,0.05)",
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={photo.src}
           alt={photo.title}
@@ -131,36 +155,37 @@ function CardFace({
             WebkitUserDrag: "none",
           }}
         />
-      ) : (
+
+        {/* Noise texture on empty placeholder */}
+        {!photo.src && (
+          <div
+            className="absolute inset-0 opacity-[0.18]"
+            style={{ backgroundImage: NOISE, backgroundSize: "180px 180px" }}
+          />
+        )}
+
+        {/* Glow on hover */}
         <div
-          className="absolute inset-0 opacity-[0.18]"
-          style={{ backgroundImage: NOISE, backgroundSize: "180px 180px" }}
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 48px rgba(255,255,255,0.07)",
+            opacity: hovered ? 1 : 0,
+            transition: "opacity 0.3s ease",
+          }}
         />
-      )}
 
-      {/* Glow on hover */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 48px rgba(255,255,255,0.07)",
-          opacity: hovered ? 1 : 0,
-          transition: "opacity 0.3s ease",
-        }}
-      />
+        {/* Bottom gradient */}
+        <div
+          className="absolute inset-x-0 bottom-0 pointer-events-none"
+          style={{
+            height: "65%",
+            background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%)",
+            opacity: hovered ? 1 : 0,
+            transition: "opacity 0.3s ease",
+          }}
+        />
 
-      {/* Bottom gradient */}
-      <div
-        className="absolute inset-x-0 bottom-0 pointer-events-none"
-        style={{
-          height: "65%",
-          background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%)",
-          opacity: hovered ? 1 : 0,
-          transition: "opacity 0.3s ease",
-        }}
-      />
-
-      {/* Text */}
-      {photo && (
+        {/* Title + category */}
         <div
           className="absolute inset-x-0 bottom-0 p-5 pointer-events-none"
           style={{
@@ -176,95 +201,7 @@ function CardFace({
             {photo.category}
           </p>
         </div>
-      )}
-    </div>
-  );
-}
-
-function CardSlot({
-  i,
-  activeTab,
-  onSelect,
-  onCursorEnter,
-  onMouseMove,
-  onCursorLeave,
-}: {
-  i: number;
-  activeTab: Tab;
-  onSelect: (photo: Photo) => void;
-  onCursorEnter: () => void;
-  onMouseMove: (e: React.MouseEvent) => void;
-  onCursorLeave: () => void;
-}) {
-  const [hovered, setHovered] = useState(false);
-
-  const photo = PHOTOGRAPHY[i] ?? null;
-  const illus = ILLUSTRATIONS[i] ?? null;
-  const diagDelay = getDiagDelay(i);
-  const flipRotate = activeTab === "photography" ? 0 : 180;
-
-  const activePhoto = activeTab === "photography" ? photo : illus;
-  const hasActive = activePhoto !== null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: hasActive ? 1 : 0, y: 0 }}
-      transition={{
-        duration: 0.6,
-        delay: i * 0.03,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-      }}
-      whileHover={hasActive ? { y: -6, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } } : undefined}
-      className={hasActive ? "cursor-none" : "pointer-events-none"}
-      style={{ aspectRatio: "4/3", perspective: "1200px" }}
-      onMouseEnter={() => { if (hasActive) { setHovered(true); onCursorEnter(); } }}
-      onMouseMove={(e) => { if (hasActive) onMouseMove(e); }}
-      onMouseLeave={() => { setHovered(false); onCursorLeave(); }}
-      onClick={() => { if (activePhoto) onSelect(activePhoto); }}
-      onContextMenu={(e) => e.preventDefault()}
-      onDragStart={(e) => e.preventDefault()}
-    >
-      {/* Flipper */}
-      <motion.div
-        animate={{ rotateY: flipRotate }}
-        transition={{
-          duration: 0.3,
-          delay: diagDelay,
-          ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-        }}
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          transformStyle: "preserve-3d",
-        }}
-      >
-        {/* Front face — Photography */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-          }}
-        >
-          <CardFace photo={photo} hovered={hovered && activeTab === "photography"} />
-        </div>
-
-        {/* Back face — Illustrations */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
-          }}
-        >
-          <CardFace photo={illus} hovered={hovered && activeTab === "illustrations"} />
-        </div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
@@ -282,15 +219,15 @@ export default function GalleryPage() {
   const blackoutTimerRef = useRef<number | null>(null);
   const blackoutOverlayRef = useRef<HTMLDivElement>(null);
 
+  const activePhotos = activeTab === "photography" ? PHOTOGRAPHY : ILLUSTRATIONS;
+
   function switchTab(tab: Tab) {
     if (tab === activeTab || isTransitioning) return;
     setIsTransitioning(true);
     setActiveTab(tab);
-    const lockMs = (getDiagDelay(MAX_SLOTS - 1) + 0.35) * 1000;
-    setTimeout(() => setIsTransitioning(false), lockMs);
+    setTimeout(() => setIsTransitioning(false), 800);
   }
 
-  // Close lightbox on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") setSelected(null);
@@ -299,12 +236,10 @@ export default function GalleryPage() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  // Detect touch device once on mount — hides the desktop "View" cursor pill
   useEffect(() => {
     setIsTouchDevice(window.matchMedia("(pointer: coarse)").matches);
   }, []);
 
-  // Reset measured lightbox dimensions + loaded image when selection clears
   useEffect(() => {
     if (!selected) {
       setImgRect(null);
@@ -312,8 +247,6 @@ export default function GalleryPage() {
     }
   }, [selected]);
 
-  // Re-measure the lightbox canvas on viewport resize so the wrapper stays
-  // locked to the canvas's rendered width across breakpoints
   useEffect(() => {
     if (!selected) return;
     const handler = () => {
@@ -326,12 +259,6 @@ export default function GalleryPage() {
     return () => window.removeEventListener("resize", handler);
   }, [selected]);
 
-  // === Canvas-based lightbox renderer ===
-  // Paints the loaded image to the lightbox canvas. When `withWatermark`
-  // is true, tiles a diagonal "© Chirayu Arya" overlay across the bitmap.
-  // The watermark is drawn synchronously inside the `contextmenu` handler
-  // so the browser's "Save image as…" action samples the watermarked
-  // pixel buffer instead of the clean original.
   const drawCanvas = useCallback((withWatermark: boolean) => {
     const canvas = lightboxCanvasRef.current;
     const img = loadedImgRef.current;
@@ -349,7 +276,7 @@ export default function GalleryPage() {
       const fontSize = Math.max(40, baseSize / 18);
       ctx.save();
       ctx.translate(w / 2, h / 2);
-      ctx.rotate(-Math.PI / 6); // ~-30°
+      ctx.rotate(-Math.PI / 6);
       ctx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -370,8 +297,6 @@ export default function GalleryPage() {
     }
   }, []);
 
-  // Load the selected image into an off-DOM Image, paint it to the canvas,
-  // and measure the canvas's rendered size for the wrapper.
   useEffect(() => {
     if (!selected) return;
     let cancelled = false;
@@ -396,21 +321,13 @@ export default function GalleryPage() {
   }, [selected, drawCanvas]);
 
   const handleCanvasContextMenu = useCallback(() => {
-    // Synchronously stamp the watermark into the canvas bitmap before the
-    // browser's native "Save image as…" menu samples the pixels.
     drawCanvas(true);
   }, [drawCanvas]);
 
   const handleCanvasMouseLeave = useCallback(() => {
-    // Revert to clean view once the pointer leaves the canvas.
     drawCanvas(false);
   }, [drawCanvas]);
 
-  // === Screenshot deterrents ===
-  // Imperative blackout — flips a pre-mounted overlay <div> directly via ref
-  // instead of going through React's render loop. Skips reconciliation and
-  // paints in the same frame as the triggering keydown, giving us the best
-  // shot at beating the OS screenshot capture.
   const startHideTimer = useCallback(() => {
     if (blackoutTimerRef.current !== null) {
       window.clearTimeout(blackoutTimerRef.current);
@@ -434,11 +351,6 @@ export default function GalleryPage() {
       return el !== null && el.style.display !== "none";
     };
 
-    // Codes that signal a real screenshot/save shortcut. macOS intercepts
-    // Shift+Digit3/4/5 at the OS level so those keydowns *never* arrive in
-    // the browser — we catch them indirectly via the Cmd/Shift modifier
-    // press below, and they stay because the digit never arrives to
-    // "cancel" the blackout.
     const SCREENSHOT_CODES = new Set(["Digit3", "Digit4", "Digit5", "KeyS", "KeyP"]);
 
     const cancelBlackout = () => {
@@ -453,36 +365,23 @@ export default function GalleryPage() {
     };
 
     const onKeydown = (e: KeyboardEvent) => {
-      // Modifier keys themselves (Shift / Cmd / Ctrl / Alt) — trigger
-      // blackout proactively. We don't yet know if this is the start of a
-      // screenshot combo (Cmd+Shift+3) or a benign one (Cmd+T) — we'll
-      // decide when the follow-up key arrives.
       if (e.key === "Shift" || e.key === "Meta" || e.key === "Control" || e.key === "Alt") {
         triggerBlackout();
         return;
       }
-      // Follow-up key while a modifier is held — decide.
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
         if (SCREENSHOT_CODES.has(e.code)) {
-          // Real screenshot/save key — keep the blackout (re-trigger).
           triggerBlackout();
         } else {
-          // Benign shortcut (Cmd+T, Cmd+R, Cmd+Shift+], typed capital
-          // letter, etc.) — cancel the blackout we just triggered.
           cancelBlackout();
         }
       }
     };
     const onKeyup = (e: KeyboardEvent) => {
-      // PrintScreen on Windows often only fires keyup
       if (e.key === "PrintScreen" || e.code === "PrintScreen") {
         triggerBlackout();
       }
     };
-    // Freeze the overlay on — no auto-hide timer. Used when another app
-    // has likely stolen focus (Screenshot.app, Snipping Tool, region-
-    // select crosshair, screen recorders) and the page is still visible
-    // behind it. Held until focus returns.
     const freezeBlackout = () => {
       const el = blackoutOverlayRef.current;
       if (el) el.style.display = "flex";
@@ -491,14 +390,6 @@ export default function GalleryPage() {
         blackoutTimerRef.current = null;
       }
     };
-
-    // mouseleave — only trigger when cursor exits *downward* (toward the
-    // Dock, where Launchpad / Screenshot.app icons live) or sideways.
-    // Exits *upward* are ignored because that's where the URL bar, tabs,
-    // and browser chrome live — those are normal browser actions.
-    // We freeze (no auto-fade) on exit; mouseenter below decides whether
-    // to start the 2s fade based on whether anything overlaying us has
-    // taken focus.
     const onMouseLeave = (e: MouseEvent) => {
       if (e.relatedTarget !== null) return;
       const clientY = e.clientY;
@@ -507,11 +398,6 @@ export default function GalleryPage() {
       const sideways = clientX <= 0 || clientX >= window.innerWidth - 1;
       if (downward || sideways) freezeBlackout();
     };
-
-    // mouseenter — cursor returned to the page. If the browser still has
-    // focus (no Screenshot.app / Spotlight / other overlay actively stole
-    // it), start the 2s fade. If focus is gone, leave it frozen — the
-    // onFocus handler will start the fade once focus returns.
     const onMouseEnter = () => {
       if (
         isBlackoutShowing() &&
@@ -521,28 +407,17 @@ export default function GalleryPage() {
         startHideTimer();
       }
     };
-
-    // When the tab becomes hidden (Cmd+T to a new tab, clicking another
-    // tab, etc.), forcibly clear any blackout that may have just been
-    // painted by an incidental blur/poll firing in the brief window
-    // between focus loss and visibility change. This is what was leaving
-    // the overlay "stuck" — by the time the tab came back, we'd already
-    // have shown the overlay with no timer.
     const onVisibilityChange = () => {
       if (document.hidden) {
         cancelBlackout();
       }
     };
-
-    // When focus returns, start the standard 2s fade timer
     const onFocus = () => {
       if (isBlackoutShowing() && blackoutTimerRef.current === null) {
         startHideTimer();
       }
     };
 
-    // Capture phase + window AND document listeners so we beat any
-    // intermediate handlers that might stopPropagation.
     window.addEventListener("keydown", onKeydown, { capture: true });
     document.addEventListener("keydown", onKeydown, { capture: true });
     window.addEventListener("keyup", onKeyup, { capture: true });
@@ -554,11 +429,6 @@ export default function GalleryPage() {
     document.addEventListener("mouseover", onMouseEnter);
     document.addEventListener("visibilitychange", onVisibilityChange);
 
-    // rAF-based focus polling — catches apps (Launchpad, Mission Control,
-    // Screenshot.app toolbar) that take focus without firing a reliable
-    // blur event on the browser window. Polling every animation frame
-    // (~16ms) instead of setInterval(200ms) closes the window where a
-    // user could click "capture" before the blackout paints.
     let lastHasFocus = typeof document !== "undefined" ? document.hasFocus() : true;
     let pollRaf = 0;
     const poll = () => {
@@ -606,7 +476,6 @@ export default function GalleryPage() {
       className="gallery-protected gallery-no-print"
       style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7", position: "relative", overflow: "hidden" }}
     >
-      {/* Anti-save / anti-screenshot CSS (scoped to this page) */}
       <style>{`
         .gallery-protected,
         .gallery-protected * {
@@ -626,9 +495,6 @@ export default function GalleryPage() {
         }
       `}</style>
 
-      {/* Instant blackout overlay — always mounted, toggled imperatively via
-          ref in the keydown handler so the paint happens in the same frame
-          as the screenshot shortcut (no React reconciliation in the path). */}
       <div
         ref={blackoutOverlayRef}
         className="fixed inset-0 items-center justify-center"
@@ -645,7 +511,7 @@ export default function GalleryPage() {
       <div className="relative">
         <Nav />
 
-        {/* Custom "View" cursor pill — desktop / mouse only */}
+        {/* Custom "View" cursor pill */}
         {!isTouchDevice && (
           <div
             className="fixed pointer-events-none z-[60]"
@@ -734,24 +600,35 @@ export default function GalleryPage() {
           </div>
         </motion.div>
 
-        {/* Photo grid */}
+        {/* Masonry grid */}
         <section className="px-8 sm:px-14 lg:px-20 pb-24">
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
-            style={{ pointerEvents: isTransitioning ? "none" : undefined }}
-          >
-            {Array.from({ length: MAX_SLOTS }, (_, i) => (
-              <CardSlot
-                key={i}
-                i={i}
-                activeTab={activeTab}
-                onSelect={setSelected}
-                onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
-                onMouseMove={handleMouseMove}
-                onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
-              />
-            ))}
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.15 } }}
+              transition={{ duration: 0.1 }}
+              className="columns-1 sm:columns-2 lg:columns-3"
+              style={{
+                columnGap: "12px",
+                pointerEvents: isTransitioning ? "none" : undefined,
+              }}
+            >
+              {activePhotos.map((photo, i) => (
+                <GalleryCard
+                  key={`${activeTab}-${photo.id}`}
+                  photo={photo}
+                  delay={Math.min(i * 0.025, 0.7)}
+                  isTouchDevice={isTouchDevice}
+                  onSelect={setSelected}
+                  onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
+                  onMouseMove={handleMouseMove}
+                  onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
+                />
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </section>
 
         {/* Lightbox */}
@@ -779,8 +656,6 @@ export default function GalleryPage() {
                 style={{
                   background: "#111",
                   border: "1px solid rgba(255,255,255,0.08)",
-                  // Lock wrapper width to the image's actual rendered width once measured
-                  // so portrait artwork doesn't get padded out by the info text below.
                   width: imgRect ? `${imgRect.w}px` : "fit-content",
                   maxWidth: "calc(100vw - 64px)",
                   minWidth: imgRect ? undefined : "min(320px, calc(100vw - 64px))",
@@ -788,7 +663,6 @@ export default function GalleryPage() {
                 }}
                 onClick={e => e.stopPropagation()}
               >
-                {/* Close button */}
                 <button
                   onClick={() => setSelected(null)}
                   className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
@@ -803,10 +677,6 @@ export default function GalleryPage() {
                   ×
                 </button>
 
-                {/* Canvas — renders the image at full natural resolution.
-                    On right-click we stamp a diagonal "© Chirayu Arya"
-                    watermark into the bitmap before the browser samples
-                    pixels for "Save image as…". Reverts on mouseleave. */}
                 <div className="relative" style={{ background: "#0a0a0a" }}>
                   <canvas
                     ref={lightboxCanvasRef}
@@ -824,7 +694,6 @@ export default function GalleryPage() {
                   />
                 </div>
 
-                {/* Info */}
                 <div className="p-6 shrink-0">
                   <h2 className="text-lg font-semibold mb-1" style={{ color: "#f5f5f7" }}>
                     {selected.title}
