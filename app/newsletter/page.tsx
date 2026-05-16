@@ -38,15 +38,15 @@ const ICON_PROPS = {
   strokeLinejoin: "round" as const,
 };
 
-const TOPICS = [
-  "Marketing",
-  "Design",
-  "International Student Life",
-  "Visa",
-  "Travel",
-  "Virtual Photography",
-  "Gaming",
-  "Music",
+const TOPICS: { emoji: string; label: string }[] = [
+  { emoji: "📣", label: "Marketing" },
+  { emoji: "🎨", label: "Design" },
+  { emoji: "🎓", label: "International Student Life" },
+  { emoji: "🛂", label: "Visa" },
+  { emoji: "✈️", label: "Travel" },
+  { emoji: "📸", label: "Virtual Photography" },
+  { emoji: "🎮", label: "Gaming" },
+  { emoji: "🎵", label: "Music" },
 ];
 
 const SECTIONS: { num: string; name: string; desc: string; icon: React.ReactNode }[] = [
@@ -87,10 +87,12 @@ function formatDate(unix: number): string {
 // ── Topic pill ───────────────────────────────────────────────────────────────
 
 function PillItem({
+  emoji,
   label,
   index,
   inView,
 }: {
+  emoji: string;
   label: string;
   index: number;
   inView: boolean;
@@ -123,6 +125,7 @@ function PillItem({
         e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
       }}
     >
+      <span style={{ marginRight: "0.45rem" }} aria-hidden>{emoji}</span>
       {label}
     </motion.div>
   );
@@ -462,7 +465,7 @@ export default function NewsletterPage() {
             A biweekly letter for students, job seekers, and purpose seekers figuring it out without one.
           </motion.p>
 
-          <div className="mt-8 sm:mt-20 lg:mt-28 flex flex-col gap-5 sm:gap-6">
+          <div className="mt-6 sm:mt-10 lg:mt-14 flex flex-col gap-5 sm:gap-6">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={heroInView ? { opacity: 1, y: 0 } : {}}
@@ -607,10 +610,11 @@ export default function NewsletterPage() {
             Things we&rsquo;ll talk about
           </motion.p>
           <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3">
-            {TOPICS.map((label, i) => (
+            {TOPICS.map((topic, i) => (
               <PillItem
-                key={label}
-                label={label}
+                key={topic.label}
+                emoji={topic.emoji}
+                label={topic.label}
                 index={i}
                 inView={insideInView}
               />
