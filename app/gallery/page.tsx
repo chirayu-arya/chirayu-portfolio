@@ -533,7 +533,7 @@ export default function GalleryPage() {
         )}
 
         {/* Page header */}
-        <section className="pt-36 pb-12 px-8 sm:px-14 lg:px-20">
+        <section className="pt-24 pb-8 px-8 sm:px-14 lg:px-20">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -601,7 +601,7 @@ export default function GalleryPage() {
         </motion.div>
 
         {/* Masonry grid */}
-        <section className="px-8 sm:px-14 lg:px-20 pb-24">
+        <section className="px-8 sm:px-14 lg:px-20 pb-16">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

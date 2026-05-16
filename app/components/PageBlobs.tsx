@@ -47,9 +47,14 @@ interface PageBlobsProps {
    * by the page-level palette (e.g. home).
    */
   startTop?: string;
+  /**
+   * Alpha scale applied to blobs after the first one (i.e. everything below
+   * the hero region). Use < 1 to lighten the rest of the page.
+   */
+  postHeroAlphaScale?: number;
 }
 
-export default function PageBlobs({ palette, startTop = "0" }: PageBlobsProps) {
+export default function PageBlobs({ palette, startTop = "0", postHeroAlphaScale = 1 }: PageBlobsProps) {
   const colors = PALETTES[palette];
 
   return (
@@ -67,6 +72,9 @@ export default function PageBlobs({ palette, startTop = "0" }: PageBlobsProps) {
       {LAYOUT.map((b, i) => {
         const c = colors[b.colorIdx];
         const isCenter = b.side === "center";
+        const scale = i === 0 ? 1 : postHeroAlphaScale;
+        const core = b.coreAlpha * scale;
+        const mid = b.midAlpha * scale;
         return (
           <div
             key={i}
@@ -77,7 +85,7 @@ export default function PageBlobs({ palette, startTop = "0" }: PageBlobsProps) {
               width: b.size,
               height: b.size,
               transform: isCenter ? "translate(-50%, -25%)" : "translateY(-25%)",
-              background: `radial-gradient(circle, rgba(${c},${b.coreAlpha}) 0%, rgba(${c},${b.midAlpha}) 42%, transparent 76%)`,
+              background: `radial-gradient(circle, rgba(${c},${core}) 0%, rgba(${c},${mid}) 42%, transparent 76%)`,
             }}
           />
         );

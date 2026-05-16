@@ -110,7 +110,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative pt-36 pb-20 px-8 sm:px-14 lg:px-20"
+      className="relative pt-24 pb-12 px-8 sm:px-14 lg:px-20"
     >
       <div ref={ref} className="relative">
 

@@ -143,7 +143,7 @@ export default function Work() {
   const statsInView = useInView(statsRef, { once: true, margin: "-5%" });
 
   return (
-    <section id="work" className="relative pt-36 pb-0 px-8 sm:px-14 lg:px-20">
+    <section id="work" className="relative pt-24 pb-0 px-8 sm:px-14 lg:px-20">
       <div>
         {/* Header */}
         <div ref={ref} className="mb-10">
@@ -190,7 +190,7 @@ export default function Work() {
         {/* Stats */}
         <div
           ref={statsRef}
-          className="grid grid-cols-2 lg:grid-cols-4 mt-20 pb-24"
+          className="grid grid-cols-2 lg:grid-cols-4 mt-12 pb-16"
           style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
         >
           {[

@@ -171,7 +171,7 @@ function SubscriberCounter() {
   return (
     <section
       ref={ref}
-      className="relative py-24 sm:py-32 px-8 sm:px-14 lg:px-20"
+      className="relative py-16 sm:py-20 px-8 sm:px-14 lg:px-20"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -393,7 +393,7 @@ export default function NewsletterPage() {
         </div>
 
         {/* CTA block — fills full viewport height */}
-        <div className="min-h-[100svh] flex flex-col justify-center pt-28 sm:pt-32 lg:pt-36 pb-12 sm:pb-16">
+        <div className="min-h-[100svh] flex flex-col justify-center pt-20 sm:pt-24 lg:pt-28 pb-10 sm:pb-12">
           {/* Eyebrow — centered */}
           <motion.p
             initial={{ opacity: 0, y: 8 }}
@@ -438,7 +438,7 @@ export default function NewsletterPage() {
         </div>
 
         {/* Premise — headline + multi-paragraph body, left-aligned */}
-        <div className="pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-28 lg:pb-36">
+        <div className="pt-14 sm:pt-20 lg:pt-24 pb-10 sm:pb-20 lg:pb-24">
           <motion.h2
             initial={{ opacity: 0, x: -60 }}
             animate={heroInView ? { opacity: 1, x: 0 } : {}}
@@ -509,7 +509,7 @@ export default function NewsletterPage() {
       {/* ── What's Inside ────────────────────────────────────────────────── */}
       <section
         ref={insideRef}
-        className="relative py-24 sm:py-32 px-8 sm:px-14 lg:px-20"
+        className="relative py-16 sm:py-20 px-8 sm:px-14 lg:px-20"
       >
         <motion.p
           initial={{ opacity: 0, y: 8 }}
@@ -625,7 +625,7 @@ export default function NewsletterPage() {
       {/* ── Latest Issues ────────────────────────────────────────────────── */}
       <section
         ref={issuesRef}
-        className="relative py-24 sm:py-32 px-8 sm:px-14 lg:px-20"
+        className="relative py-16 sm:py-20 px-8 sm:px-14 lg:px-20"
       >
         <motion.p
           initial={{ opacity: 0, y: 8 }}

@@ -267,7 +267,7 @@ export default function AboutPage() {
 
       {/* ── Hero ── */}
       <section
-        className="relative pt-36 pb-12 px-8 sm:px-14 lg:px-20"
+        className="relative pt-24 pb-8 px-8 sm:px-14 lg:px-20"
       >
 
         <div ref={heroRef} className="relative" style={{ zIndex: 1 }}>
@@ -365,7 +365,7 @@ export default function AboutPage() {
 
       {/* ── Marquee ── */}
       <section
-        className="py-16 overflow-hidden"
+        className="py-10 overflow-hidden"
         style={{
           borderTop: "1px solid rgba(255,255,255,0.07)",
           borderBottom: "1px solid rgba(255,255,255,0.07)",
@@ -403,7 +403,7 @@ export default function AboutPage() {
 
       {/* ── Experience ── */}
       <section
-        className="relative pt-20 pb-16 px-8 sm:px-14 lg:px-20"
+        className="relative pt-12 pb-10 px-8 sm:px-14 lg:px-20"
       >
         <div ref={expRef} className="relative">
           <motion.p
@@ -456,7 +456,7 @@ export default function AboutPage() {
 
       {/* ── Education ── */}
       <section
-        className="relative pt-24 pb-28 px-8 sm:px-14 lg:px-20"
+        className="relative pt-16 pb-20 px-8 sm:px-14 lg:px-20"
       >
         <div ref={eduRef} className="relative">
           <motion.p

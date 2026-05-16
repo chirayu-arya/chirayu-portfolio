@@ -85,7 +85,7 @@ export default function Featured() {
     <section
       id="featured"
       className="relative"
-      style={{ paddingTop: "9rem", paddingBottom: "6rem" }}
+      style={{ paddingTop: "6rem", paddingBottom: "4rem" }}
     >
       <div className="relative">
         {/* Header */}

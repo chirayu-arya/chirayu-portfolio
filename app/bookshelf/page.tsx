@@ -459,7 +459,7 @@ export default function BookshelfPage() {
       <div className="relative z-10 px-8 sm:px-14 lg:px-20">
 
         {/* ── Hero ─────────────────────────────────────────────────────────── */}
-        <section className="pt-36 pb-20">
+        <section className="pt-24 pb-12">
           <motion.p
             className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
             style={{ color: "#86868b" }}
@@ -491,7 +491,7 @@ export default function BookshelfPage() {
           </div>
         </section>
 
-        <div className="flex flex-col gap-20 pb-32">
+        <div className="flex flex-col gap-12 pb-20">
 
           {/* ── Currently Reading ──────────────────────────────────────────── */}
           {currentlyReading.length > 0 && (
