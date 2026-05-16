@@ -13,6 +13,7 @@ type ColorTriple = readonly [string, string, string];
 const PALETTES: Record<string, ColorTriple> = {
   crimson: ["220,20,60", "180,0,40", "139,0,0"],
   "crimson-purple": ["220,20,60", "139,92,246", "91,33,182"],
+  "crimson-amber-teal": ["220,20,60", "212,168,67", "20,184,166"],
   navy: ["30,58,138", "37,99,235", "15,23,42"],
   "magenta-orange": ["217,70,239", "249,115,22", "192,38,211"],
   "ps-blue": ["0,48,135", "0,86,179", "15,23,42"],
@@ -29,7 +30,7 @@ const CORE_ALPHA = 0.40;
 const MID_ALPHA = 0.18;
 
 const LAYOUT = [
-  { top: "5%", side: "left" as const, size: "70vmax", offset: "-18vmax", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 0 },
+  { top: "10%", side: "center" as const, size: "70vmax", offset: "0", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 0 },
   { top: "20%", side: "right" as const, size: "72vmax", offset: "-20vmax", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 1 },
   { top: "35%", side: "left" as const, size: "75vmax", offset: "-20vmax", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 2 },
   { top: "50%", side: "right" as const, size: "72vmax", offset: "-18vmax", coreAlpha: CORE_ALPHA, midAlpha: MID_ALPHA, colorIdx: 0 },
@@ -65,16 +66,17 @@ export default function PageBlobs({ palette, startTop = "0" }: PageBlobsProps) {
     >
       {LAYOUT.map((b, i) => {
         const c = colors[b.colorIdx];
+        const isCenter = b.side === "center";
         return (
           <div
             key={i}
             className="bg-blob absolute rounded-full"
             style={{
               top: b.top,
-              [b.side]: b.offset,
+              ...(isCenter ? { left: "50%" } : { [b.side]: b.offset }),
               width: b.size,
               height: b.size,
-              transform: "translateY(-25%)",
+              transform: isCenter ? "translate(-50%, -25%)" : "translateY(-25%)",
               background: `radial-gradient(circle, rgba(${c},${b.coreAlpha}) 0%, rgba(${c},${b.midAlpha}) 42%, transparent 76%)`,
             }}
           />

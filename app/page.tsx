@@ -12,7 +12,7 @@ export default function Home() {
     <main className="relative bg-black overflow-x-hidden">
       <Nav />
       {/* Page blobs span the full page height (every 15%); rendered first so DOM order keeps them behind sections */}
-      <PageBlobs palette="crimson-purple" startTop="0" />
+      <PageBlobs palette="crimson-amber-teal" startTop="0" />
       <Hero />
       <About />
       <Featured />

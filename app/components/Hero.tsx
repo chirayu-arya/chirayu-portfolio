@@ -86,8 +86,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-black"
-      style={{ isolation: "isolate" }}
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
     >
       {/* ── Cinematic black overlay — lifts on load ── */}
       <motion.div
@@ -98,52 +97,33 @@ export default function Hero() {
         transition={{ duration: 1.0, delay: 0.3, ease: "easeInOut" }}
       />
 
-      {/* ── Crimson gradient blobs — breathe in first ── */}
+      {/* ── Light accent blobs — soft warm highlights, kept above the bottom edge so they don't recreate a seam ── */}
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
-        {/* Blob 1 — top-left */}
         <motion.div
           className="absolute"
-          style={{ width: "70vmax", height: "70vmax", top: "-20vmax", left: "-20vmax" }}
+          style={{ width: "55vmax", height: "55vmax", top: "-10vmax", left: "-12vmax" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 2.8, delay: 0.1 }}
+          transition={{ duration: 2.8, delay: 0.2 }}
         >
           <div
             className="bg-blob absolute inset-0 rounded-full"
-            style={{ background: isMobile ? "radial-gradient(ellipse, rgba(220,20,60,0.82) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(220,20,60,0.45) 0%, transparent 68%)" }}
+            style={{ background: "radial-gradient(ellipse, rgba(220,20,60,0.42) 0%, transparent 70%)" }}
           />
         </motion.div>
 
-        {/* Blob 2 — top-right */}
         <motion.div
           className="absolute"
-          style={{ width: "65vmax", height: "65vmax", top: "-15vmax", right: "-15vmax" }}
+          style={{ width: "50vmax", height: "50vmax", top: "5vmax", right: "-12vmax" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 2.8, delay: 0.35 }}
+          transition={{ duration: 2.8, delay: 0.5 }}
         >
           <div
             className="bg-blob absolute inset-0 rounded-full"
-            style={{ background: isMobile ? "radial-gradient(ellipse, rgba(180,0,40,0.72) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(180,0,40,0.38) 0%, transparent 68%)" }}
+            style={{ background: "radial-gradient(ellipse, rgba(220,20,60,0.36) 0%, transparent 70%)" }}
           />
         </motion.div>
-
-        {/* Blob 3 — bottom-center */}
-        <motion.div
-          className="absolute"
-          style={{ width: "65vmax", height: "65vmax", bottom: "-15vmax", left: "50%", marginLeft: "-32.5vmax" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2.8, delay: 0.6 }}
-        >
-          <div
-            className="bg-blob absolute inset-0 rounded-full"
-            style={{ background: isMobile ? "radial-gradient(ellipse, rgba(139,0,0,0.78) 0%, transparent 68%)" : "radial-gradient(ellipse, rgba(139,0,0,0.4) 0%, transparent 68%)" }}
-          />
-        </motion.div>
-
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,0,0,0.15) 0%, transparent 100%)" }} />
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 140% 140% at 50% 50%, transparent 45%, rgba(0,0,0,0.5) 100%)" }} />
       </div>
 
       {/* ── Star field ── */}
