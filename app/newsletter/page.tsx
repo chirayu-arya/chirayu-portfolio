@@ -38,22 +38,42 @@ const ICON_PROPS = {
   strokeLinejoin: "round" as const,
 };
 
-const TOPICS: { emoji: string; label: string }[] = [
-  { emoji: "📣", label: "Marketing" },
-  { emoji: "🎨", label: "Design" },
-  { emoji: "🎓", label: "International Student Life" },
-  { emoji: "🛂", label: "Visa" },
-  { emoji: "✈️", label: "Travel" },
-  { emoji: "📸", label: "Virtual Photography" },
-  { emoji: "🎮", label: "Gaming" },
-  { emoji: "🎵", label: "Music" },
+// ── "Break the cycle" — cluster of clichés we're done with ──────────────────
+// Each entry is a fragment of generic advice positioned absolutely behind the
+// section headline. Varying blur / opacity / size / rotation create a depth
+// effect, like reading clearly through a fog of recycled platitudes.
+const CYCLE_QUOTES: {
+  text: string;
+  top: string;
+  left: string;
+  rot: number;
+  size: string;
+  blur: number;
+  opacity: number;
+  weight: number;
+  color: string;
+  mobile: boolean;
+}[] = [
+  { text: '"Follow your passion."', top: "14%", left: "6%", rot: -5, size: "clamp(1.3rem, 2.4vw, 2.2rem)", blur: 3, opacity: 0.34, weight: 600, color: "#f5f5f7", mobile: true },
+  { text: '"Just network more."', top: "8%", left: "52%", rot: 3, size: "clamp(1.4rem, 2.6vw, 2.4rem)", blur: 1, opacity: 0.50, weight: 700, color: "#f5f5f7", mobile: true },
+  { text: '"Trust the journey."', top: "18%", left: "76%", rot: -4, size: "clamp(1rem, 1.8vw, 1.6rem)", blur: 6, opacity: 0.26, weight: 400, color: "#f5f5f7", mobile: false },
+  { text: '"Keep grinding."', top: "38%", left: "3%", rot: 4, size: "clamp(1.4rem, 2.8vw, 2.6rem)", blur: 1, opacity: 0.52, weight: 700, color: "rgba(245,140,160,1)", mobile: true },
+  { text: '"Manifest it."', top: "36%", left: "82%", rot: -3, size: "clamp(1.2rem, 2.2vw, 2rem)", blur: 4, opacity: 0.32, weight: 500, color: "#f5f5f7", mobile: false },
+  { text: '"Build your personal brand."', top: "22%", left: "28%", rot: 2, size: "clamp(0.9rem, 1.6vw, 1.4rem)", blur: 7, opacity: 0.24, weight: 400, color: "#f5f5f7", mobile: false },
+  { text: '"Stay positive."', top: "60%", left: "86%", rot: 5, size: "clamp(1rem, 1.7vw, 1.5rem)", blur: 5, opacity: 0.30, weight: 500, color: "#f5f5f7", mobile: false },
+  { text: '"Everything happens for a reason."', top: "76%", left: "38%", rot: -2, size: "clamp(1.1rem, 2vw, 1.9rem)", blur: 2, opacity: 0.42, weight: 600, color: "#f5f5f7", mobile: true },
+  { text: '"Get out of your comfort zone."', top: "82%", left: "5%", rot: 5, size: "clamp(1.1rem, 2vw, 1.9rem)", blur: 1, opacity: 0.46, weight: 600, color: "#f5f5f7", mobile: true },
+  { text: '"Just put yourself out there."', top: "86%", left: "60%", rot: -4, size: "clamp(1rem, 1.9vw, 1.7rem)", blur: 3, opacity: 0.36, weight: 500, color: "rgba(245,140,160,1)", mobile: true },
+  { text: '"What’s meant for you won’t pass you."', top: "52%", left: "10%", rot: 3, size: "clamp(0.9rem, 1.5vw, 1.3rem)", blur: 8, opacity: 0.22, weight: 400, color: "#f5f5f7", mobile: false },
+  { text: '"Just be yourself."', top: "66%", left: "22%", rot: -6, size: "clamp(1rem, 1.7vw, 1.5rem)", blur: 5, opacity: 0.28, weight: 500, color: "#f5f5f7", mobile: false },
 ];
 
-const SECTIONS: { num: string; name: string; desc: string; icon: React.ReactNode }[] = [
+type Section = { name: string; desc: string; icon: React.ReactNode };
+
+const ROW_1: Section[] = [
   {
-    num: "01",
     name: "The Lead",
-    desc: "The main piece of every issue. One subject, examined honestly, with the time and care it actually deserves. A career lesson learned the hard way, an observation about industries shifting under your feet, or a reframe on something you've been told a hundred times that turns out to be wrong. 400 to 600 words. Always opinionated, never preachy.",
+    desc: "The main piece of every issue. One subject, examined honestly, with the time it actually deserves.",
     icon: (
       <svg {...ICON_PROPS}>
         <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z" />
@@ -62,9 +82,71 @@ const SECTIONS: { num: string; name: string; desc: string; icon: React.ReactNode
     ),
   },
   {
-    num: "02",
+    name: "The Reframe",
+    desc: "Common advice torn down. What's wrong with it, and what to think instead.",
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M3 12a9 9 0 0 1 15.5-6.36L21 8" />
+        <path d="M21 3v5h-5" />
+        <path d="M21 12a9 9 0 0 1-15.5 6.36L3 16" />
+        <path d="M3 21v-5h5" />
+      </svg>
+    ),
+  },
+  {
+    name: "Field Notes",
+    desc: "Stories from inside the mess. The internship that fell through. The pivot that actually worked.",
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0Z" />
+        <circle cx="12" cy="10" r="3" />
+      </svg>
+    ),
+  },
+  {
+    name: "Office Hours",
+    desc: "Real reader questions answered honestly. Visa, jobs, offers, the right time to quit.",
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      </svg>
+    ),
+  },
+];
+
+const ROW_2: Section[] = [
+  {
+    name: "Cultural Translation",
+    desc: "The unwritten rules nobody explains. Email culture, how networking really works, what your manager actually means.",
+    icon: (
+      <svg {...ICON_PROPS}>
+        <circle cx="12" cy="12" r="10" />
+        <path d="M2 12h20" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+      </svg>
+    ),
+  },
+  {
+    name: "The Sharpener",
+    desc: "One concrete tool or framework. Cold emails, salary negotiation on OPT, asking for a raise without overthinking it.",
+    icon: (
+      <svg {...ICON_PROPS}>
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+      </svg>
+    ),
+  },
+  {
+    name: "Permission Slip",
+    desc: "One thing you're allowed to stop doing, feeling, or worrying about this week.",
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z" />
+      </svg>
+    ),
+  },
+  {
     name: "Building",
-    desc: "Behind the curtain of something built, broken, or rebuilt. A design choice that took longer than it should have, a project that failed in an interesting way, a small tool I made because nothing existed for the job. The real texture of making things, not the LinkedIn version where everything goes to plan.",
+    desc: "Behind the curtain of something I shipped or rebuilt. The design choices, the failures, what actually worked.",
     icon: (
       <svg {...ICON_PROPS}>
         <polyline points="16 18 22 12 16 6" />
@@ -84,50 +166,49 @@ function formatDate(unix: number): string {
   });
 }
 
-// ── Topic pill ───────────────────────────────────────────────────────────────
+// ── Section card (used in the "What's Inside" marquee rows) ─────────────────
 
-function PillItem({
-  emoji,
-  label,
-  index,
-  inView,
-}: {
-  emoji: string;
-  label: string;
-  index: number;
-  inView: boolean;
-}) {
-  const [entered, setEntered] = useState(false);
+function SectionCard({ name, desc, icon }: Section) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, ease: EASE, delay: 0.6 + index * 0.04 }}
-      onAnimationComplete={() => setEntered(true)}
-      whileHover={{ y: -3 }}
-      className="rounded-full text-sm font-medium"
+    <div
+      className="flex-shrink-0 w-[280px] sm:w-[320px] rounded-2xl p-5 sm:p-6 mr-4 sm:mr-5"
       style={{
-        background: "rgba(255,255,255,0.04)",
+        background: "rgba(255,255,255,0.03)",
         border: "1px solid rgba(255,255,255,0.08)",
-        color: "#f5f5f7",
-        padding: "10px 20px",
-        cursor: "default",
-        transition: entered
-          ? "background 0.18s ease, border-color 0.18s ease"
-          : undefined,
+        transition: "border-color 0.22s ease, background 0.22s ease",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.background = "rgba(220,20,60,0.12)";
-        e.currentTarget.style.borderColor = "rgba(220,20,60,0.35)";
+        e.currentTarget.style.borderColor = "rgba(220,20,60,0.3)";
+        e.currentTarget.style.background = "rgba(220,20,60,0.04)";
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.background = "rgba(255,255,255,0.04)";
         e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+        e.currentTarget.style.background = "rgba(255,255,255,0.03)";
       }}
     >
-      <span style={{ marginRight: "0.45rem" }} aria-hidden>{emoji}</span>
-      {label}
-    </motion.div>
+      <div
+        className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
+        style={{
+          background: "rgba(220,20,60,0.1)",
+          border: "1px solid rgba(220,20,60,0.25)",
+          color: "rgba(245,80,110,1)",
+        }}
+      >
+        {icon}
+      </div>
+      <h3
+        className="text-lg font-bold mb-2"
+        style={{ color: "#f5f5f7" }}
+      >
+        {name}
+      </h3>
+      <p
+        className="text-sm leading-snug"
+        style={{ color: "#86868b", textWrap: "pretty" }}
+      >
+        {desc}
+      </p>
+    </div>
   );
 }
 
@@ -334,10 +415,12 @@ function SubscribeForm() {
 
 export default function NewsletterPage() {
   const heroRef = useRef<HTMLDivElement>(null);
+  const breakRef = useRef<HTMLDivElement>(null);
   const insideRef = useRef<HTMLDivElement>(null);
   const issuesRef = useRef<HTMLDivElement>(null);
 
   const heroInView = useInView(heroRef, { once: true, margin: "-8%" });
+  const breakInView = useInView(breakRef, { once: true, margin: "-15%" });
   const insideInView = useInView(insideRef, { once: true, margin: "-8%" });
   const issuesInView = useInView(issuesRef, { once: true, margin: "-8%" });
 
@@ -462,7 +545,7 @@ export default function NewsletterPage() {
             className="mt-6 sm:mt-7 text-base sm:text-lg lg:text-xl"
             style={{ color: "#86868b", textWrap: "pretty" }}
           >
-            A biweekly letter for students, job seekers, and purpose seekers figuring it out without one.
+            For students, job seekers, and purpose seekers figuring it out&hellip;
           </motion.p>
 
           <div className="mt-6 sm:mt-10 lg:mt-14 flex flex-col gap-5 sm:gap-6">
@@ -473,7 +556,7 @@ export default function NewsletterPage() {
             className="text-base sm:text-lg lg:text-xl leading-relaxed"
             style={{ color: "#f5f5f7", textWrap: "pretty" }}
           >
-            You came here with a plan, the kind that fits neatly on a single page. <strong style={{ fontWeight: 700 }}>A degree, a visa, a city, a timeline</strong> that promised everything would fall into place if you just kept moving. Then reality showed up uninvited. The job market shifted under your feet, the political climate turned colder than the brochures had suggested, and the internship that was supposed to anchor your year fell through in a single polite email. Slowly, almost without you noticing, the plan stopped being the plan.
+            You came here with a plan. <strong style={{ fontWeight: 700 }}>A degree, a visa, a city, a timeline</strong> that promised the next thing if you just kept moving. Then the market shifted, the political climate turned, and the internship that was supposed to anchor your year disappeared in a polite email. The plan stopped being the plan, and nobody handed you the next one.
           </motion.p>
 
           <motion.p
@@ -483,7 +566,7 @@ export default function NewsletterPage() {
             className="text-base sm:text-lg lg:text-xl leading-relaxed"
             style={{ color: "#f5f5f7", textWrap: "pretty" }}
           >
-            Most of what gets written for people in your shoes is aspirational to the point of being useless. The same recycled lines on a loop, dressed up in different fonts: <strong style={{ fontWeight: 700 }}>&ldquo;follow your passion,&rdquo; &ldquo;network more,&rdquo; &ldquo;trust the journey.&rdquo;</strong> Written by people who haven&rsquo;t sat with real uncertainty in years, who&rsquo;ve forgotten what it actually feels like to not know what comes next, and who confuse motivational reassurance with something useful.
+            Most of what gets written for people in your shoes is useless. The same lines, recycled on a loop: <strong style={{ fontWeight: 700 }}>&ldquo;follow your passion,&rdquo; &ldquo;network more,&rdquo; &ldquo;trust the journey.&rdquo;</strong> Written by people who haven&rsquo;t sat with real uncertainty in years, who confuse comfort with help.
           </motion.p>
 
           <motion.p
@@ -493,7 +576,7 @@ export default function NewsletterPage() {
             className="text-base sm:text-lg lg:text-xl leading-relaxed"
             style={{ color: "#f5f5f7", textWrap: "pretty" }}
           >
-            Unscripted is different because it&rsquo;s written from inside the same fog. <strong style={{ fontWeight: 700 }}>Nine roles across five industries</strong> before most students have wrapped their first internship, ranging from construction SaaS to HR tech, from crypto and Web3 to environmental software, and a UNESCO initiative that almost didn&rsquo;t happen. Not a tidy set of lessons polished for a LinkedIn carousel, but the actual texture of figuring it out while it&rsquo;s still being figured out. Not advice from someone who has arrived. <strong style={{ fontWeight: 700 }}>Perspective</strong> from someone still walking.
+            Unscripted is different. It&rsquo;s written from inside the same fog, by someone still inside it. Not advice from someone who arrived. <strong style={{ fontWeight: 700 }}>Perspective</strong> from someone still walking.
           </motion.p>
 
           <motion.p
@@ -503,9 +586,72 @@ export default function NewsletterPage() {
             className="text-base sm:text-lg lg:text-xl leading-relaxed"
             style={{ color: "#f5f5f7", textWrap: "pretty" }}
           >
-            This is a biweekly letter for the path nobody handed you a map for. No playbook, because there isn&rsquo;t one to hand out. No filler, because your inbox is already full enough. Just the things worth saying when there&rsquo;s finally something honest worth saying, and a small reminder that the version of you who figures it out is closer than it feels right now.
+            This is a newsletter for the path nobody mapped. No playbook, because there isn&rsquo;t one. No filler, because your inbox is already full. Just the things worth saying, and a quiet reminder that the version of you who figures this out is closer than it feels.
           </motion.p>
         </div>
+        </div>
+      </section>
+
+      {/* ── Break the cycle — fog of clichés with focal headline ─────────── */}
+      <section
+        ref={breakRef}
+        className="relative min-h-[80vh] flex items-center justify-center px-8 sm:px-14 lg:px-20 py-24 sm:py-32 overflow-hidden"
+      >
+        {/* Cloud of cliché quotes — scattered, layered, blurred for depth */}
+        <div className="absolute inset-0 pointer-events-none select-none">
+          {CYCLE_QUOTES.map((q, i) => (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0, y: 12 }}
+              animate={breakInView ? { opacity: q.opacity, y: 0 } : {}}
+              transition={{
+                duration: 1,
+                ease: EASE,
+                delay: 0.15 + (i % 4) * 0.08,
+              }}
+              className={`absolute whitespace-nowrap ${q.mobile ? "" : "hidden sm:block"}`}
+              style={{
+                top: q.top,
+                left: q.left,
+                fontSize: q.size,
+                fontWeight: q.weight,
+                color: q.color,
+                filter: `blur(${q.blur}px)`,
+                transform: `rotate(${q.rot}deg)`,
+                letterSpacing: "-0.01em",
+                lineHeight: 1,
+              }}
+            >
+              {q.text}
+            </motion.span>
+          ))}
+        </div>
+
+        {/* Focal headline + subheadline */}
+        <div className="relative text-center" style={{ zIndex: 2 }}>
+          <motion.h2
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={breakInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.25 }}
+            className="font-black tracking-tight leading-none"
+            style={{
+              fontSize: "clamp(3rem, 8vw, 7rem)",
+              color: "#f5f5f7",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Break the cycle.
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={breakInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: EASE, delay: 0.55 }}
+            className="mt-6 sm:mt-8 text-base sm:text-lg lg:text-xl font-medium leading-snug whitespace-normal sm:whitespace-nowrap"
+            style={{ color: "#c5c5c8" }}
+          >
+            You don&rsquo;t need more motivation. You need a different conversation.
+          </motion.p>
         </div>
       </section>
 
@@ -538,89 +684,51 @@ export default function NewsletterPage() {
           What's in every issue.
         </motion.h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6">
-          {SECTIONS.map((s, i) => (
-            <motion.div
-              key={s.num}
-              initial={{ opacity: 0, y: 24 }}
-              animate={insideInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, ease: EASE, delay: 0.1 + i * 0.07 }}
-              whileHover={{ y: -4 }}
-              className="rounded-2xl p-6 sm:p-7 flex flex-col"
+        {/* Two looped marquee rows scrolling in opposite directions.
+            Each row's content is duplicated so the translate(-50%) loop
+            stays seamless. Hovering a row pauses its animation. */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={insideInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
+          className="flex flex-col gap-4 sm:gap-5"
+        >
+          {/* Row 1 — scrolls left. No flex gap: each SectionCard has its
+              own mr-* so the trailing gap is identical at every position
+              (including after the last card), which keeps the -50% loop
+              seamless. */}
+          <div className="overflow-hidden">
+            <div
+              className="flex animate-marquee hover:[animation-play-state:paused]"
               style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                transition: "border-color 0.22s ease, background 0.22s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "rgba(220,20,60,0.3)";
-                e.currentTarget.style.background = "rgba(220,20,60,0.04)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-                e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+                width: "max-content",
+                animationDuration: "55s",
+                willChange: "transform",
               }}
             >
-              <div className="flex items-start justify-between mb-6">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{
-                    background: "rgba(220,20,60,0.1)",
-                    border: "1px solid rgba(220,20,60,0.25)",
-                    color: "rgba(245,80,110,1)",
-                  }}
-                >
-                  {s.icon}
-                </div>
-                <span
-                  className="text-xs tracking-[0.22em] font-medium pt-1"
-                  style={{ color: "#515154" }}
-                >
-                  {s.num}
-                </span>
-              </div>
-              <h3
-                className="text-lg sm:text-xl font-bold mb-2.5"
-                style={{ color: "#f5f5f7" }}
-              >
-                {s.name}
-              </h3>
-              <p
-                className="text-sm sm:text-base leading-relaxed"
-                style={{ color: "#86868b", textWrap: "pretty" }}
-              >
-                {s.desc}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Topic pills */}
-        <div
-          className="mt-16 sm:mt-20 pt-12 sm:pt-14"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={insideInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, ease: EASE, delay: 0.5 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium text-center mb-8"
-            style={{ color: "#86868b" }}
-          >
-            Things we&rsquo;ll talk about
-          </motion.p>
-          <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3">
-            {TOPICS.map((topic, i) => (
-              <PillItem
-                key={topic.label}
-                emoji={topic.emoji}
-                label={topic.label}
-                index={i}
-                inView={insideInView}
-              />
-            ))}
+              {[...ROW_1, ...ROW_1].map((s, i) => (
+                <SectionCard key={`r1-${i}`} {...s} />
+              ))}
+            </div>
           </div>
-        </div>
+
+          {/* Row 2 — scrolls right (reverse) */}
+          <div className="overflow-hidden">
+            <div
+              className="flex animate-marquee hover:[animation-play-state:paused]"
+              style={{
+                width: "max-content",
+                animationDuration: "60s",
+                animationDirection: "reverse",
+                willChange: "transform",
+              }}
+            >
+              {[...ROW_2, ...ROW_2].map((s, i) => (
+                <SectionCard key={`r2-${i}`} {...s} />
+              ))}
+            </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* ── Subscriber counter ───────────────────────────────────────────── */}
