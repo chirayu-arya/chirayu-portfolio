@@ -108,9 +108,10 @@ Bio text: full personal story with italic phrases ("You can carve your own path.
 - 30 photography cards, 18 illustration cards (placeholder)
 - True double-sided card flip on toggle: each card has front (photo) and back (illustration), rotates 0deg to 180deg with diagonal stagger (`delay = (row + col) * 0.055s`)
 - Cards: 4:3 aspect ratio, NO rounded corners (sharp-cornered, editorial), noise texture, hover lift + glow + gradient + text overlay, custom "View" cursor pill
-- Lightbox modal on card click
+- Lightbox modal on card click — modal hugs each image's natural aspect ratio (CSS `width: fit-content` on motion.div, image bounded by `calc(100vw - 64px)` × `calc(100vh - 64px - 160px)`), no fixed `max-w-2xl` cap
 - Crimson blobs (2 corner-anchored, replacing 5-blob colorful palette)
 - Contact footer at bottom
+- **Populating the gallery**: when the user says "populate the gallery", follow the rules in the auto-memory file `feedback_gallery_population.md` exactly. Do not re-ask the rules.
 
 ### `/gaming` (app/gaming/page.tsx) — BUILT 2026-04-25, REDESIGNED in design-revamp
 Full PlayStation gaming dashboard connected to live PSN API.

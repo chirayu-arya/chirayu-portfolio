@@ -26,6 +26,8 @@ const VIRTUAL_DESC = "Clicked on Playstation 5.";
 const ILLUS_TOOL = "Made on Procreate, on iPad Pro, with Apple Pencil Pro.";
 
 const PHOTOGRAPHY: Photo[] = [
+  { id: 50, tab: "photography", w: 2157, h: 3834, title: "Crystal Sentinel",         category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9518.JPG` },
+  { id: 51, tab: "photography", w: 1952, h: 2602, title: "Lunar Pilgrim",            category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9510.jpg` },
   { id: 1,  tab: "photography", w: 3840, h: 2160, title: "Together at 33",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Gustave%20%26%20Sophie%20-%20Chirayu%20Arya.jpg` },
   { id: 2,  tab: "photography", w: 3840, h: 2160, title: "Lumière Glance",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_7685.jpg` },
   { id: 3,  tab: "photography", w: 3814, h: 2145, title: "Stillness Beneath the Falls", category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8199.JPG` },
@@ -39,9 +41,9 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 11, tab: "photography", w: 1683, h: 2992, title: "Into the Light",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8392%202.JPG` },
   { id: 12, tab: "photography", w: 1844, h: 3278, title: "Ginkgo Storm",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8858.JPG` },
   { id: 13, tab: "photography", w: 1682, h: 2243, title: "Plumed Sentinel",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8564.JPG` },
-  { id: 14, tab: "photography", w: 1866, h: 3317, title: "Moonrise Over the Sea",    category: "Real Photography",             description: "Shot on iPhone 16 Pro.", src: `${RP}/IMG_6865.jpg` },
   { id: 15, tab: "photography", w: 1882, h: 2510, title: "Cloaked in Gold",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8582.JPG` },
   { id: 16, tab: "photography", w: 3610, h: 2031, title: "Defiant Stand",            category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8607.JPG` },
+  { id: 52, tab: "photography", w: 2017, h: 2689, title: "Sundered Sky",             category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9519.JPG` },
   { id: 17, tab: "photography", w: 2160, h: 3840, title: "Through the Ferns",        category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8867.JPG` },
   { id: 18, tab: "photography", w: 1971, h: 2628, title: "The Approach",             category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8643.jpg` },
   { id: 19, tab: "photography", w: 3840, h: 2160, title: "Venom Rising",             category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7735.JPG` },
@@ -57,6 +59,7 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 29, tab: "photography", w: 1954, h: 2606, title: "The Cradle",               category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9171.jpg` },
   { id: 30, tab: "photography", w: 1991, h: 2655, title: "Three of Us",              category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9172.jpg` },
   { id: 31, tab: "photography", w: 3840, h: 2160, title: "Sun Through the Canopy",   category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8205.JPG` },
+  { id: 53, tab: "photography", w: 2087, h: 2783, title: "The Great Wheel",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9522.jpg` },
   { id: 32, tab: "photography", w: 3840, h: 2160, title: "The Officer",              category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9332.JPG` },
   { id: 33, tab: "photography", w: 1601, h: 2135, title: "Camp at Dusk",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8871.JPG` },
   { id: 34, tab: "photography", w: 1860, h: 2480, title: "Burning Forward",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9338.jpg` },
@@ -99,6 +102,8 @@ function GalleryCard({
   onCursorEnter,
   onMouseMove,
   onCursorLeave,
+  aspect,
+  noMargin,
 }: {
   photo: Photo;
   delay: number;
@@ -107,13 +112,16 @@ function GalleryCard({
   onCursorEnter: () => void;
   onMouseMove: (e: React.MouseEvent) => void;
   onCursorLeave: () => void;
+  aspect?: string;     // override card aspect ratio (e.g. "3 / 4" for featured row)
+  noMargin?: boolean;  // skip masonry marginBottom when used in a grid
 }) {
   const [hovered, setHovered] = useState(false);
+  const cardAspect = aspect ?? `${photo.w} / ${photo.h}`;
 
   return (
     <motion.div
       className={`break-inside-avoid ${isTouchDevice ? "" : "cursor-none"}`}
-      style={{ marginBottom: "12px" }}
+      style={{ marginBottom: noMargin ? 0 : "12px" }}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
@@ -131,7 +139,7 @@ function GalleryCard({
     >
       <div
         style={{
-          aspectRatio: `${photo.w} / ${photo.h}`,
+          aspectRatio: cardAspect,
           position: "relative",
           overflow: "hidden",
           background: "#0a0a0a",
