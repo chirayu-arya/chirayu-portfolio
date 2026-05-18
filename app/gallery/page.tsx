@@ -234,6 +234,7 @@ export default function GalleryPage() {
   const lensCanvasRef = useRef<HTMLCanvasElement>(null);
   const [lensPos, setLensPos] = useState<{ x: number; y: number } | null>(null);
   const LENS_SIZE = 300;
+  const LENS_ZOOM = 2.5;
 
   const activePhotos = activeTab === "photography" ? PHOTOGRAPHY : ILLUSTRATIONS;
 
@@ -359,21 +360,24 @@ export default function GalleryPage() {
     if (!lensCtx) return;
     const dpr = window.devicePixelRatio || 1;
     const internalSize = LENS_SIZE * dpr;
-    if (lensCanvas.width !== internalSize) {
+    if (lensCanvas.width !== internalSize || lensCanvas.height !== internalSize) {
       lensCanvas.width = internalSize;
       lensCanvas.height = internalSize;
     }
     // No transform — draw at full internal pixel size for true 1:1 device-pixel mapping
     lensCtx.clearRect(0, 0, internalSize, internalSize);
 
-    // True 1:1 source-to-device-pixel zoom. The main canvas is sized to natural image
-    // dimensions, so its internal pixels are natural pixels. Pull `internalSize` natural
-    // pixels centered on the cursor and paint them into `internalSize` device pixels in
-    // the lens canvas — exact 1:1, zero scaling, no interpolation.
+    // Sharpness and zoom decoupled:
+    //   • Lens canvas internal size = LENS_SIZE × dpr   (sharpness — Retina-aware)
+    //   • Source crop in CSS pixels = LENS_SIZE / LENS_ZOOM   (zoom — consistent across displays)
+    // The main canvas is sized to the image's natural dimensions, so its internal pixels
+    // ARE natural pixels. Convert the CSS-pixel source crop to natural pixels via naturalScale,
+    // then paint that crop into the full device-pixel lens internal size.
     const naturalScale = mainCanvas.width / mainCanvas.offsetWidth;
-    const sx = Math.round(cursorX * naturalScale - internalSize / 2);
-    const sy = Math.round(cursorY * naturalScale - internalSize / 2);
-    lensCtx.drawImage(mainCanvas, sx, sy, internalSize, internalSize, 0, 0, internalSize, internalSize);
+    const sourceSizeNatural = (LENS_SIZE / LENS_ZOOM) * naturalScale;
+    const sx = Math.round(cursorX * naturalScale - sourceSizeNatural / 2);
+    const sy = Math.round(cursorY * naturalScale - sourceSizeNatural / 2);
+    lensCtx.drawImage(mainCanvas, sx, sy, sourceSizeNatural, sourceSizeNatural, 0, 0, internalSize, internalSize);
   }, [isTouchDevice]);
 
   const startHideTimer = useCallback(() => {
