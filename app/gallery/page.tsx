@@ -516,6 +516,20 @@ export default function GalleryPage() {
 
       <PageBlobs palette="magenta-orange" />
 
+      {/* Maroon blob — deep accent anchored at the very top of the gallery */}
+      <div
+        className="bg-blob absolute rounded-full pointer-events-none"
+        style={{
+          width: "90vmax",
+          height: "70vmax",
+          top: "-25vmax",
+          left: "50%",
+          transform: "translateX(-50%)",
+          background: "radial-gradient(ellipse, rgba(120,25,80,0.6) 0%, transparent 70%)",
+          zIndex: 0,
+        }}
+      />
+
       <div className="relative">
         <Nav />
 
