@@ -18,6 +18,7 @@ const PALETTES: Record<string, ColorTriple> = {
   "magenta-orange": ["217,70,239", "249,115,22", "192,38,211"],
   "ps-blue": ["0,48,135", "0,86,179", "15,23,42"],
   amber: ["212,168,67", "180,140,50", "146,64,14"],
+  "tomato-saffron": ["220,60,40", "240,170,40", "180,40,30"],
 };
 
 export type Palette = keyof typeof PALETTES;

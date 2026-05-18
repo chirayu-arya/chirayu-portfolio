@@ -11,6 +11,7 @@ const professionalItems = [
 
 const interestItems = [
   { label: "Gaming", href: "/gaming" },
+  { label: "Cooking", href: "/cooking" },
   { label: "Books", href: "/bookshelf" },
 ];
 
