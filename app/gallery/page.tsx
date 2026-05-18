@@ -26,57 +26,62 @@ const VIRTUAL_DESC = "Clicked on Playstation 5.";
 const ILLUS_TOOL = "Made on Procreate, on iPad Pro, with Apple Pencil Pro.";
 
 const PHOTOGRAPHY: Photo[] = [
-  { id: 50, tab: "photography", w: 2157, h: 3834, title: "Crystal Sentinel",         category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9518.JPG` },
-  { id: 51, tab: "photography", w: 1952, h: 2602, title: "Lunar Pilgrim",            category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9510.jpg` },
-  { id: 1,  tab: "photography", w: 3840, h: 2160, title: "Together at 33",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Gustave%20%26%20Sophie%20-%20Chirayu%20Arya.jpg` },
-  { id: 2,  tab: "photography", w: 3840, h: 2160, title: "Lumière Glance",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_7685.jpg` },
+  { id: 50, tab: "photography", w: 2157, h: 3834, title: "Crystal Sentinel",         category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9518.JPG` },
+  { id: 13, tab: "photography", w: 1682, h: 2243, title: "Plumed Sentinel",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8564.JPG` },
+  { id: 58, tab: "photography", w: 3840, h: 2160, title: "Runebearer",               category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9556%202.JPG` },
+  { id: 1,  tab: "photography", w: 3840, h: 2160, title: "Together at 33",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Gustave%20%26%20Sophie%20-%20Chirayu%20Arya.jpg` },
+  { id: 2,  tab: "photography", w: 3840, h: 2160, title: "Lumière Glance",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_7685.jpg` },
   { id: 3,  tab: "photography", w: 3814, h: 2145, title: "Stillness Beneath the Falls", category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8199.JPG` },
-  { id: 4,  tab: "photography", w: 3840, h: 2160, title: "Through the Veil",         category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_7858.jpg` },
+  { id: 4,  tab: "photography", w: 3840, h: 2160, title: "Through the Veil",         category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_7858.jpg` },
   { id: 5,  tab: "photography", w: 3840, h: 2160, title: "The Wildflower Ride",      category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8852.JPG` },
-  { id: 6,  tab: "photography", w: 2157, h: 2876, title: "The First Spark",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8255.jpg` },
+  { id: 6,  tab: "photography", w: 2157, h: 2876, title: "The First Spark",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8255.jpg` },
   { id: 7,  tab: "photography", w: 3840, h: 2160, title: "Symbiote Showdown",        category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7733.JPG` },
-  { id: 8,  tab: "photography", w: 2071, h: 2761, title: "The Quiet Heir",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8367%202.jpg` },
-  { id: 9,  tab: "photography", w: 2157, h: 3834, title: "After the Battle",         category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8381%203.JPG` },
+  { id: 8,  tab: "photography", w: 2071, h: 2761, title: "The Quiet Heir",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8367%202.jpg` },
+  { id: 9,  tab: "photography", w: 2157, h: 3834, title: "After the Battle",         category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8381%203.JPG` },
   { id: 10, tab: "photography", w: 2305, h: 1297, title: "Plains Lily",              category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8200.JPG` },
-  { id: 11, tab: "photography", w: 1683, h: 2992, title: "Into the Light",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8392%202.JPG` },
+  { id: 11, tab: "photography", w: 1683, h: 2992, title: "Into the Light",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8392%202.JPG` },
   { id: 12, tab: "photography", w: 1844, h: 3278, title: "Ginkgo Storm",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8858.JPG` },
-  { id: 13, tab: "photography", w: 1682, h: 2243, title: "Plumed Sentinel",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8564.JPG` },
-  { id: 15, tab: "photography", w: 1882, h: 2510, title: "Cloaked in Gold",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8582.JPG` },
-  { id: 16, tab: "photography", w: 3610, h: 2031, title: "Defiant Stand",            category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8607.JPG` },
-  { id: 52, tab: "photography", w: 2017, h: 2689, title: "Sundered Sky",             category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9519.JPG` },
+  { id: 54, tab: "photography", w: 1814, h: 3225, title: "Blood Memory",             category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9531.JPG` },
+  { id: 51, tab: "photography", w: 1952, h: 2602, title: "Lunar Pilgrim",            category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9510.jpg` },
+  { id: 55, tab: "photography", w: 3840, h: 2160, title: "Echoes of 33",             category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9542.JPG` },
+  { id: 15, tab: "photography", w: 1882, h: 2510, title: "Cloaked in Gold",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8582.JPG` },
+  { id: 16, tab: "photography", w: 3610, h: 2031, title: "Defiant Stand",            category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8607.JPG` },
   { id: 17, tab: "photography", w: 2160, h: 3840, title: "Through the Ferns",        category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8867.JPG` },
-  { id: 18, tab: "photography", w: 1971, h: 2628, title: "The Approach",             category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8643.jpg` },
+  { id: 18, tab: "photography", w: 1971, h: 2628, title: "The Approach",             category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8643.jpg` },
   { id: 19, tab: "photography", w: 3840, h: 2160, title: "Venom Rising",             category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7735.JPG` },
-  { id: 20, tab: "photography", w: 2157, h: 2876, title: "Petals at Midnight",       category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8652.jpg` },
+  { id: 20, tab: "photography", w: 2157, h: 2876, title: "Petals at Midnight",       category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8652.jpg` },
   { id: 21, tab: "photography", w: 3840, h: 2160, title: "Roots of Pandora",         category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8204.JPG` },
-  { id: 22, tab: "photography", w: 3840, h: 2160, title: "The Last Bloom",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8682.jpg` },
-  { id: 23, tab: "photography", w: 2109, h: 2812, title: "Beneath the 33",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8690.JPG` },
+  { id: 22, tab: "photography", w: 3840, h: 2160, title: "The Last Bloom",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8682.jpg` },
+  { id: 23, tab: "photography", w: 2109, h: 2812, title: "Beneath the 33",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8690.JPG` },
   { id: 24, tab: "photography", w: 2160, h: 3840, title: "Bluebell Stand",           category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8869.JPG` },
-  { id: 25, tab: "photography", w: 1811, h: 2415, title: "Faceless Watcher",         category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8699.JPG` },
+  { id: 25, tab: "photography", w: 1811, h: 2415, title: "Faceless Watcher",         category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8699.JPG` },
+  { id: 52, tab: "photography", w: 2017, h: 2689, title: "Sundered Sky",             category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9519.JPG` },
+  { id: 56, tab: "photography", w: 1890, h: 2835, title: "Renoir",     category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9543.jpg` },
   { id: 26, tab: "photography", w: 3840, h: 2160, title: "Skyline Patrol",           category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7739.JPG` },
-  { id: 27, tab: "photography", w: 1978, h: 3517, title: "Strings by Firelight",     category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8812.JPG` },
+  { id: 27, tab: "photography", w: 1978, h: 3517, title: "Strings by Firelight",     category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8812.JPG` },
   { id: 28, tab: "photography", w: 1506, h: 2008, title: "Lantern Watch",            category: "Ghost of Tsushima",            description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Tsushima/IMG_8519.JPG` },
-  { id: 29, tab: "photography", w: 1954, h: 2606, title: "The Cradle",               category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9171.jpg` },
-  { id: 30, tab: "photography", w: 1991, h: 2655, title: "Three of Us",              category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9172.jpg` },
+  { id: 29, tab: "photography", w: 1954, h: 2606, title: "The Cradle",               category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9171.jpg` },
+  { id: 30, tab: "photography", w: 1991, h: 2655, title: "Three of Us",              category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9172.jpg` },
   { id: 31, tab: "photography", w: 3840, h: 2160, title: "Sun Through the Canopy",   category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8205.JPG` },
-  { id: 53, tab: "photography", w: 2087, h: 2783, title: "The Great Wheel",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9522.jpg` },
-  { id: 32, tab: "photography", w: 3840, h: 2160, title: "The Officer",              category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9332.JPG` },
+  { id: 32, tab: "photography", w: 3840, h: 2160, title: "The Officer",              category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9332.JPG` },
   { id: 33, tab: "photography", w: 1601, h: 2135, title: "Camp at Dusk",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8871.JPG` },
-  { id: 34, tab: "photography", w: 1860, h: 2480, title: "Burning Forward",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9338.jpg` },
+  { id: 34, tab: "photography", w: 1860, h: 2480, title: "Burning Forward",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9338.jpg` },
   { id: 35, tab: "photography", w: 3840, h: 2160, title: "Aerial Confrontation",     category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7743.JPG` },
-  { id: 36, tab: "photography", w: 3840, h: 2160, title: "Patchwork Idol",           category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9343.JPG` },
-  { id: 37, tab: "photography", w: 2160, h: 2700, title: "Cliffside Conversation",   category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9360.jpg` },
+  { id: 36, tab: "photography", w: 3840, h: 2160, title: "Patchwork Idol",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9343.JPG` },
+  { id: 53, tab: "photography", w: 2087, h: 2783, title: "The Great Wheel",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9522.jpg` },
+  { id: 57, tab: "photography", w: 3840, h: 2160, title: "The Lampmaster",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9548.JPG` },
+  { id: 37, tab: "photography", w: 2160, h: 2700, title: "Cliffside Conversation",   category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9360.jpg` },
   { id: 38, tab: "photography", w: 3840, h: 2160, title: "A Quiet Moment",           category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8210.JPG` },
-  { id: 39, tab: "photography", w: 1971, h: 3504, title: "Ember Stare",              category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9436.JPG` },
+  { id: 39, tab: "photography", w: 1971, h: 3504, title: "Ember Stare",              category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9436.JPG` },
   { id: 40, tab: "photography", w: 1601, h: 2135, title: "Resting Companions",       category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8901.JPG` },
-  { id: 41, tab: "photography", w: 2160, h: 2880, title: "First Meeting",            category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9452.jpg` },
+  { id: 41, tab: "photography", w: 2160, h: 2880, title: "First Meeting",            category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9452.jpg` },
   { id: 42, tab: "photography", w: 3840, h: 2160, title: "Wings of Dread",           category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7745.JPG` },
-  { id: 43, tab: "photography", w: 3840, h: 2160, title: "Behind the Mask",          category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9457.JPG` },
-  { id: 44, tab: "photography", w: 2157, h: 2876, title: "Pilgrim Mound",            category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9492.jpg` },
+  { id: 43, tab: "photography", w: 3840, h: 2160, title: "Behind the Mask",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9457.JPG` },
+  { id: 44, tab: "photography", w: 2157, h: 2876, title: "Pilgrim Mound",            category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9492.jpg` },
   { id: 45, tab: "photography", w: 1914, h: 3402, title: "Maple Strike",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8948.JPG` },
-  { id: 46, tab: "photography", w: 2157, h: 2876, title: "The Last Embrace",         category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9497.jpg` },
+  { id: 46, tab: "photography", w: 2157, h: 2876, title: "The Last Embrace",         category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9497.jpg` },
   { id: 47, tab: "photography", w: 3840, h: 2160, title: "The Final Grip",           category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7746.JPG` },
-  { id: 48, tab: "photography", w: 1344, h: 756,  title: "Festival Day",             category: "Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Post%203.png` },
+  { id: 48, tab: "photography", w: 1344, h: 756,  title: "Festival Day",             category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Post%203.png` },
   { id: 49, tab: "photography", w: 3840, h: 2160, title: "Crimson Path",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8978.JPG` },
 ];
 
@@ -226,6 +231,9 @@ export default function GalleryPage() {
   const loadedImgRef = useRef<HTMLImageElement | null>(null);
   const blackoutTimerRef = useRef<number | null>(null);
   const blackoutOverlayRef = useRef<HTMLDivElement>(null);
+  const lensCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [lensPos, setLensPos] = useState<{ x: number; y: number } | null>(null);
+  const LENS_SIZE = 300;
 
   const activePhotos = activeTab === "photography" ? PHOTOGRAPHY : ILLUSTRATIONS;
 
@@ -334,7 +342,39 @@ export default function GalleryPage() {
 
   const handleCanvasMouseLeave = useCallback(() => {
     drawCanvas(false);
+    setLensPos(null);
   }, [drawCanvas]);
+
+  const handleCanvasMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (isTouchDevice) return;
+    const mainCanvas = e.currentTarget;
+    const rect = mainCanvas.getBoundingClientRect();
+    const cursorX = e.clientX - rect.left;
+    const cursorY = e.clientY - rect.top;
+    setLensPos({ x: cursorX, y: cursorY });
+
+    const lensCanvas = lensCanvasRef.current;
+    if (!lensCanvas) return;
+    const lensCtx = lensCanvas.getContext("2d");
+    if (!lensCtx) return;
+    const dpr = window.devicePixelRatio || 1;
+    const internalSize = LENS_SIZE * dpr;
+    if (lensCanvas.width !== internalSize) {
+      lensCanvas.width = internalSize;
+      lensCanvas.height = internalSize;
+    }
+    // No transform — draw at full internal pixel size for true 1:1 device-pixel mapping
+    lensCtx.clearRect(0, 0, internalSize, internalSize);
+
+    // True 1:1 source-to-device-pixel zoom. The main canvas is sized to natural image
+    // dimensions, so its internal pixels are natural pixels. Pull `internalSize` natural
+    // pixels centered on the cursor and paint them into `internalSize` device pixels in
+    // the lens canvas — exact 1:1, zero scaling, no interpolation.
+    const naturalScale = mainCanvas.width / mainCanvas.offsetWidth;
+    const sx = Math.round(cursorX * naturalScale - internalSize / 2);
+    const sy = Math.round(cursorY * naturalScale - internalSize / 2);
+    lensCtx.drawImage(mainCanvas, sx, sy, internalSize, internalSize, 0, 0, internalSize, internalSize);
+  }, [isTouchDevice]);
 
   const startHideTimer = useCallback(() => {
     if (blackoutTimerRef.current !== null) {
@@ -631,7 +671,7 @@ export default function GalleryPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, transition: { duration: 0.15 } }}
               transition={{ duration: 0.1 }}
-              className="columns-1 sm:columns-2 lg:columns-3"
+              className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4"
               style={{
                 columnGap: "12px",
                 pointerEvents: isTransitioning ? "none" : undefined,
@@ -703,6 +743,7 @@ export default function GalleryPage() {
                   <canvas
                     ref={lightboxCanvasRef}
                     onContextMenu={handleCanvasContextMenu}
+                    onMouseMove={handleCanvasMouseMove}
                     onMouseLeave={handleCanvasMouseLeave}
                     aria-label={selected.title}
                     role="img"
@@ -712,6 +753,24 @@ export default function GalleryPage() {
                       maxHeight: "calc(100vh - 64px - 160px)",
                       width: "auto",
                       height: "auto",
+                      cursor: lensPos && !isTouchDevice ? "none" : "default",
+                    }}
+                  />
+                  {/* Magnifier lens — follows cursor over the lightbox image */}
+                  <canvas
+                    ref={lensCanvasRef}
+                    aria-hidden
+                    style={{
+                      position: "absolute",
+                      left: (lensPos?.x ?? 0) - LENS_SIZE / 2,
+                      top: (lensPos?.y ?? 0) - LENS_SIZE / 2,
+                      width: LENS_SIZE,
+                      height: LENS_SIZE,
+                      borderRadius: "50%",
+                      border: "2px solid rgba(255,255,255,0.7)",
+                      pointerEvents: "none",
+                      opacity: lensPos && !isTouchDevice ? 1 : 0,
+                      transition: "opacity 0.12s ease",
                     }}
                   />
                 </div>
