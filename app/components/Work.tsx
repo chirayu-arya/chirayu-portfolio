@@ -220,16 +220,6 @@ export default function Work() {
               Projects that speak
               <br />for themselves.
             </motion.h2>
-            <motion.a
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              href="#"
-              className="text-sm cursor-pointer whitespace-nowrap hidden sm:block"
-              style={{ color: "#86868b", paddingBottom: "0.4rem" }}
-            >
-              All work →
-            </motion.a>
           </div>
         </div>
 
