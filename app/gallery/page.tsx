@@ -238,6 +238,16 @@ export default function GalleryPage() {
 
   const activePhotos = activeTab === "photography" ? PHOTOGRAPHY : ILLUSTRATIONS;
 
+  // Mobile-only ordering: the 9 most recent photography shots float to the top.
+  // Desktop (sm+) keeps the source order so the column-top layout we tuned for masonry holds.
+  const FEATURED_IDS = new Set<number>([50, 51, 52, 53, 54, 55, 56, 57, 58]);
+  const mobilePhotos = activeTab === "photography"
+    ? [
+        ...PHOTOGRAPHY.filter(p => FEATURED_IDS.has(p.id)),
+        ...PHOTOGRAPHY.filter(p => !FEATURED_IDS.has(p.id)),
+      ]
+    : ILLUSTRATIONS;
+
   function switchTab(tab: Tab) {
     if (tab === activeTab || isTransitioning) return;
     setIsTransitioning(true);
@@ -669,13 +679,41 @@ export default function GalleryPage() {
         {/* Masonry grid */}
         <section className="px-8 sm:px-14 lg:px-20 pb-16">
           <AnimatePresence mode="wait">
+            {/* Mobile (<sm): 1 column, recent 9 shots first */}
             <motion.div
-              key={activeTab}
+              key={`mobile-${activeTab}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, transition: { duration: 0.15 } }}
               transition={{ duration: 0.1 }}
-              className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4"
+              className="columns-1 sm:hidden"
+              style={{
+                columnGap: "12px",
+                pointerEvents: isTransitioning ? "none" : undefined,
+              }}
+            >
+              {mobilePhotos.map((photo, i) => (
+                <GalleryCard
+                  key={`mobile-${activeTab}-${photo.id}`}
+                  photo={photo}
+                  delay={Math.min(i * 0.025, 0.7)}
+                  isTouchDevice={isTouchDevice}
+                  onSelect={setSelected}
+                  onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
+                  onMouseMove={handleMouseMove}
+                  onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
+                />
+              ))}
+            </motion.div>
+
+            {/* Tablet+ (sm and up): multi-column, original source order tuned for column-top layout */}
+            <motion.div
+              key={`desktop-${activeTab}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.15 } }}
+              transition={{ duration: 0.1 }}
+              className="hidden sm:block sm:columns-2 lg:columns-3 xl:columns-4"
               style={{
                 columnGap: "12px",
                 pointerEvents: isTransitioning ? "none" : undefined,
@@ -683,7 +721,7 @@ export default function GalleryPage() {
             >
               {activePhotos.map((photo, i) => (
                 <GalleryCard
-                  key={`${activeTab}-${photo.id}`}
+                  key={`desktop-${activeTab}-${photo.id}`}
                   photo={photo}
                   delay={Math.min(i * 0.025, 0.7)}
                   isTouchDevice={isTouchDevice}
