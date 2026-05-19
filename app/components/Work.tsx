@@ -246,8 +246,8 @@ export default function Work() {
               transform: "scale(1.03)",
             }}
           >
-            {projects.map((project, i) => (
-              <ProjectRow key={project.index} project={project} index={i} inView={inView} isLast={i === projects.length - 1} />
+            {projects.slice(0, 2).map((project, i, arr) => (
+              <ProjectRow key={project.index} project={project} index={i} inView={inView} isLast={i === arr.length - 1} />
             ))}
           </div>
 
