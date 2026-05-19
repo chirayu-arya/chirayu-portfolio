@@ -181,10 +181,54 @@ export default function Work() {
         </div>
 
         {/* Editorial rows */}
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
-          {projects.map((project, i) => (
-            <ProjectRow key={project.index} project={project} index={i} inView={inView} isLast={i === projects.length - 1} />
-          ))}
+        <div className="relative" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+          <div
+            aria-hidden
+            style={{
+              filter: "blur(8px)",
+              WebkitFilter: "blur(8px)",
+              opacity: 0.55,
+              pointerEvents: "none",
+              userSelect: "none",
+            }}
+          >
+            {projects.map((project, i) => (
+              <ProjectRow key={project.index} project={project} index={i} inView={inView} isLast={i === projects.length - 1} />
+            ))}
+          </div>
+
+          {/* Work in Progress overlay */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          >
+            <div
+              className="flex flex-col items-center text-center"
+              style={{
+                background: "rgba(10,10,12,0.55)",
+                border: "1px solid rgba(255,255,255,0.09)",
+                borderRadius: 16,
+                padding: "1.25rem 2rem",
+                backdropFilter: "blur(6px)",
+                WebkitBackdropFilter: "blur(6px)",
+              }}
+            >
+              <span
+                className="text-xs tracking-[0.22em] uppercase font-medium mb-2"
+                style={{ color: "#dc143c" }}
+              >
+                Work in Progress
+              </span>
+              <span
+                className="font-black tracking-tight leading-none"
+                style={{ fontSize: "clamp(1.4rem, 2.4vw, 2rem)", color: "#f5f5f7" }}
+              >
+                New projects landing soon.
+              </span>
+            </div>
+          </motion.div>
         </div>
 
         {/* Stats */}
