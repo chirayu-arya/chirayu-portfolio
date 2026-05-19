@@ -62,6 +62,59 @@ const projects = [
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
+const WIP_ITEMS = [
+  "Work In Progress", "New Projects Loading",
+  "Work In Progress", "New Projects Loading",
+  "Work In Progress", "New Projects Loading",
+  "Work In Progress", "New Projects Loading",
+];
+const WIP_LOOP = [...WIP_ITEMS, ...WIP_ITEMS, ...WIP_ITEMS, ...WIP_ITEMS];
+
+function WipTape({ rotate = -8, reverse = false }: { rotate?: number; reverse?: boolean }) {
+  return (
+    <div
+      className="absolute left-1/2 top-1/2 w-[140%]"
+      style={{
+        transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
+        background: "#FFE234",
+        padding: "11px 0",
+        overflow: "hidden",
+        filter: "drop-shadow(0 6px 18px rgba(0,0,0,0.6))",
+      }}
+    >
+      <div
+        className="animate-marquee flex"
+        style={{
+          width: "max-content",
+          animationDuration: "40s",
+          animationDirection: reverse ? "reverse" : "normal",
+        }}
+      >
+        {WIP_LOOP.map((item, i) => (
+          <span
+            key={i}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "1.6rem",
+              paddingRight: "1.6rem",
+              color: "#0a0a0a",
+              fontWeight: 700,
+              fontSize: "0.78rem",
+              letterSpacing: "0.07em",
+              textTransform: "uppercase",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {item}
+            <span style={{ opacity: 0.3, fontSize: "0.48rem" }}>◆</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ProjectRow({ project, index, inView, isLast }: { project: (typeof projects)[0]; index: number; inView: boolean; isLast?: boolean }) {
   return (
     <motion.div
@@ -205,64 +258,8 @@ export default function Work() {
             transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
             className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden"
           >
-            {/* Band 1 — top-left to bottom-right */}
-            <div
-              className="absolute left-1/2 top-1/2 w-[140%] overflow-hidden"
-              style={{
-                transform: "translate(-50%, -50%) rotate(-12deg)",
-                background: "#f5c518",
-                borderTop: "2px solid #0a0a0c",
-                borderBottom: "2px solid #0a0a0c",
-                padding: "0.9rem 0",
-              }}
-            >
-              <div className="flex whitespace-nowrap animate-marquee">
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className="font-black uppercase mx-8"
-                    style={{
-                      fontSize: "clamp(1.1rem, 2.2vw, 1.8rem)",
-                      color: "#0a0a0c",
-                      letterSpacing: "0.08em",
-                    }}
-                  >
-                    ⚠ Work In Progress
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Band 2 — bottom-left to top-right (crosses Band 1) */}
-            <div
-              className="absolute left-1/2 top-1/2 w-[140%] overflow-hidden"
-              style={{
-                transform: "translate(-50%, -50%) rotate(12deg)",
-                background: "#0a0a0c",
-                borderTop: "2px solid #f5c518",
-                borderBottom: "2px solid #f5c518",
-                padding: "0.9rem 0",
-              }}
-            >
-              <div
-                className="flex whitespace-nowrap animate-marquee"
-                style={{ animationDirection: "reverse" }}
-              >
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className="font-black uppercase mx-8"
-                    style={{
-                      fontSize: "clamp(1.1rem, 2.2vw, 1.8rem)",
-                      color: "#f5c518",
-                      letterSpacing: "0.08em",
-                    }}
-                  >
-                    ⚠ Work In Progress
-                  </span>
-                ))}
-              </div>
-            </div>
+            <WipTape rotate={-8} />
+            <WipTape rotate={8} reverse />
           </motion.div>
         </div>
 
