@@ -185,11 +185,12 @@ export default function Work() {
           <div
             aria-hidden
             style={{
-              filter: "blur(8px)",
-              WebkitFilter: "blur(8px)",
-              opacity: 0.55,
+              filter: "blur(28px) saturate(0.6)",
+              WebkitFilter: "blur(28px) saturate(0.6)",
+              opacity: 0.32,
               pointerEvents: "none",
               userSelect: "none",
+              transform: "scale(1.03)",
             }}
           >
             {projects.map((project, i) => (
@@ -197,35 +198,35 @@ export default function Work() {
             ))}
           </div>
 
-          {/* Work in Progress overlay */}
+          {/* Work in Progress hazard stripe */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            className="absolute inset-0 flex items-center justify-center pointer-events-none px-4"
           >
             <div
-              className="flex flex-col items-center text-center"
+              className="w-full flex items-center justify-center overflow-hidden"
               style={{
-                background: "rgba(10,10,12,0.55)",
-                border: "1px solid rgba(255,255,255,0.09)",
-                borderRadius: 16,
-                padding: "1.25rem 2rem",
-                backdropFilter: "blur(6px)",
-                WebkitBackdropFilter: "blur(6px)",
+                background:
+                  "repeating-linear-gradient(135deg, #f5c518 0 32px, #0a0a0c 32px 64px)",
+                border: "2px solid #0a0a0c",
+                padding: "1.1rem 1.5rem",
+                maxWidth: "920px",
               }}
             >
               <span
-                className="text-xs tracking-[0.22em] uppercase font-medium mb-2"
-                style={{ color: "#dc143c" }}
+                className="font-black tracking-tight uppercase text-center"
+                style={{
+                  fontSize: "clamp(1.1rem, 2.4vw, 2rem)",
+                  color: "#0a0a0c",
+                  background: "#f5c518",
+                  padding: "0.4rem 1.4rem",
+                  letterSpacing: "0.04em",
+                  border: "2px solid #0a0a0c",
+                }}
               >
-                Work in Progress
-              </span>
-              <span
-                className="font-black tracking-tight leading-none"
-                style={{ fontSize: "clamp(1.4rem, 2.4vw, 2rem)", color: "#f5f5f7" }}
-              >
-                New projects landing soon.
+                ⚠ Work in Progress ⚠
               </span>
             </div>
           </motion.div>
