@@ -198,36 +198,70 @@ export default function Work() {
             ))}
           </div>
 
-          {/* Work in Progress hazard stripe */}
+          {/* Work in Progress criss-cross marquees */}
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none px-4"
+            className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden"
           >
+            {/* Band 1 — top-left to bottom-right */}
             <div
-              className="w-full flex items-center justify-center overflow-hidden"
+              className="absolute left-1/2 top-1/2 w-[140%] overflow-hidden"
               style={{
-                background:
-                  "repeating-linear-gradient(135deg, #f5c518 0 32px, #0a0a0c 32px 64px)",
-                border: "2px solid #0a0a0c",
-                padding: "1.1rem 1.5rem",
-                maxWidth: "920px",
+                transform: "translate(-50%, -50%) rotate(-12deg)",
+                background: "#f5c518",
+                borderTop: "2px solid #0a0a0c",
+                borderBottom: "2px solid #0a0a0c",
+                padding: "0.9rem 0",
               }}
             >
-              <span
-                className="font-black tracking-tight uppercase text-center"
-                style={{
-                  fontSize: "clamp(1.1rem, 2.4vw, 2rem)",
-                  color: "#0a0a0c",
-                  background: "#f5c518",
-                  padding: "0.4rem 1.4rem",
-                  letterSpacing: "0.04em",
-                  border: "2px solid #0a0a0c",
-                }}
+              <div className="flex whitespace-nowrap animate-marquee">
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <span
+                    key={i}
+                    className="font-black uppercase mx-8"
+                    style={{
+                      fontSize: "clamp(1.1rem, 2.2vw, 1.8rem)",
+                      color: "#0a0a0c",
+                      letterSpacing: "0.08em",
+                    }}
+                  >
+                    ⚠ Work In Progress
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Band 2 — bottom-left to top-right (crosses Band 1) */}
+            <div
+              className="absolute left-1/2 top-1/2 w-[140%] overflow-hidden"
+              style={{
+                transform: "translate(-50%, -50%) rotate(12deg)",
+                background: "#0a0a0c",
+                borderTop: "2px solid #f5c518",
+                borderBottom: "2px solid #f5c518",
+                padding: "0.9rem 0",
+              }}
+            >
+              <div
+                className="flex whitespace-nowrap animate-marquee"
+                style={{ animationDirection: "reverse" }}
               >
-                ⚠ Work in Progress ⚠
-              </span>
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <span
+                    key={i}
+                    className="font-black uppercase mx-8"
+                    style={{
+                      fontSize: "clamp(1.1rem, 2.2vw, 1.8rem)",
+                      color: "#f5c518",
+                      letterSpacing: "0.08em",
+                    }}
+                  >
+                    ⚠ Work In Progress
+                  </span>
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
