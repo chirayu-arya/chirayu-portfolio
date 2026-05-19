@@ -256,7 +256,12 @@ export default function Work() {
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden"
+            className="absolute top-0 bottom-0 flex items-center justify-center pointer-events-none overflow-hidden"
+            style={{
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "100vw",
+            }}
           >
             <WipTape rotate={-8} />
             <WipTape rotate={8} reverse />
