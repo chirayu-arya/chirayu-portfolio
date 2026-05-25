@@ -1,9 +1,10 @@
 "use client";
 
 import Nav from "../components/Nav";
+import Contact from "../components/Contact";
 import PageBlobs from "../components/PageBlobs";
 import { motion, useInView, useAnimation, useMotionValue } from "framer-motion";
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useEffect, useState } from "react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -59,13 +60,6 @@ type PSNData = {
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 const EASE = [0.16, 1, 0.3, 1] as const;
-
-function parseDurationHours(iso: string | undefined): number {
-  if (!iso) return 0;
-  const match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-  if (!match) return 0;
-  return parseInt(match[1] ?? "0") + parseInt(match[2] ?? "0") / 60;
-}
 
 function parseDuration(iso: string | undefined): string {
   if (!iso) return "";
@@ -317,7 +311,6 @@ function TrophyDashboard({ summary }: { summary: TrophySummary }) {
   return (
     <motion.div ref={ref} className="relative rounded-2xl overflow-hidden"
       style={{ background: "#0a0a0a", border: "1px solid rgba(212,168,67,0.15)" }}
-      whileHover={{ y: -4, borderColor: "rgba(212,168,67,0.3)" }}
       transition={{ duration: 0.3, ease: EASE }}>
       {/* Amber gradient overlay — mirrors the blue in Currently Playing */}
       <div className="absolute inset-0 pointer-events-none"
@@ -447,11 +440,9 @@ function CurrentlyPlaying({ game }: { game: LibraryGame }) {
   const img = gameImage(game);
 
   return (
-    <motion.div
+    <div
       className="relative rounded-3xl overflow-hidden"
       style={{ border: "1px solid rgba(220,20,60,0.35)" }}
-      whileHover={{ y: -8, scale: 1.015, borderColor: "rgba(220,20,60,0.7)" }}
-      transition={{ duration: 0.35, ease: EASE }}
     >
       {img && (
         <div className="absolute inset-0">
@@ -515,7 +506,7 @@ function CurrentlyPlaying({ game }: { game: LibraryGame }) {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -559,81 +550,6 @@ function RecentCard({ game, index }: { game: LibraryGame; index: number }) {
   );
 }
 
-// ── Library Card ──────────────────────────────────────────────────────────────
-
-function LibraryCard({ game, index }: { game: LibraryGame; index: number }) {
-  const img = gameImage(game);
-  const pct = game.trophy?.progress ?? null;
-  const hasPlatinum = (game.trophy?.earnedTrophies.platinum ?? 0) > 0;
-  const duration = parseDuration(game.playDuration);
-
-  const row = Math.floor(index / 3);
-  const col = index % 3;
-
-  return (
-    <div className="library-card-wrap">
-    <motion.div
-      className="group relative rounded-2xl overflow-hidden"
-      style={{
-        background: "#0a0a0a",
-        border: hasPlatinum ? "1px solid rgba(184,197,214,0.25)" : "1px solid rgba(255,255,255,0.06)",
-      }}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-8%" }}
-      transition={{ duration: 0.5, ease: EASE, delay: (row + col) * 0.03 }}
-    >
-      {/* Fixed pixel height kills the fractional-pixel gap that aspect-ratio causes */}
-      <div className="relative w-full overflow-hidden" style={{ height: 160 }}>
-        {img
-          ? <img src={img} alt={game.name} className="w-full h-full object-cover object-top" style={{ display: "block", transition: "transform 0.7s ease", }} />
-          : <div className="w-full h-full flex items-center justify-center" style={{ background: "#111" }}><span className="text-4xl opacity-20">🎮</span></div>
-        }
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, #0a0a0a 0%, transparent 50%)" }} />
-        {hasPlatinum && (
-          <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-semibold"
-            style={{ background: "rgba(184,197,214,0.18)", color: "#B8C5D6", backdropFilter: "blur(8px)", border: "1px solid rgba(184,197,214,0.25)" }}>
-            PLATINUM
-          </div>
-        )}
-        <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-xs font-medium"
-          style={{ background: "rgba(0,0,0,0.65)", color: "#f5f5f7", backdropFilter: "blur(8px)" }}>
-          {platformLabel(game.category)}
-        </div>
-      </div>
-
-      <div className="p-4 pt-3 flex flex-col gap-3">
-        <p className="text-sm font-semibold leading-snug" style={{ color: "#f5f5f7" }}>{game.name}</p>
-
-        {duration && (
-          <p className="text-xs" style={{ color: "#515154" }}>{duration} played · {game.playCount} sessions</p>
-        )}
-
-        {pct !== null ? (
-          <div className="flex flex-col gap-1.5">
-            <div className="flex justify-between items-center">
-              <span className="text-xs" style={{ color: "#86868b" }}>
-                {game.trophy!.earnedTrophies.bronze + game.trophy!.earnedTrophies.silver + game.trophy!.earnedTrophies.gold + game.trophy!.earnedTrophies.platinum}
-                /{game.trophy!.definedTrophies.bronze + game.trophy!.definedTrophies.silver + game.trophy!.definedTrophies.gold + game.trophy!.definedTrophies.platinum} trophies
-              </span>
-              <span className="text-xs font-semibold" style={{ color: pct === 100 ? "#B8C5D6" : "#dc143c" }}>{pct}%</span>
-            </div>
-            <ProgressBar value={pct} color={pct === 100 ? "#B8C5D6" : "#dc143c"} />
-            <div className="flex gap-3">
-              {(["platinum", "gold", "silver", "bronze"] as const).map((t) => (
-                <TrophyPip key={t} type={t} count={game.trophy!.earnedTrophies[t]} />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <p className="text-xs" style={{ color: "#515154" }}>No trophy data</p>
-        )}
-      </div>
-    </motion.div>
-    </div>
-  );
-}
-
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 
 function Skeleton() {
@@ -645,26 +561,15 @@ function Skeleton() {
           <div key={i} className="flex-shrink-0 w-44 h-56 rounded-xl" style={{ background: "#111" }} />
         ))}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Array.from({ length: 9 }).map((_, i) => (
-          <div key={i} className="rounded-2xl h-64" style={{ background: "#111" }} />
-        ))}
-      </div>
     </div>
   );
 }
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
-type FilterStatus = "all" | "completed" | "in-progress" | "not-started";
-
 export default function GamingPage() {
   const [data, setData] = useState<PSNData | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  // Library controls
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<FilterStatus>("all");
 
   useEffect(() => {
     fetch("/api/psn")
@@ -679,32 +584,7 @@ export default function GamingPage() {
   const currentlyPlayingGames = data?.recentlyPlayed?.slice(0, 2) ?? [];
   const recentlyPlayed = data?.recentlyPlayed?.slice(2) ?? [];
 
-  const filteredLibrary = useMemo(() => {
-    if (!data) return [];
-    let games = [...data.library];
-
-    // Search
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      games = games.filter((g) => g.name.toLowerCase().includes(q));
-    }
-
-    // Status — based on play time, not trophy progress
-    if (status === "completed") games = games.filter((g) => g.trophy?.progress === 100);
-    if (status === "in-progress") games = games.filter((g) => parseDurationHours(g.playDuration) > 0 && (g.trophy?.progress ?? 0) < 100);
-    if (status === "not-started") games = games.filter((g) => parseDurationHours(g.playDuration) === 0);
-
-    return games;
-  }, [data, search, status]);
-
   const summary = data?.trophySummary;
-
-  const STATUS_OPTIONS: { key: FilterStatus; label: string }[] = [
-    { key: "all", label: "All" },
-    { key: "completed", label: "Completed" },
-    { key: "in-progress", label: "In Progress" },
-    { key: "not-started", label: "Not Started" },
-  ];
 
   return (
     <main className="relative min-h-screen overflow-x-hidden" style={{ background: "#000" }}>
@@ -718,7 +598,7 @@ export default function GamingPage() {
         </div>
       </div>
 
-      <div className="relative z-10 px-8 sm:px-14 lg:px-20 pt-24 pb-0">
+      <div className="relative z-10 px-8 sm:px-14 lg:px-20 pt-24 pb-32">
 
         {/* Header */}
         <div className="mb-16">
@@ -765,7 +645,6 @@ export default function GamingPage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, ease: EASE, delay: 0.05 }}
-              whileHover={{ y: -3, background: "rgba(220,20,60,0.16)", borderColor: "rgba(220,20,60,0.4)" }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -876,82 +755,11 @@ export default function GamingPage() {
               </div>
             )}
 
-            {/* Library */}
-            <div>
-              <p className="text-xs tracking-[0.22em] uppercase font-medium mb-6" style={{ color: "#86868b" }}>
-                Library
-              </p>
-              <div className="flex items-end justify-between gap-8 mb-10">
-                <motion.h2
-                  initial={{ opacity: 0, x: -40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-8%" }}
-                  transition={{ duration: 1.0, ease: EASE }}
-                  className="font-black tracking-tight leading-[0.92]"
-                  style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)", color: "#f5f5f7" }}
-                >
-                  Everything I own.
-                </motion.h2>
-                <motion.p
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-8%" }}
-                  transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
-                  className="text-sm hidden sm:block"
-                  style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "16rem", textAlign: "right" }}
-                >
-                  {filteredLibrary.length !== data.library.length
-                    ? `${filteredLibrary.length} of ${data.totalLibraryCount?.toLocaleString() ?? data.library.length} games`
-                    : `${data.totalLibraryCount?.toLocaleString() ?? data.library.length} games in the library.`}
-                </motion.p>
-              </div>
-
-              {/* Search */}
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Search games..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full sm:w-72 px-4 py-2.5 rounded-full text-sm outline-none"
-                  style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    color: "#f5f5f7",
-                  }}
-                />
-              </div>
-
-              {/* Status filter */}
-              <div className="flex gap-1.5 flex-wrap mb-6">
-                {STATUS_OPTIONS.map(({ key, label }) => (
-                  <button key={key} onClick={() => setStatus(key)}
-                    className="px-4 py-1.5 rounded-full text-xs font-medium"
-                    style={{
-                      background: status === key ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.05)",
-                      color: status === key ? "#f5f5f7" : "#86868b",
-                      border: status === key ? "1px solid rgba(255,255,255,0.2)" : "1px solid rgba(255,255,255,0.08)",
-                      cursor: "pointer",
-                    }}>
-                    {label}
-                  </button>
-                ))}
-              </div>
-
-              {filteredLibrary.length === 0 ? (
-                <p className="text-sm py-12 text-center" style={{ color: "#515154" }}>No games found.</p>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {filteredLibrary.map((game, i) => (
-                    <LibraryCard key={game.titleId} game={game} index={i} />
-                  ))}
-                </div>
-              )}
-            </div>
-
           </div>
         )}
       </div>
+
+      <Contact />
 
     </main>
   );
