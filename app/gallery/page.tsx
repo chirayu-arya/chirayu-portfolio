@@ -83,6 +83,19 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 47, tab: "photography", w: 3840, h: 2160, title: "The Final Grip",           category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7746.JPG` },
   { id: 48, tab: "photography", w: 1344, h: 756,  title: "Festival Day",             category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Post%203.png` },
   { id: 49, tab: "photography", w: 3840, h: 2160, title: "Crimson Path",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8978.JPG` },
+  // — New batch: 3 Expedition 33 + 9 Hellblade —
+  { id: 59, tab: "photography", w: 2157, h: 3834, title: "Hour of the Sun",          category: "Clair Obscur: Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9585.JPG` },
+  { id: 60, tab: "photography", w: 2157, h: 3834, title: "Verso's Gaze",             category: "Clair Obscur: Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9587.JPG` },
+  { id: 61, tab: "photography", w: 2157, h: 3834, title: "Touching 33",              category: "Clair Obscur: Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9588.JPG` },
+  { id: 67, tab: "photography", w: 1967, h: 2623, title: "Warrior's Stare",          category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9620.JPG` },
+  { id: 64, tab: "photography", w: 2160, h: 2880, title: "Bridge of Trials",         category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9613.jpg` },
+  { id: 69, tab: "photography", w: 2064, h: 3669, title: "Surt's Wrath",             category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9624.JPG` },
+  { id: 63, tab: "photography", w: 2917, h: 1945, title: "Edge of Madness",          category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9612.JPG` },
+  { id: 65, tab: "photography", w: 2160, h: 3840, title: "Crown of Memory",          category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9617.JPG` },
+  { id: 66, tab: "photography", w: 3840, h: 2160, title: "Eye in the Dark",          category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9619.JPG` },
+  { id: 62, tab: "photography", w: 1495, h: 2492, title: "The Vessel",               category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9608.jpg` },
+  { id: 68, tab: "photography", w: 2160, h: 3840, title: "Hearthfire",               category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9623.JPG` },
+  { id: 70, tab: "photography", w: 1344, h: 2390, title: "Quiet Resolve",            category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9625.JPG` },
 ];
 
 const ILLUSTRATIONS: Photo[] = [
@@ -99,6 +112,141 @@ const ILLUSTRATIONS: Photo[] = [
 
 const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
+// Game metadata for photography grouping — ordered as they should appear in the gallery.
+// `category` must match the exact string used in PHOTOGRAPHY entries.
+// `coverId` optionally overrides the tier-1 cover photo (defaults to the first photo in source order).
+// `coverObjectPosition` shifts the visible region inside the 4:3 cover frame (CSS `object-position`).
+const GAMES: { category: string; studio: string; coverId?: number; coverObjectPosition?: string }[] = [
+  { category: "Clair Obscur: Expedition 33", studio: "Sandfall Interactive / Kepler Interactive", coverId: 53 }, // The Great Wheel
+  { category: "Ghost of Yōtei", studio: "Sucker Punch Productions / Sony Interactive Entertainment", coverId: 49 }, // Crimson Path
+  { category: "Marvel's Spider-Man 2", studio: "Insomniac Games / Sony Interactive Entertainment" },
+  { category: "Avatar: Frontiers of Pandora", studio: "Massive Entertainment / Ubisoft" },
+  { category: "Ghost of Tsushima", studio: "Sucker Punch Productions / Sony Interactive Entertainment" },
+  { category: "Hellblade: Senua's Sacrifice", studio: "Ninja Theory / Xbox Game Studios", coverId: 70 }, // Quiet Resolve
+  { category: "Real Photography", studio: "iPhone 16 Pro" },
+];
+
+// Photos grouped by game, in GAMES order, preserving source order within each group.
+// `cover` is the resolved photo to use on the tier-1 game card (override or first photo).
+const PHOTOGRAPHY_GROUPS = GAMES
+  .map(g => {
+    const photos = PHOTOGRAPHY.filter(p => p.category === g.category);
+    const cover = (g.coverId != null && photos.find(p => p.id === g.coverId)) || photos[0];
+    return { ...g, photos, cover };
+  })
+  .filter(g => g.photos.length > 0);
+
+// Convert a photography description into a short pill label:
+//   "Clicked on Playstation 5." → "PlayStation 5"
+//   "Shot on iPhone 16 Pro."    → "iPhone 16 Pro"
+function toPillLabel(description: string): string {
+  return description
+    .replace(/^Clicked on Playstation 5\.?$/i, "PlayStation 5")
+    .replace(/^Clicked on /i, "")
+    .replace(/^Shot on /i, "")
+    .replace(/\.$/, "");
+}
+
+function GameCard({
+  group,
+  cover,
+  delay,
+  isTouchDevice,
+  onOpen,
+  onCursorEnter,
+  onMouseMove,
+  onCursorLeave,
+}: {
+  group: { category: string; studio: string; photos: Photo[]; coverObjectPosition?: string };
+  cover: Photo;
+  delay: number;
+  isTouchDevice: boolean;
+  onOpen: () => void;
+  onCursorEnter: () => void;
+  onMouseMove: (e: React.MouseEvent) => void;
+  onCursorLeave: () => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <motion.button
+      type="button"
+      onClick={onOpen}
+      onMouseEnter={() => { setHovered(true); onCursorEnter(); }}
+      onMouseMove={onMouseMove}
+      onMouseLeave={() => { setHovered(false); onCursorLeave(); }}
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+      whileHover={{ y: -6, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }}
+      className={`text-left ${isTouchDevice ? "" : "cursor-none"}`}
+      style={{ background: "transparent", padding: 0, border: "none" }}
+    >
+      {/* Cover — image only by default; editorial overlay appears on hover */}
+      <div
+        style={{
+          aspectRatio: "4 / 3",
+          position: "relative",
+          overflow: "hidden",
+          background: "#0a0a0a",
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={cover.src}
+          alt={group.category}
+          loading="lazy"
+          className="absolute inset-0 w-full h-full object-cover"
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
+          style={{
+            WebkitUserSelect: "none",
+            userSelect: "none",
+            WebkitTouchCallout: "none",
+            objectPosition: group.coverObjectPosition ?? "50% 50%",
+            transform: hovered ? "scale(1.05)" : "scale(1)",
+            transition: "transform 0.7s ease",
+            // @ts-expect-error vendor-prefixed property not in CSS types
+            WebkitUserDrag: "none",
+          }}
+        />
+
+        {/* Black tint inside an inset rectangle — outer image edge stays untinted */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            inset: "16px",
+            background: "rgba(0,0,0,0.75)",
+            opacity: hovered ? 1 : 0,
+            transition: "opacity 0.35s ease",
+          }}
+        />
+
+        {/* Editorial overlay — vertically + horizontally centered, hover only */}
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none"
+          style={{
+            opacity: hovered ? 1 : 0,
+            transform: hovered ? "translateY(0)" : "translateY(8px)",
+            transition: "opacity 0.35s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        >
+          <p
+            className="font-black tracking-tight leading-[0.95] uppercase"
+            style={{ fontSize: "clamp(1.5rem, 2.6vw, 2.4rem)", color: "#f5f5f7" }}
+          >
+            {group.category}
+          </p>
+          <p className="text-sm mt-3" style={{ color: "rgba(245,245,247,0.7)" }}>
+            {group.studio}
+          </p>
+        </div>
+      </div>
+    </motion.button>
+  );
+}
+
 function GalleryCard({
   photo,
   delay,
@@ -109,6 +257,7 @@ function GalleryCard({
   onCursorLeave,
   aspect,
   noMargin,
+  skipEntry,
 }: {
   photo: Photo;
   delay: number;
@@ -119,6 +268,7 @@ function GalleryCard({
   onCursorLeave: () => void;
   aspect?: string;     // override card aspect ratio (e.g. "3 / 4" for featured row)
   noMargin?: boolean;  // skip masonry marginBottom when used in a grid
+  skipEntry?: boolean; // skip entry fade/slide animation (used inside game detail page)
 }) {
   const [hovered, setHovered] = useState(false);
   const cardAspect = aspect ?? `${photo.w} / ${photo.h}`;
@@ -126,10 +276,10 @@ function GalleryCard({
   return (
     <motion.div
       className={`break-inside-avoid ${isTouchDevice ? "" : "cursor-none"}`}
-      style={{ marginBottom: noMargin ? 0 : "12px" }}
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
+      style={{ marginBottom: noMargin ? 0 : "6px" }}
+      initial={skipEntry ? false : { opacity: 0, y: 16 }}
+      animate={skipEntry ? undefined : { opacity: 1, y: 0 }}
+      transition={skipEntry ? undefined : {
         delay,
         duration: 0.55,
         ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
@@ -148,7 +298,6 @@ function GalleryCard({
           position: "relative",
           overflow: "hidden",
           background: "#0a0a0a",
-          border: "1px solid rgba(255,255,255,0.05)",
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -236,17 +385,8 @@ export default function GalleryPage() {
   const LENS_SIZE = 300;
   const LENS_ZOOM = 2.5;
 
-  const activePhotos = activeTab === "photography" ? PHOTOGRAPHY : ILLUSTRATIONS;
-
-  // Mobile-only ordering: the 9 most recent photography shots float to the top.
-  // Desktop (sm+) keeps the source order so the column-top layout we tuned for masonry holds.
-  const FEATURED_IDS = new Set<number>([50, 51, 52, 53, 54, 55, 56, 57, 58]);
-  const mobilePhotos = activeTab === "photography"
-    ? [
-        ...PHOTOGRAPHY.filter(p => FEATURED_IDS.has(p.id)),
-        ...PHOTOGRAPHY.filter(p => !FEATURED_IDS.has(p.id)),
-      ]
-    : ILLUSTRATIONS;
+  // Two-tier photography: null = game-cards grid; string = that game's photos
+  const [activeGame, setActiveGame] = useState<string | null>(null);
 
   function switchTab(tab: Tab) {
     if (tab === activeTab || isTransitioning) return;
@@ -608,7 +748,17 @@ export default function GalleryPage() {
           </div>
         )}
 
-        {/* Page header */}
+        {/* Page header + tab toggle — animates out smoothly when entering a game (tier 2) */}
+        <AnimatePresence initial={false}>
+        {activeGame === null && (
+          <motion.div
+            key="gallery-header"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+            style={{ overflow: "hidden" }}
+          >
         <section className="pt-24 pb-8 px-8 sm:px-14 lg:px-20">
           <motion.p
             initial={{ opacity: 0 }}
@@ -675,63 +825,121 @@ export default function GalleryPage() {
             ))}
           </div>
         </motion.div>
+          </motion.div>
+        )}
+        </AnimatePresence>
 
-        {/* Masonry grid */}
+        {/* Two-tier photography: game cards → game detail. Illustrations stays as a single masonry. */}
         <section className="px-8 sm:px-14 lg:px-20 pb-16">
           <AnimatePresence mode="wait">
-            {/* Mobile (<sm): 1 column, recent 9 shots first */}
-            <motion.div
-              key={`mobile-${activeTab}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, transition: { duration: 0.15 } }}
-              transition={{ duration: 0.1 }}
-              className="columns-1 sm:hidden"
-              style={{
-                columnGap: "12px",
-                pointerEvents: isTransitioning ? "none" : undefined,
-              }}
-            >
-              {mobilePhotos.map((photo, i) => (
-                <GalleryCard
-                  key={`mobile-${activeTab}-${photo.id}`}
-                  photo={photo}
-                  delay={Math.min(i * 0.025, 0.7)}
-                  isTouchDevice={isTouchDevice}
-                  onSelect={setSelected}
-                  onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
-                  onMouseMove={handleMouseMove}
-                  onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
-                />
-              ))}
-            </motion.div>
-
-            {/* Tablet+ (sm and up): multi-column, original source order tuned for column-top layout */}
-            <motion.div
-              key={`desktop-${activeTab}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, transition: { duration: 0.15 } }}
-              transition={{ duration: 0.1 }}
-              className="hidden sm:block sm:columns-2 lg:columns-3 xl:columns-4"
-              style={{
-                columnGap: "12px",
-                pointerEvents: isTransitioning ? "none" : undefined,
-              }}
-            >
-              {activePhotos.map((photo, i) => (
-                <GalleryCard
-                  key={`desktop-${activeTab}-${photo.id}`}
-                  photo={photo}
-                  delay={Math.min(i * 0.025, 0.7)}
-                  isTouchDevice={isTouchDevice}
-                  onSelect={setSelected}
-                  onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
-                  onMouseMove={handleMouseMove}
-                  onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
-                />
-              ))}
-            </motion.div>
+            {activeTab === "illustrations" ? (
+              <motion.div
+                key="illustrations-grid"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4"
+                style={{ columnGap: "6px", pointerEvents: isTransitioning ? "none" : undefined }}
+              >
+                {ILLUSTRATIONS.map((photo, i) => (
+                  <GalleryCard
+                    key={`illus-${photo.id}`}
+                    photo={photo}
+                    delay={Math.min(i * 0.025, 0.7)}
+                    isTouchDevice={isTouchDevice}
+                    onSelect={setSelected}
+                    onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
+                    onMouseMove={handleMouseMove}
+                    onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
+                  />
+                ))}
+              </motion.div>
+            ) : activeGame === null ? (
+              // Tier 1 — game cards grid
+              <motion.div
+                key="game-cards"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-2"
+              >
+                {PHOTOGRAPHY_GROUPS.map((group, gi) => {
+                  return (
+                    <GameCard
+                      key={group.category}
+                      group={group}
+                      cover={group.cover}
+                      delay={gi * 0.06}
+                      isTouchDevice={isTouchDevice}
+                      onOpen={() => setActiveGame(group.category)}
+                      onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
+                      onMouseMove={handleMouseMove}
+                      onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
+                    />
+                  );
+                })}
+              </motion.div>
+            ) : (() => {
+              // Tier 2 — single game detail
+              const group = PHOTOGRAPHY_GROUPS.find(g => g.category === activeGame);
+              if (!group) return null;
+              return (
+                <motion.div
+                  key={`game-${activeGame}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                  className="pt-36"
+                  style={{ pointerEvents: isTransitioning ? "none" : undefined }}
+                >
+                  {/* Heading row: back arrow at left, centered game title; byline centered below */}
+                  <div className="mb-20">
+                    <div className="relative">
+                      <button
+                        onClick={() => setActiveGame(null)}
+                        aria-label="Back to all projects"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 cursor-pointer leading-none transition-colors"
+                        style={{ color: "#86868b", fontSize: "clamp(1.75rem, 2.4vw, 2.5rem)" }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = "#f5f5f7")}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = "#86868b")}
+                      >
+                        ←
+                      </button>
+                      <h2
+                        className="text-center font-black tracking-tight leading-[0.92] px-16 lg:whitespace-nowrap"
+                        style={{ fontSize: "clamp(2rem, 4vw, 4rem)", color: "#f5f5f7" }}
+                      >
+                        {group.category}
+                      </h2>
+                    </div>
+                    <p className="text-center text-lg sm:text-xl mt-6" style={{ color: "#a1a1a6" }}>
+                      {group.studio} · {group.photos.length} {group.photos.length === 1 ? "shot" : "shots"}
+                    </p>
+                  </div>
+                  <div
+                    className="columns-1 sm:columns-2 lg:columns-3"
+                    style={{ columnGap: "6px" }}
+                  >
+                    {group.photos.map((photo, i) => (
+                      <GalleryCard
+                        key={`tier2-${photo.id}`}
+                        photo={photo}
+                        delay={Math.min(i * 0.025, 0.7)}
+                        isTouchDevice={isTouchDevice}
+                        onSelect={setSelected}
+                        onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
+                        onMouseMove={handleMouseMove}
+                        onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
+                        skipEntry
+                      />
+                    ))}
+                  </div>
+                </motion.div>
+              );
+            })()}
           </AnimatePresence>
         </section>
 
@@ -822,7 +1030,20 @@ export default function GalleryPage() {
                     {selected.title}
                   </h2>
                   <p className="text-sm mb-4" style={{ color: "#86868b" }}>{selected.category}</p>
-                  <p className="text-sm leading-relaxed" style={{ color: "#a1a1a6" }}>{selected.description}</p>
+                  {selected.tab === "photography" ? (
+                    <span
+                      className="inline-block text-xs font-medium tracking-wide rounded-full px-3 py-1.5"
+                      style={{
+                        background: "rgba(255,255,255,0.06)",
+                        border: "1px solid rgba(255,255,255,0.12)",
+                        color: "rgba(245,245,247,0.85)",
+                      }}
+                    >
+                      {toPillLabel(selected.description)}
+                    </span>
+                  ) : (
+                    <p className="text-sm leading-relaxed" style={{ color: "#a1a1a6" }}>{selected.description}</p>
+                  )}
                 </div>
               </motion.div>
             </motion.div>
