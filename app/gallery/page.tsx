@@ -2,9 +2,8 @@
 
 import Nav from "../components/Nav";
 import Contact from "../components/Contact";
-import PageBlobs from "../components/PageBlobs";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo, useLayoutEffect } from "react";
 
 type Tab = "photography" | "illustrations";
 
@@ -87,12 +86,10 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 59, tab: "photography", w: 2157, h: 3834, title: "Hour of the Sun",          category: "Clair Obscur: Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9585.JPG` },
   { id: 60, tab: "photography", w: 2157, h: 3834, title: "Verso's Gaze",             category: "Clair Obscur: Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9587.JPG` },
   { id: 61, tab: "photography", w: 2157, h: 3834, title: "Touching 33",              category: "Clair Obscur: Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9588.JPG` },
-  { id: 67, tab: "photography", w: 1967, h: 2623, title: "Warrior's Stare",          category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9620.JPG` },
   { id: 64, tab: "photography", w: 2160, h: 2880, title: "Bridge of Trials",         category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9613.jpg` },
   { id: 69, tab: "photography", w: 2064, h: 3669, title: "Surt's Wrath",             category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9624.JPG` },
   { id: 63, tab: "photography", w: 2917, h: 1945, title: "Edge of Madness",          category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9612.JPG` },
   { id: 65, tab: "photography", w: 2160, h: 3840, title: "Crown of Memory",          category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9617.JPG` },
-  { id: 66, tab: "photography", w: 3840, h: 2160, title: "Eye in the Dark",          category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9619.JPG` },
   { id: 62, tab: "photography", w: 1495, h: 2492, title: "The Vessel",               category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9608.jpg` },
   { id: 68, tab: "photography", w: 2160, h: 3840, title: "Hearthfire",               category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9623.JPG` },
   { id: 70, tab: "photography", w: 1344, h: 2390, title: "Quiet Resolve",            category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9625.JPG` },
@@ -116,13 +113,13 @@ const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http:
 // `category` must match the exact string used in PHOTOGRAPHY entries.
 // `coverId` optionally overrides the tier-1 cover photo (defaults to the first photo in source order).
 // `coverObjectPosition` shifts the visible region inside the 4:3 cover frame (CSS `object-position`).
-const GAMES: { category: string; studio: string; coverId?: number; coverObjectPosition?: string }[] = [
-  { category: "Clair Obscur: Expedition 33", studio: "Sandfall Interactive / Kepler Interactive", coverId: 53 }, // The Great Wheel
-  { category: "Ghost of Yōtei", studio: "Sucker Punch Productions / Sony Interactive Entertainment", coverId: 49 }, // Crimson Path
-  { category: "Marvel's Spider-Man 2", studio: "Insomniac Games / Sony Interactive Entertainment" },
+const GAMES: { category: string; studio: string; coverId?: number; coverObjectPosition?: string; pinTopIds?: number[] }[] = [
+  { category: "Clair Obscur: Expedition 33", studio: "Sandfall Interactive / Kepler Interactive", coverId: 53, pinTopIds: [57, 53] }, // The Great Wheel; pin Lampmaster + Great Wheel to top row
+  { category: "Ghost of Yōtei", studio: "Sucker Punch Productions / Sony Interactive Entertainment", coverId: 45, coverObjectPosition: "50% 62%" }, // Maple Strike
+  { category: "Hellblade: Senua's Sacrifice", studio: "Ninja Theory / Xbox Game Studios", coverId: 65, coverObjectPosition: "50% 55%" }, // Crown of Memory
   { category: "Avatar: Frontiers of Pandora", studio: "Massive Entertainment / Ubisoft" },
-  { category: "Ghost of Tsushima", studio: "Sucker Punch Productions / Sony Interactive Entertainment" },
-  { category: "Hellblade: Senua's Sacrifice", studio: "Ninja Theory / Xbox Game Studios", coverId: 70 }, // Quiet Resolve
+  { category: "Ghost of Tsushima", studio: "Sucker Punch Productions / Sony Interactive Entertainment", coverObjectPosition: "50% 80%" },
+  { category: "Marvel's Spider-Man 2", studio: "Insomniac Games / Sony Interactive Entertainment" },
   { category: "Real Photography", studio: "iPhone 16 Pro" },
 ];
 
@@ -136,15 +133,259 @@ const PHOTOGRAPHY_GROUPS = GAMES
   })
   .filter(g => g.photos.length > 0);
 
-// Convert a photography description into a short pill label:
-//   "Clicked on Playstation 5." → "PlayStation 5"
-//   "Shot on iPhone 16 Pro."    → "iPhone 16 Pro"
-function toPillLabel(description: string): string {
-  return description
-    .replace(/^Clicked on Playstation 5\.?$/i, "PlayStation 5")
-    .replace(/^Clicked on /i, "")
-    .replace(/^Shot on /i, "")
-    .replace(/\.$/, "");
+// Auto-generated description for photography rows whose `description` is still
+// the default VIRTUAL_DESC. Override per-row by replacing the description string
+// in the PHOTOGRAPHY array with custom copy.
+function descFor(p: Photo): string {
+  if (p.tab === "illustrations") return p.description;
+  if (p.description !== VIRTUAL_DESC) return p.description;
+  return `${p.title}, a moment captured in ${p.category}.`;
+}
+
+// Hardware tier for the "Shot on PlayStation®..." sentence in the lightbox.
+// Senua's Sacrifice was captured on a PS5 Pro; everything else on a base PS5.
+function platformFor(p: Photo): string {
+  if (/senua|hellblade/i.test(p.category)) return "5 Pro";
+  return "5";
+}
+
+// Returns the active masonry column count for the current viewport. Mirrors
+// the Tailwind responsive breakpoints used elsewhere on the page.
+function useColumnCount(): number {
+  const [count, setCount] = useState(3);
+  useEffect(() => {
+    const compute = () => {
+      const w = window.innerWidth;
+      if (w >= 1024) setCount(3);
+      else if (w >= 640) setCount(2);
+      else setCount(1);
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
+  return count;
+}
+
+// True Pinterest-style masonry that supports column spans. Wide photos
+// (w/h > 1.7) occupy 2 adjacent columns; portraits occupy 1. Each photo lands
+// at the position with the lowest current top among the column window it needs.
+type MasonryItem = { photo: Photo; top: number; left: number; width: number; height: number };
+type MasonryLayout = { items: MasonryItem[]; totalHeight: number };
+
+function MasonryGrid({
+  photos,
+  columnCount,
+  isTouchDevice,
+  onSelect,
+  onCursorEnter,
+  onMouseMove,
+  onCursorLeave,
+  startDelayOffset = 0,
+  pinTopIds,
+}: {
+  photos: Photo[];
+  columnCount: number;
+  isTouchDevice: boolean;
+  onSelect: (p: Photo) => void;
+  onCursorEnter: () => void;
+  onMouseMove: (e: React.MouseEvent) => void;
+  onCursorLeave: () => void;
+  startDelayOffset?: number;
+  pinTopIds?: number[];
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const GAP = 6;
+
+  // Measure synchronously after first commit so the initial render has a real
+  // width (height: 0 collapses the container, so we read width via getBCR rather
+  // than relying on ResizeObserver to fire on the collapsed element).
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const measure = () => {
+      const w = el.getBoundingClientRect().width;
+      if (w > 0) setContainerWidth(w);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
+  const layout = useMemo<MasonryLayout>(() => {
+    if (!containerWidth || columnCount < 1) return { items: [], totalHeight: 0 };
+    const colW = (containerWidth - GAP * (columnCount - 1)) / columnCount;
+    const heights = new Array<number>(columnCount).fill(0);
+    const items: MasonryItem[] = [];
+
+    // Track the span (1 or 2) of the most recent item placed in each column so
+    // we can discourage stacking two landscape (span-2) items directly on top
+    // of one another — a portrait between them reads as more varied rhythm.
+    const lastSpanByCol = new Array<number>(columnCount).fill(0);
+
+    // Helper: place a single photo at the best position. Score is lexicographic
+    // [stackPenalty, postMax, -postMin]: avoid landscape-on-landscape if any
+    // alternative exists, then minimize max column height, then maximize min.
+    const placePhoto = (p: Photo) => {
+      const wideEligible = p.w / p.h > 1.7 && columnCount >= 2;
+      const span = wideEligible ? 2 : 1;
+      const width = colW * span + GAP * (span - 1);
+      const height = width * (p.h / p.w);
+      let bestStart = 0;
+      let bestTop = 0;
+      let bestStack = Infinity;
+      let bestMax = Infinity;
+      let bestMin = -Infinity;
+      for (let i = 0; i <= columnCount - span; i++) {
+        let top = 0;
+        for (let j = i; j < i + span; j++) if (heights[j] > top) top = heights[j];
+        const newTop = top + height + GAP;
+        let postMax = 0;
+        let postMin = Infinity;
+        for (let k = 0; k < columnCount; k++) {
+          const v = k >= i && k < i + span ? newTop : heights[k];
+          if (v > postMax) postMax = v;
+          if (v < postMin) postMin = v;
+        }
+        // Anti-stack: penalize landscape directly on top of another landscape.
+        let stack = 0;
+        if (span === 2) {
+          for (let j = i; j < i + span; j++) {
+            if (lastSpanByCol[j] === 2) { stack = 1; break; }
+          }
+        }
+        const better =
+          stack < bestStack - 0.001 ||
+          (Math.abs(stack - bestStack) < 0.001 && postMax < bestMax - 0.001) ||
+          (Math.abs(stack - bestStack) < 0.001 && Math.abs(postMax - bestMax) < 0.001 && postMin > bestMin + 0.001);
+        if (better) {
+          bestStack = stack;
+          bestMax = postMax;
+          bestMin = postMin;
+          bestStart = i;
+          bestTop = top;
+        }
+      }
+      const left = bestStart * (colW + GAP);
+      items.push({ photo: p, top: bestTop, left, width, height });
+      for (let j = bestStart; j < bestStart + span; j++) {
+        heights[j] = bestTop + height + GAP;
+        lastSpanByCol[j] = span;
+      }
+    };
+
+    // Phase 1: place pinned photos in pinned order so they land in the top row.
+    const pinnedIds = pinTopIds ?? [];
+    const pinnedSet = new Set(pinnedIds);
+    for (const id of pinnedIds) {
+      const p = photos.find(ph => ph.id === id);
+      if (p) placePhoto(p);
+    }
+
+    // Phase 2: reorder remaining photos for tight packing — at each step pick
+    // the (photo, position) that minimizes the resulting max column height,
+    // tiebreak by maximizing the resulting min. Landscape photos (w/h > 1.7)
+    // span 2 columns so they read prominently; portraits stay in 1 column.
+    const remaining = photos.filter(p => !pinnedSet.has(p.id));
+    while (remaining.length) {
+      let bestQI = 0;
+      let bestStart = 0;
+      let bestTop = 0;
+      let bestSpan = 1;
+      let bestStack = Infinity;
+      let bestMax = Infinity;
+      let bestMin = -Infinity;
+      for (let qi = 0; qi < remaining.length; qi++) {
+        const p = remaining[qi];
+        const wideEligible = p.w / p.h > 1.7 && columnCount >= 2;
+        const span = wideEligible ? 2 : 1;
+        const width = colW * span + GAP * (span - 1);
+        const height = width * (p.h / p.w);
+        for (let i = 0; i <= columnCount - span; i++) {
+          let top = 0;
+          for (let j = i; j < i + span; j++) if (heights[j] > top) top = heights[j];
+          const newTop = top + height + GAP;
+          let postMax = 0;
+          let postMin = Infinity;
+          for (let k = 0; k < columnCount; k++) {
+            const v = k >= i && k < i + span ? newTop : heights[k];
+            if (v > postMax) postMax = v;
+            if (v < postMin) postMin = v;
+          }
+          let stack = 0;
+          if (span === 2) {
+            for (let j = i; j < i + span; j++) {
+              if (lastSpanByCol[j] === 2) { stack = 1; break; }
+            }
+          }
+          const better =
+            stack < bestStack - 0.001 ||
+            (Math.abs(stack - bestStack) < 0.001 && postMax < bestMax - 0.001) ||
+            (Math.abs(stack - bestStack) < 0.001 && Math.abs(postMax - bestMax) < 0.001 && postMin > bestMin + 0.001);
+          if (better) {
+            bestStack = stack;
+            bestMax = postMax;
+            bestMin = postMin;
+            bestQI = qi;
+            bestStart = i;
+            bestTop = top;
+            bestSpan = span;
+          }
+        }
+      }
+      const p = remaining[bestQI];
+      const width = colW * bestSpan + GAP * (bestSpan - 1);
+      const height = width * (p.h / p.w);
+      const left = bestStart * (colW + GAP);
+      items.push({ photo: p, top: bestTop, left, width, height });
+      for (let j = bestStart; j < bestStart + bestSpan; j++) {
+        heights[j] = bestTop + height + GAP;
+        lastSpanByCol[j] = bestSpan;
+      }
+      remaining.splice(bestQI, 1);
+    }
+
+    const totalHeight = Math.max(0, ...heights) - (heights.some(h => h > 0) ? GAP : 0);
+    return { items, totalHeight };
+  }, [containerWidth, columnCount, photos, pinTopIds]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{ position: "relative", width: "100%", height: layout.totalHeight }}
+    >
+      {layout.items.map((item, i) => (
+        <div
+          key={`m-${item.photo.id}`}
+          style={{
+            position: "absolute",
+            top: item.top,
+            left: item.left,
+            width: item.width,
+            height: item.height,
+          }}
+        >
+          <GalleryCard
+            photo={item.photo}
+            delay={Math.min((startDelayOffset + i) * 0.025, 0.7)}
+            isTouchDevice={isTouchDevice}
+            onSelect={onSelect}
+            onCursorEnter={onCursorEnter}
+            onMouseMove={onMouseMove}
+            onCursorLeave={onCursorLeave}
+            skipEntry
+            noMargin
+          />
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function GameCard({
@@ -178,7 +419,6 @@ function GameCard({
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-      whileHover={{ y: -6, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }}
       className={`text-left ${isTouchDevice ? "" : "cursor-none"}`}
       style={{ background: "transparent", padding: 0, border: "none" }}
     >
@@ -212,20 +452,20 @@ function GameCard({
           }}
         />
 
-        {/* Black tint inside an inset rectangle — outer image edge stays untinted */}
+        {/* Black tint — fades from opaque at the bottom to transparent at the top */}
         <div
           className="absolute pointer-events-none"
           style={{
-            inset: "16px",
-            background: "rgba(0,0,0,0.75)",
+            inset: 0,
+            background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 25%, rgba(0,0,0,0) 50%)",
             opacity: hovered ? 1 : 0,
             transition: "opacity 0.35s ease",
           }}
         />
 
-        {/* Editorial overlay — vertically + horizontally centered, hover only */}
+        {/* Editorial overlay — anchored to the bottom, hover only */}
         <div
-          className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none"
+          className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center px-6 pb-8 pointer-events-none"
           style={{
             opacity: hovered ? 1 : 0,
             transform: hovered ? "translateY(0)" : "translateY(8px)",
@@ -233,7 +473,7 @@ function GameCard({
           }}
         >
           <p
-            className="font-black tracking-tight leading-[0.95] uppercase"
+            className="font-black tracking-tight leading-[0.95]"
             style={{ fontSize: "clamp(1.5rem, 2.6vw, 2.4rem)", color: "#f5f5f7" }}
           >
             {group.category}
@@ -284,11 +524,10 @@ function GalleryCard({
         duration: 0.55,
         ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       }}
-      whileHover={{ y: -6, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }}
       onMouseEnter={() => { setHovered(true); onCursorEnter(); }}
       onMouseMove={onMouseMove}
       onMouseLeave={() => { setHovered(false); onCursorLeave(); }}
-      onClick={() => onSelect(photo)}
+      onClick={() => { if (!isTouchDevice) onSelect(photo); }}
       onContextMenu={(e) => e.preventDefault()}
       onDragStart={(e) => e.preventDefault()}
     >
@@ -387,6 +626,7 @@ export default function GalleryPage() {
 
   // Two-tier photography: null = game-cards grid; string = that game's photos
   const [activeGame, setActiveGame] = useState<string | null>(null);
+  const columnCount = useColumnCount();
 
   function switchTab(tab: Tab) {
     if (tab === activeTab || isTransitioning) return;
@@ -676,7 +916,7 @@ export default function GalleryPage() {
   return (
     <main
       className="gallery-protected gallery-no-print"
-      style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7", position: "relative", overflow: "hidden" }}
+      style={{ background: "#ededf0", minHeight: "100vh", color: "#1d1d1f", position: "relative", overflow: "hidden" }}
     >
       <style>{`
         .gallery-protected,
@@ -708,22 +948,6 @@ export default function GalleryPage() {
         </p>
       </div>
 
-      <PageBlobs palette="magenta-orange" />
-
-      {/* Maroon blob — deep accent anchored at the very top of the gallery */}
-      <div
-        className="bg-blob absolute rounded-full pointer-events-none"
-        style={{
-          width: "90vmax",
-          height: "70vmax",
-          top: "-25vmax",
-          left: "50%",
-          transform: "translateX(-50%)",
-          background: "radial-gradient(ellipse, rgba(120,25,80,0.6) 0%, transparent 70%)",
-          zIndex: 0,
-        }}
-      />
-
       <div className="relative">
         <Nav />
 
@@ -741,7 +965,7 @@ export default function GalleryPage() {
           >
             <div
               className="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap"
-              style={{ background: "#f5f5f7", color: "#000" }}
+              style={{ background: "#1d1d1f", color: "#fff" }}
             >
               View
             </div>
@@ -775,7 +999,7 @@ export default function GalleryPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.05 }}
               className="font-black tracking-tight leading-[0.92]"
-              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
+              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#2a2a2d" }}
             >
               Take a deep dive.
             </motion.h1>
@@ -801,8 +1025,8 @@ export default function GalleryPage() {
           <div
             className="flex items-center p-1 rounded-full"
             style={{
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.09)",
+              background: "rgba(0,0,0,0.05)",
+              border: "1px solid rgba(0,0,0,0.09)",
             }}
           >
             {(["photography", "illustrations"] as Tab[]).map((tab) => (
@@ -810,13 +1034,18 @@ export default function GalleryPage() {
                 key={tab}
                 onClick={() => switchTab(tab)}
                 className="relative px-6 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer"
-                style={{ color: activeTab === tab ? "#000" : "rgba(255,255,255,0.5)" }}
+                style={{ color: activeTab === tab ? "#f5f5f0" : "rgba(0,0,0,0.4)" }}
               >
                 {activeTab === tab && (
                   <motion.div
                     layoutId="tab-pill"
                     className="absolute inset-0 rounded-full"
-                    style={{ background: "#f5f5f7" }}
+                    style={{
+                      background:
+                        "linear-gradient(135deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.01) 100%), rgba(12,12,14,0.55)",
+                      backdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
+                      WebkitBackdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
+                    }}
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
                   />
                 )}
@@ -903,14 +1132,14 @@ export default function GalleryPage() {
                         aria-label="Back to all projects"
                         className="absolute left-0 top-1/2 -translate-y-1/2 cursor-pointer leading-none transition-colors"
                         style={{ color: "#86868b", fontSize: "clamp(1.75rem, 2.4vw, 2.5rem)" }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = "#f5f5f7")}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = "#1d1d1f")}
                         onMouseLeave={(e) => (e.currentTarget.style.color = "#86868b")}
                       >
                         ←
                       </button>
                       <h2
                         className="text-center font-black tracking-tight leading-[0.92] px-16 lg:whitespace-nowrap"
-                        style={{ fontSize: "clamp(2rem, 4vw, 4rem)", color: "#f5f5f7" }}
+                        style={{ fontSize: "clamp(2rem, 4vw, 4rem)", color: "#1d1d1f" }}
                       >
                         {group.category}
                       </h2>
@@ -919,24 +1148,16 @@ export default function GalleryPage() {
                       {group.studio} · {group.photos.length} {group.photos.length === 1 ? "shot" : "shots"}
                     </p>
                   </div>
-                  <div
-                    className="columns-1 sm:columns-2 lg:columns-3"
-                    style={{ columnGap: "6px" }}
-                  >
-                    {group.photos.map((photo, i) => (
-                      <GalleryCard
-                        key={`tier2-${photo.id}`}
-                        photo={photo}
-                        delay={Math.min(i * 0.025, 0.7)}
-                        isTouchDevice={isTouchDevice}
-                        onSelect={setSelected}
-                        onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
-                        onMouseMove={handleMouseMove}
-                        onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
-                        skipEntry
-                      />
-                    ))}
-                  </div>
+                  <MasonryGrid
+                    photos={group.photos}
+                    columnCount={columnCount}
+                    isTouchDevice={isTouchDevice}
+                    onSelect={setSelected}
+                    onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
+                    onMouseMove={handleMouseMove}
+                    onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
+                    pinTopIds={group.pinTopIds}
+                  />
                 </motion.div>
               );
             })()}
@@ -959,93 +1180,110 @@ export default function GalleryPage() {
               }}
               onClick={() => setSelected(null)}
             >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.96, y: 16 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.96, y: 16 }}
-                transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                className="relative rounded-3xl overflow-hidden flex flex-col"
-                style={{
-                  background: "#111",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  width: imgRect ? `${imgRect.w}px` : "fit-content",
-                  maxWidth: "calc(100vw - 64px)",
-                  minWidth: imgRect ? undefined : "min(320px, calc(100vw - 64px))",
-                  maxHeight: "calc(100vh - 64px)",
-                }}
-                onClick={e => e.stopPropagation()}
-              >
-                <button
-                  onClick={() => setSelected(null)}
-                  className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
-                  style={{
-                    background: "rgba(0,0,0,0.55)",
-                    border: "1px solid rgba(255,255,255,0.12)",
-                    color: "#f5f5f7",
-                    fontSize: "1.25rem",
-                    lineHeight: 1,
-                  }}
-                >
-                  ×
-                </button>
-
-                <div className="relative" style={{ background: "#0a0a0a" }}>
-                  <canvas
-                    ref={lightboxCanvasRef}
-                    onContextMenu={handleCanvasContextMenu}
-                    onMouseMove={handleCanvasMouseMove}
-                    onMouseLeave={handleCanvasMouseLeave}
-                    aria-label={selected.title}
-                    role="img"
+              {(() => {
+                const isPortrait = selected.h > selected.w;
+                const INFO_W = 320;
+                const outerWidth = imgRect
+                  ? isPortrait
+                    ? `${imgRect.w + INFO_W}px`
+                    : `${imgRect.w}px`
+                  : "fit-content";
+                const canvasMaxWidth = isPortrait
+                  ? `calc(100vw - 64px - ${INFO_W}px)`
+                  : "calc(100vw - 64px)";
+                const canvasMaxHeight = isPortrait
+                  ? "calc(100vh - 64px)"
+                  : "calc(100vh - 64px - 160px)";
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.96, y: 16 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.96, y: 16 }}
+                    transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                    className={`relative rounded-3xl overflow-hidden ${isPortrait ? "flex flex-row items-stretch" : "flex flex-col"}`}
                     style={{
-                      display: "block",
+                      background: "#111",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                      width: outerWidth,
                       maxWidth: "calc(100vw - 64px)",
-                      maxHeight: "calc(100vh - 64px - 160px)",
-                      width: "auto",
-                      height: "auto",
-                      cursor: lensPos && !isTouchDevice ? "none" : "default",
+                      minWidth: imgRect ? undefined : "min(320px, calc(100vw - 64px))",
+                      maxHeight: "calc(100vh - 64px)",
                     }}
-                  />
-                  {/* Magnifier lens — follows cursor over the lightbox image */}
-                  <canvas
-                    ref={lensCanvasRef}
-                    aria-hidden
-                    style={{
-                      position: "absolute",
-                      left: (lensPos?.x ?? 0) - LENS_SIZE / 2,
-                      top: (lensPos?.y ?? 0) - LENS_SIZE / 2,
-                      width: LENS_SIZE,
-                      height: LENS_SIZE,
-                      borderRadius: "50%",
-                      border: "2px solid rgba(255,255,255,0.7)",
-                      pointerEvents: "none",
-                      opacity: lensPos && !isTouchDevice ? 1 : 0,
-                      transition: "opacity 0.12s ease",
-                    }}
-                  />
-                </div>
-
-                <div className="p-6 shrink-0">
-                  <h2 className="text-lg font-semibold mb-1" style={{ color: "#f5f5f7" }}>
-                    {selected.title}
-                  </h2>
-                  <p className="text-sm mb-4" style={{ color: "#86868b" }}>{selected.category}</p>
-                  {selected.tab === "photography" ? (
-                    <span
-                      className="inline-block text-xs font-medium tracking-wide rounded-full px-3 py-1.5"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    <button
+                      onClick={() => setSelected(null)}
+                      className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full flex items-center justify-center cursor-pointer"
                       style={{
-                        background: "rgba(255,255,255,0.06)",
+                        background: "rgba(0,0,0,0.55)",
                         border: "1px solid rgba(255,255,255,0.12)",
-                        color: "rgba(245,245,247,0.85)",
+                        color: "#f5f5f7",
+                        fontSize: "1.25rem",
+                        lineHeight: 1,
                       }}
                     >
-                      {toPillLabel(selected.description)}
-                    </span>
-                  ) : (
-                    <p className="text-sm leading-relaxed" style={{ color: "#a1a1a6" }}>{selected.description}</p>
-                  )}
-                </div>
-              </motion.div>
+                      ×
+                    </button>
+
+                    <div className="relative shrink-0" style={{ background: "#0a0a0a" }}>
+                      <canvas
+                        ref={lightboxCanvasRef}
+                        onContextMenu={handleCanvasContextMenu}
+                        onMouseMove={handleCanvasMouseMove}
+                        onMouseLeave={handleCanvasMouseLeave}
+                        aria-label={selected.title}
+                        role="img"
+                        style={{
+                          display: "block",
+                          maxWidth: canvasMaxWidth,
+                          maxHeight: canvasMaxHeight,
+                          width: "auto",
+                          height: "auto",
+                          cursor: lensPos && !isTouchDevice ? "none" : "default",
+                        }}
+                      />
+                      {/* Magnifier lens — follows cursor over the lightbox image */}
+                      <canvas
+                        ref={lensCanvasRef}
+                        aria-hidden
+                        style={{
+                          position: "absolute",
+                          left: (lensPos?.x ?? 0) - LENS_SIZE / 2,
+                          top: (lensPos?.y ?? 0) - LENS_SIZE / 2,
+                          width: LENS_SIZE,
+                          height: LENS_SIZE,
+                          borderRadius: "50%",
+                          border: "2px solid rgba(255,255,255,0.7)",
+                          pointerEvents: "none",
+                          opacity: lensPos && !isTouchDevice ? 1 : 0,
+                          transition: "opacity 0.12s ease",
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      className={`p-6 shrink-0 ${isPortrait ? "flex flex-col overflow-y-auto" : ""}`}
+                      style={isPortrait ? { width: INFO_W } : undefined}
+                    >
+                      <h2 className="text-lg font-semibold mb-1" style={{ color: "#f5f5f7" }}>
+                        {selected.title}
+                      </h2>
+                      <p className="text-sm mb-4" style={{ color: "#86868b" }}>{selected.category}</p>
+                      <p className="text-sm leading-relaxed" style={{ color: "#a1a1a6" }}>
+                        {descFor(selected)}
+                      </p>
+                      {selected.tab === "photography" && (
+                        <p
+                          className={`text-xs ${isPortrait ? "mt-auto pt-6" : "mt-3"}`}
+                          style={{ color: "#86868b" }}
+                        >
+                          Shot on PlayStation<sup style={{ fontSize: "0.6em", verticalAlign: "super" }}>®</sup> {platformFor(selected)}.
+                        </p>
+                      )}
+                    </div>
+                  </motion.div>
+                );
+              })()}
             </motion.div>
           )}
         </AnimatePresence>

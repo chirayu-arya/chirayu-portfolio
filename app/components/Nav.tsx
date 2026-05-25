@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 const professionalItems = [
   { label: "Branding & Marketing", href: "#brand-marketing" },
@@ -160,6 +161,24 @@ const MobileWorkDropdownContent = ({ onClose }: { onClose?: () => void }) => (
 export default function Nav() {
   const [workOpen, setWorkOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isLightPage = pathname?.startsWith("/gallery") ?? false;
+
+  const desktopGlass = isLightPage
+    ? {
+        backdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
+        WebkitBackdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
+        background:
+          "linear-gradient(135deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.01) 100%), rgba(12,12,14,0.55)",
+        border: "1px solid rgba(255,255,255,0.09)",
+        boxShadow:
+          "inset 0 0.5px 0 rgba(255,255,255,0.15), inset 0 -0.5px 0 rgba(0,0,0,0.15), 0 16px 56px rgba(0,0,0,0.25), 0 2px 6px rgba(0,0,0,0.15)",
+      }
+    : glassStyle;
+
+  const mobileGlass = isLightPage
+    ? { ...mobileGlassStyle, background: "rgba(10,10,12,0.96)" }
+    : mobileGlassStyle;
 
   return (
     <>
@@ -170,7 +189,7 @@ export default function Nav() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="pointer-events-auto flex items-center gap-2.5 px-2 py-1.5 rounded-full"
-          style={glassStyle}
+          style={desktopGlass}
         >
           <a
             href="/"
@@ -252,7 +271,7 @@ export default function Nav() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="flex items-center justify-between px-3 py-1.5 rounded-full"
-          style={mobileGlassStyle}
+          style={mobileGlass}
         >
           {/* Left: Home + About */}
           <div className="flex items-center gap-1">

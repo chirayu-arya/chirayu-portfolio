@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { usePathname } from "next/navigation";
 
 const SOCIALS = [
   {
@@ -54,6 +55,18 @@ const SOCIALS = [
 export default function Contact() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
+  const pathname = usePathname();
+  const isLightPage = pathname?.startsWith("/gallery") ?? false;
+
+  const headlineColor = isLightPage ? "#2a2a2d" : "#f5f5f7";
+  const ctaBg = isLightPage ? "#2a2a2d" : "#f5f5f7";
+  const ctaFg = isLightPage ? "#f5f5f7" : "#000";
+  const dividerColor = isLightPage ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.07)";
+  const iconBg = isLightPage ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)";
+  const iconBorder = isLightPage ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.09)";
+  const iconBgHover = isLightPage ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.1)";
+  const iconBorderHover = isLightPage ? "rgba(0,0,0,0.16)" : "rgba(255,255,255,0.18)";
+  const iconColor = isLightPage ? "#1d1d1f" : "#f5f5f7";
 
   return (
     <section id="contact" className="relative pt-24 pb-10 px-8 sm:px-14 lg:px-20">
@@ -73,7 +86,7 @@ export default function Contact() {
 
           <h2
             className="font-black tracking-tight leading-[0.92] mb-12"
-            style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
+            style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: headlineColor }}
           >
             {["If it's worth building,", "it's worth talking about."].map((line, i) => (
               <span key={i} style={{ display: "block", overflow: "hidden", paddingBottom: "0.12em" }}>
@@ -100,7 +113,7 @@ export default function Contact() {
               whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.18 }}
               className="inline-flex items-center gap-2 px-8 py-3 rounded-full text-sm font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
-              style={{ background: "#f5f5f7", color: "#000" }}
+              style={{ background: ctaBg, color: ctaFg }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -117,7 +130,7 @@ export default function Contact() {
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-10"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ borderTop: `1px solid ${dividerColor}` }}
         >
           <span className="text-sm" style={{ color: "#86868b" }}>
             © {new Date().getFullYear()} Chirayu Arya
@@ -137,19 +150,19 @@ export default function Contact() {
                   width: 44,
                   height: 44,
                   borderRadius: 10,
-                  background: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(255,255,255,0.09)",
-                  color: "#f5f5f7",
+                  background: iconBg,
+                  border: `1px solid ${iconBorder}`,
+                  color: iconColor,
                   flexShrink: 0,
                   transition: "background 0.2s ease, border-color 0.2s ease",
                 }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.1)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.18)";
+                  (e.currentTarget as HTMLElement).style.background = iconBgHover;
+                  (e.currentTarget as HTMLElement).style.borderColor = iconBorderHover;
                 }}
                 onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.09)";
+                  (e.currentTarget as HTMLElement).style.background = iconBg;
+                  (e.currentTarget as HTMLElement).style.borderColor = iconBorder;
                 }}
               >
                 {icon}
