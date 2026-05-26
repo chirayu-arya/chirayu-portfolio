@@ -916,7 +916,7 @@ export default function GalleryPage() {
   return (
     <main
       className="gallery-protected gallery-no-print"
-      style={{ background: "#ededf0", minHeight: "100vh", color: "#1d1d1f", position: "relative", overflow: "hidden" }}
+      style={{ background: "#fcfcfc", minHeight: "100vh", color: "#1d1d1f", position: "relative", overflow: "hidden" }}
     >
       <style>{`
         .gallery-protected,
@@ -1025,8 +1025,12 @@ export default function GalleryPage() {
           <div
             className="flex items-center p-1 rounded-full"
             style={{
-              background: "rgba(0,0,0,0.05)",
-              border: "1px solid rgba(0,0,0,0.09)",
+              background:
+                "linear-gradient(135deg, rgba(220,20,60,0.22) 0%, rgba(139,92,246,0.22) 55%, rgba(59,130,246,0.18) 100%), rgba(255,255,255,0.7)",
+              border: "1px solid rgba(255,255,255,0.5)",
+              backdropFilter: "blur(20px) saturate(1.6)",
+              WebkitBackdropFilter: "blur(20px) saturate(1.6)",
+              boxShadow: "0 4px 14px rgba(60,20,80,0.12)",
             }}
           >
             {(["photography", "illustrations"] as Tab[]).map((tab) => (
@@ -1034,17 +1038,15 @@ export default function GalleryPage() {
                 key={tab}
                 onClick={() => switchTab(tab)}
                 className="relative px-6 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer"
-                style={{ color: activeTab === tab ? "#f5f5f0" : "rgba(0,0,0,0.4)" }}
+                style={{ color: activeTab === tab ? "#1d1d1f" : "rgba(0,0,0,0.55)" }}
               >
                 {activeTab === tab && (
                   <motion.div
                     layoutId="tab-pill"
                     className="absolute inset-0 rounded-full"
                     style={{
-                      background:
-                        "linear-gradient(135deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.01) 100%), rgba(12,12,14,0.55)",
-                      backdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
-                      WebkitBackdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
+                      background: "#ffffff",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
                     }}
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
                   />

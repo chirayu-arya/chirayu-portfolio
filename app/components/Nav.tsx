@@ -166,19 +166,31 @@ export default function Nav() {
 
   const desktopGlass = isLightPage
     ? {
-        backdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
-        WebkitBackdropFilter: "blur(30px) saturate(2.2) brightness(1.08)",
+        backdropFilter: "blur(20px) saturate(1.6)",
+        WebkitBackdropFilter: "blur(20px) saturate(1.6)",
         background:
-          "linear-gradient(135deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.01) 100%), rgba(12,12,14,0.55)",
-        border: "1px solid rgba(255,255,255,0.09)",
-        boxShadow:
-          "inset 0 0.5px 0 rgba(255,255,255,0.15), inset 0 -0.5px 0 rgba(0,0,0,0.15), 0 16px 56px rgba(0,0,0,0.25), 0 2px 6px rgba(0,0,0,0.15)",
+          "linear-gradient(135deg, rgba(220,20,60,0.22) 0%, rgba(139,92,246,0.22) 55%, rgba(59,130,246,0.18) 100%), rgba(255,255,255,0.7)",
+        border: "1px solid rgba(255,255,255,0.5)",
+        boxShadow: "0 4px 14px rgba(60,20,80,0.12)",
       }
     : glassStyle;
 
   const mobileGlass = isLightPage
-    ? { ...mobileGlassStyle, background: "rgba(10,10,12,0.96)" }
+    ? {
+        background:
+          "linear-gradient(135deg, rgba(220,20,60,0.22) 0%, rgba(139,92,246,0.22) 55%, rgba(59,130,246,0.18) 100%), rgba(255,255,255,0.86)",
+        border: "1px solid rgba(255,255,255,0.5)",
+        boxShadow: "0 4px 14px rgba(60,20,80,0.12)",
+      }
     : mobileGlassStyle;
+
+  // Item colors track the underlying surface so the nav reads on both dark and light pages.
+  const itemTextStyle = isLightPage ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.65)";
+  const itemHoverText = isLightPage ? "#1d1d1f" : "#ffffff";
+  const itemHoverBg = isLightPage ? "#ffffff" : "rgba(255,255,255,0.07)";
+  const itemHoverShadow = isLightPage ? "0 2px 8px rgba(0,0,0,0.08)" : "none";
+  const ctaBg = isLightPage ? "#ffffff" : "rgba(255,255,255,0.92)";
+  const ctaFg = "#000";
 
   return (
     <>
@@ -193,27 +205,54 @@ export default function Nav() {
         >
           <a
             href="/"
-            className="px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            className="px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer"
+            style={{ color: itemTextStyle, boxShadow: "none" }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = itemHoverBg;
+              e.currentTarget.style.color = itemHoverText;
+              e.currentTarget.style.boxShadow = itemHoverShadow;
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = itemTextStyle;
+              e.currentTarget.style.boxShadow = "none";
+            }}
           >
             Home
           </a>
 
           <a
             href="/about"
-            className="px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            className="px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer"
+            style={{ color: itemTextStyle }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = itemHoverBg;
+              e.currentTarget.style.color = itemHoverText;
+              e.currentTarget.style.boxShadow = itemHoverShadow;
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = itemTextStyle;
+              e.currentTarget.style.boxShadow = "none";
+            }}
           >
             About
           </a>
 
           <a
             href="/gallery"
-            className="px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            className="px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer"
+            style={{ color: itemTextStyle }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = itemHoverBg;
+              e.currentTarget.style.color = itemHoverText;
+              e.currentTarget.style.boxShadow = itemHoverShadow;
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = itemTextStyle;
+              e.currentTarget.style.boxShadow = "none";
+            }}
           >
             Gallery
           </a>
@@ -221,9 +260,18 @@ export default function Nav() {
           {/* Work dropdown */}
           <div className="relative" onMouseEnter={() => setWorkOpen(true)} onMouseLeave={() => setWorkOpen(false)}>
             <button
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer"
+              style={{ color: itemTextStyle }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = itemHoverBg;
+                e.currentTarget.style.color = itemHoverText;
+                e.currentTarget.style.boxShadow = itemHoverShadow;
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.color = itemTextStyle;
+                e.currentTarget.style.boxShadow = "none";
+              }}
             >
               Work
               <motion.svg
@@ -257,7 +305,7 @@ export default function Nav() {
             target="_blank"
             rel="noopener noreferrer"
             className="px-5 py-2 rounded-full text-sm font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
-            style={{ background: "rgba(255,255,255,0.92)", color: "#000" }}
+            style={{ background: ctaBg, color: ctaFg }}
           >
             View Resume
           </a>
