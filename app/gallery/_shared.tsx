@@ -2,6 +2,7 @@
 
 import Nav from "../components/Nav";
 import Contact from "../components/Contact";
+import PageBlobs from "../components/PageBlobs";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef, useMemo, useLayoutEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -1021,7 +1022,7 @@ export default function GalleryPage() {
   return (
     <main
       className="gallery-protected gallery-no-print"
-      style={{ background: "#fcfcfc", minHeight: "100vh", color: "#1d1d1f", position: "relative", overflow: "hidden" }}
+      style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7", position: "relative", overflow: "hidden" }}
     >
       <style>{`
         .gallery-protected,
@@ -1053,6 +1054,22 @@ export default function GalleryPage() {
         </p>
       </div>
 
+      <PageBlobs palette="magenta-orange" />
+
+      {/* Maroon blob — deep accent anchored at the very top of the gallery */}
+      <div
+        className="bg-blob absolute rounded-full pointer-events-none"
+        style={{
+          width: "90vmax",
+          height: "70vmax",
+          top: "-25vmax",
+          left: "50%",
+          transform: "translateX(-50%)",
+          background: "radial-gradient(ellipse, rgba(120,25,80,0.6) 0%, transparent 70%)",
+          zIndex: 0,
+        }}
+      />
+
       <div className="relative">
         <Nav />
 
@@ -1070,7 +1087,7 @@ export default function GalleryPage() {
           >
             <div
               className="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap"
-              style={{ background: "#1d1d1f", color: "#fff" }}
+              style={{ background: "#f5f5f7", color: "#000" }}
             >
               View
             </div>
@@ -1104,7 +1121,7 @@ export default function GalleryPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.05 }}
               className="font-black tracking-tight leading-[0.92]"
-              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#2a2a2d" }}
+              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
             >
               Take a deep dive.
             </motion.h1>
@@ -1130,12 +1147,8 @@ export default function GalleryPage() {
           <div
             className="flex items-center p-1 rounded-full"
             style={{
-              background:
-                "linear-gradient(135deg, rgba(220,20,60,0.22) 0%, rgba(139,92,246,0.22) 55%, rgba(59,130,246,0.18) 100%), rgba(255,255,255,0.7)",
-              border: "1px solid rgba(255,255,255,0.5)",
-              backdropFilter: "blur(20px) saturate(1.6)",
-              WebkitBackdropFilter: "blur(20px) saturate(1.6)",
-              boxShadow: "0 4px 14px rgba(60,20,80,0.12)",
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.09)",
             }}
           >
             {(["photography", "illustrations"] as Tab[]).map((tab) => (
@@ -1143,16 +1156,13 @@ export default function GalleryPage() {
                 key={tab}
                 onClick={() => switchTab(tab)}
                 className="relative px-6 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer"
-                style={{ color: activeTab === tab ? "#1d1d1f" : "rgba(0,0,0,0.55)" }}
+                style={{ color: activeTab === tab ? "#000" : "rgba(255,255,255,0.5)" }}
               >
                 {activeTab === tab && (
                   <motion.div
                     layoutId="tab-pill"
                     className="absolute inset-0 rounded-full"
-                    style={{
-                      background: "#ffffff",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                    }}
+                    style={{ background: "#f5f5f7" }}
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
                   />
                 )}
@@ -1239,14 +1249,14 @@ export default function GalleryPage() {
                         aria-label="Back to all projects"
                         className="absolute left-0 top-1/2 -translate-y-1/2 cursor-pointer leading-none transition-colors"
                         style={{ color: "#86868b", fontSize: "clamp(1.75rem, 2.4vw, 2.5rem)" }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = "#1d1d1f")}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = "#f5f5f7")}
                         onMouseLeave={(e) => (e.currentTarget.style.color = "#86868b")}
                       >
                         ←
                       </button>
                       <h2
                         className="text-center font-black tracking-tight leading-[0.92] px-16 lg:whitespace-nowrap"
-                        style={{ fontSize: "clamp(2rem, 4vw, 4rem)", color: "#1d1d1f" }}
+                        style={{ fontSize: "clamp(2rem, 4vw, 4rem)", color: "#f5f5f7" }}
                       >
                         {group.category}
                       </h2>
