@@ -115,7 +115,6 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 61, tab: "photography", w: 2157, h: 3834, title: "Touching 33",              category: "Clair Obscur: Expedition 33", description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9588.JPG` },
   { id: 64, tab: "photography", w: 2160, h: 2880, title: "Bridge of Trials",         category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9613.jpg` },
   { id: 69, tab: "photography", w: 2064, h: 3669, title: "Surt's Wrath",             category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9624.JPG` },
-  { id: 63, tab: "photography", w: 2917, h: 1945, title: "Edge of Madness",          category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9612.JPG` },
   { id: 65, tab: "photography", w: 2160, h: 3840, title: "Crown of Memory",          category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9617.JPG` },
   { id: 62, tab: "photography", w: 1495, h: 2492, title: "The Vessel",               category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9608.jpg` },
   { id: 68, tab: "photography", w: 2160, h: 3840, title: "Hearthfire",               category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9623.JPG` },
@@ -237,7 +236,6 @@ const PHOTO_DESCRIPTIONS: Record<number, string> = {
   // Hellblade: Senua's Sacrifice
   64: "Senua crosses a narrow stone bridge with the voices walking step for step beside her. The bridge has no railing and the voices have no manners. She does not look down, and she does not look back.",
   69: "Surt's volcanic blade splits the night with a wall of flame, Senua small and unmoving in its glow. The heat distorts the air between them, making the giant tremble at his own edges. She is the one who picked this fight, and she remembers it.",
-  63: "The world tilts at the threshold of Senua's psyche, geometry bending in on itself. Walls become floors become voices become walls again. The frame holds the rhythm of a panic she's learned to walk through.",
   65: "A crown of antlers and bone rests on a cairn, the memory it holds heavier than the metal. Someone she loved wore this. The crown is small, but the photo makes you understand the weight.",
   62: "Senua stands before the carved vessel, runes glowing along its rim, the offering already half made. Her face says she does not entirely believe in what she's about to do. Her hands say she's going to do it anyway.",
   68: "Firelight finds Senua's face in a moment of rare quiet, the warmth older than any of the gods she's chasing. For a moment there are no voices, no goals, no journey. Just the fire and a woman remembering she has a face.",
