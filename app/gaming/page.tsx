@@ -598,7 +598,7 @@ export default function GamingPage() {
         </div>
       </div>
 
-      <div className="relative z-10 px-8 sm:px-14 lg:px-20 pt-24 pb-32">
+      <div className="relative z-10 px-8 sm:px-14 lg:px-20 pt-36 pb-32">
 
         {/* Header */}
         <div className="mb-16">

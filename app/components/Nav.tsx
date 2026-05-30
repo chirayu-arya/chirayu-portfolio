@@ -164,7 +164,7 @@ export default function Nav() {
   return (
     <>
       {/* ── Desktop nav (md+) ── */}
-      <div className="hidden md:flex fixed top-5 inset-x-0 z-50 justify-center pointer-events-none px-4">
+      <div className="hidden md:flex fixed top-[22px] inset-x-0 z-50 justify-center pointer-events-none px-4">
         <motion.nav
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
