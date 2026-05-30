@@ -45,6 +45,7 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 50, tab: "photography", w: 2157, h: 3834, title: "Crystal Sentinel",         category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9518.JPG` },
   { id: 71, tab: "photography", w: 1656, h: 2943, title: "Highland Vigil",           category: "Hellblade: Senua's Sacrifice",               description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9640.JPG` },
   { id: 13, tab: "photography", w: 1682, h: 2243, title: "Plumed Sentinel",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8564.JPG` },
+  { id: 82, tab: "photography", w: 2157, h: 2876, title: "The Painted Hunter",       category: "Horizon Forbidden West",       description: VIRTUAL_DESC, src: `${VP}/Horizon%20Forbidden%20West/IMG_9716.jpg` },
   { id: 58, tab: "photography", w: 3840, h: 2160, title: "Runebearer",               category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9556%202.JPG` },
   { id: 1,  tab: "photography", w: 3840, h: 2160, title: "Together at 33",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Gustave%20%26%20Sophie%20-%20Chirayu%20Arya.jpg` },
   { id: 2,  tab: "photography", w: 3840, h: 2160, title: "Lumière Glance",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_7685.jpg` },
@@ -72,6 +73,8 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 75, tab: "photography", w: 2157, h: 2876, title: "The Offering",             category: "Hellblade: Senua's Sacrifice",               description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9650.JPG` },
   { id: 9,  tab: "photography", w: 2157, h: 3834, title: "After the Battle",         category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8381%203.JPG` },
   { id: 21, tab: "photography", w: 3840, h: 2160, title: "Roots of Pandora",         category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8204.JPG` },
+  { id: 84, tab: "photography", w: 3840, h: 2160, title: "Embers Over the Arches",   category: "Horizon Zero Dawn",            description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9723.JPG` },
+  { id: 83, tab: "photography", w: 3840, h: 2160, title: "Under Ancient Stars",      category: "Horizon Zero Dawn",            description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9722.JPG` },
   { id: 22, tab: "photography", w: 3840, h: 2160, title: "The Last Bloom",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8682.jpg` },
   { id: 23, tab: "photography", w: 2109, h: 2812, title: "Beneath the 33",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8690.JPG` },
   { id: 24, tab: "photography", w: 2160, h: 3840, title: "Bluebell Stand",           category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8869.JPG` },
@@ -119,6 +122,7 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 62, tab: "photography", w: 1495, h: 2492, title: "The Vessel",               category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9608.jpg` },
   { id: 68, tab: "photography", w: 2160, h: 3840, title: "Hearthfire",               category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9623.JPG` },
   { id: 70, tab: "photography", w: 1344, h: 2390, title: "Quiet Resolve",            category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9625.JPG` },
+  { id: 85, tab: "photography", w: 2160, h: 2880, title: "Red Bloom Country",        category: "Horizon Zero Dawn",            description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9724.JPG` },
 ];
 
 const ILLUSTRATIONS: Photo[] = [
@@ -146,6 +150,8 @@ const GAMES: { category: string; studio: string; coverId?: number; coverObjectPo
   { category: "Avatar: Frontiers of Pandora", studio: "Massive Entertainment / Ubisoft" },
   { category: "Ghost of Tsushima", studio: "Sucker Punch Productions / Sony Interactive Entertainment", coverObjectPosition: "50% 80%" },
   { category: "Marvel's Spider-Man 2", studio: "Insomniac Games / Sony Interactive Entertainment" },
+  { category: "Horizon Zero Dawn", studio: "Guerrilla Games / Sony Interactive Entertainment", coverId: 83 }, // Under Ancient Stars
+  { category: "Horizon Forbidden West", studio: "Guerrilla Games / Sony Interactive Entertainment" },
   { category: "Real Photography", studio: "iPhone 16 Pro" },
 ];
 
@@ -250,6 +256,14 @@ const PHOTO_DESCRIPTIONS: Record<number, string> = {
   78: "Senua kneels over the proof of her last kill, holding a stone skull aloft with a snarl that is both grief and defiance. The fur at her shoulders is matted with rain and ash. The voices in her head are quiet for once; they're letting her have this.",
   79: "The horned beast lowers its monstrous head into the rain, antlers and fangs picking up the cold light around it. Every muscle is held in the kind of stillness that ends in motion. The bones scattered on the ground are evidence of how many tried to outwait it.",
   80: "Senua holds Gramr aloft, the sword burning cold blue against the warm gold of the cave fire behind her. Sparks and snow fall in the same frame, the impossible weather of a place that exists mostly in her head. For the first time in a long time her face is steady.",
+
+  // Horizon Forbidden West
+  82: "Aloy draws the bow with the arrow's fletching pressed against her teeth, war paint stark across her face. The world outside the frame falls away, and so does any doubt about what comes next. The shot will land before she lets the breath go.",
+
+  // Horizon Zero Dawn
+  83: "Aloy slows her Charger under a swirl of Milky Way, the desert glow and her bone-and-wire saddle the only warmth for miles. The old machines below the ground are quiet for once. She tips her head back the way people used to, back when looking up was still a kind of answer.",
+  84: "Aloy turns her mount toward the arches at golden hour, embers drifting past in the warm air. The cybernetic charger beneath her hums like an animal that hasn't decided which side it's on yet. She is in no hurry; the land out here remembers everything.",
+  85: "Aloy looks out across a mesa carpeted in red bloom, the far cliffs catching late light. Her mount holds still beside her, the kind of stillness that lets the wind do the talking. The view is hers because nothing else out here can read it.",
 };
 
 // Lightbox description for any photo. Illustrations use their inline copy;
@@ -261,9 +275,10 @@ function descFor(p: Photo): string {
 }
 
 // Hardware tier for the "Shot on PlayStation®..." sentence in the lightbox.
-// Senua's Sacrifice was captured on a PS5 Pro; everything else on a base PS5.
+// Senua's Sacrifice and both Horizon entries were captured on a PS5 Pro;
+// everything else on a base PS5.
 function platformFor(p: Photo): string {
-  if (/senua|hellblade/i.test(p.category)) return "5 Pro";
+  if (/senua|hellblade|horizon/i.test(p.category)) return "5 Pro";
   return "5";
 }
 
@@ -353,52 +368,31 @@ function MasonryGrid({
     }
     for (const p of photos) if (!pinnedSet.has(p.id)) ordered.push(p);
 
-    // Split into landscape singles and portrait rows (chunks of columnCount).
-    const landscapes: Photo[] = [];
-    const portraits: Photo[] = [];
-    for (const p of ordered) (isLandscape(p) ? landscapes : portraits).push(p);
-    const portraitRows: Photo[][] = [];
-    for (let i = 0; i < portraits.length; i += columnCount) {
-      portraitRows.push(portraits.slice(i, i + columnCount));
-    }
-
-    // Interleave landscape rows and portrait rows so landscapes don't stack
-    // directly on top of one another when there's a portrait row to insert.
+    // Walk the ordered list and emit rows in source order. Each landscape is
+    // its own full-width row; portraits batch into rows of columnCount and
+    // flush whenever the buffer fills, a landscape arrives, or we hit the end.
+    // This honors deliberate source ordering instead of bucketing by aspect.
     type Row =
       | { kind: "L"; photo: Photo }
       | { kind: "P"; photos: Photo[] };
     const rows: Row[] = [];
-    const L = landscapes.slice();
-    const P = portraitRows.slice();
-    const total = L.length + P.length;
-    let placedL = 0;
-    for (let i = 0; i < total; i++) {
-      const targetL = total === 0 ? 0 : ((i + 1) * L.length) / total;
-      const wantsL = L.length > 0 && (P.length === 0 || placedL + 1 <= targetL);
-      if (wantsL) {
-        rows.push({ kind: "L", photo: L.shift()! });
-        placedL++;
-      } else if (P.length > 0) {
-        rows.push({ kind: "P", photos: P.shift()! });
-      } else if (L.length > 0) {
-        rows.push({ kind: "L", photo: L.shift()! });
-        placedL++;
+    let buffer: Photo[] = [];
+    const flushBuffer = () => {
+      if (buffer.length > 0) {
+        rows.push({ kind: "P", photos: buffer });
+        buffer = [];
+      }
+    };
+    for (const p of ordered) {
+      if (isLandscape(p)) {
+        flushBuffer();
+        rows.push({ kind: "L", photo: p });
+      } else {
+        buffer.push(p);
+        if (buffer.length === columnCount) flushBuffer();
       }
     }
-    // Final pass: if any landscape sits directly above another, try to swap it
-    // with the next portrait row to break the stack.
-    for (let i = 1; i < rows.length; i++) {
-      if (rows[i].kind === "L" && rows[i - 1].kind === "L") {
-        for (let j = i + 1; j < rows.length; j++) {
-          if (rows[j].kind === "P") {
-            const tmp = rows[i];
-            rows[i] = rows[j];
-            rows[j] = tmp;
-            break;
-          }
-        }
-      }
-    }
+    flushBuffer();
 
     // Render rows into absolute-positioned items. Landscape row = full width
     // at the photo's natural aspect. Portrait row = each portrait at colW with
