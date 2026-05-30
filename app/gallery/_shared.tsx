@@ -56,7 +56,6 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 6,  tab: "photography", w: 2157, h: 2876, title: "The First Spark",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8255.jpg` },
   { id: 7,  tab: "photography", w: 3840, h: 2160, title: "Symbiote Showdown",        category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7733.JPG` },
   { id: 73, tab: "photography", w: 1916, h: 2554, title: "The Lorekeeper Kneels",    category: "Hellblade: Senua's Sacrifice",               description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9647.JPG` },
-  { id: 8,  tab: "photography", w: 2071, h: 2761, title: "The Quiet Heir",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8367%202.jpg` },
   { id: 20, tab: "photography", w: 2157, h: 2876, title: "Petals at Midnight",       category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8652.jpg` },
   { id: 10, tab: "photography", w: 2305, h: 1297, title: "Plains Lily",              category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8200.JPG` },
   { id: 11, tab: "photography", w: 1683, h: 2992, title: "Into the Light",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8392%202.JPG` },
@@ -144,7 +143,7 @@ const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http:
 // `coverId` optionally overrides the tier-1 cover photo (defaults to the first photo in source order).
 // `coverObjectPosition` shifts the visible region inside the 4:3 cover frame (CSS `object-position`).
 const GAMES: { category: string; studio: string; coverId?: number; coverObjectPosition?: string; pinTopIds?: number[] }[] = [
-  { category: "Clair Obscur: Expedition 33", studio: "Sandfall Interactive / Kepler Interactive", coverId: 53, pinTopIds: [57, 53] }, // The Great Wheel; pin Lampmaster + Great Wheel to top row
+  { category: "Clair Obscur: Expedition 33", studio: "Sandfall Interactive / Kepler Interactive", coverId: 22, pinTopIds: [57, 53] }, // The Last Bloom; pin Lampmaster + Great Wheel to top row
   { category: "Ghost of Yōtei", studio: "Sucker Punch Productions / Sony Interactive Entertainment", coverId: 45, coverObjectPosition: "50% 62%" }, // Maple Strike
   { category: "Hellblade: Senua's Sacrifice", studio: "Ninja Theory / Xbox Game Studios", coverId: 65, coverObjectPosition: "50% 55%" }, // Crown of Memory
   { category: "Avatar: Frontiers of Pandora", studio: "Massive Entertainment / Ubisoft" },
@@ -177,7 +176,6 @@ const PHOTO_DESCRIPTIONS: Record<number, string> = {
   2:  "A glance back through the lantern-lit streets of Lumière, where every face already knows the year that's coming. The colors are warm but the city is not; it's the warmth of a held breath. You can almost hear the soft, patient ticking under the cobblestones.",
   4:  "A figure steps through the painted veil, the world thinning back into brushstrokes behind them. On the other side, the colors are bolder but less true, as if someone is still deciding what they should look like. The vellum at the edges curls, just slightly, with their passing.",
   6:  "The first ember of Pictos magic flickers to life in cupped hands, the dark of Lumière pressing in around it. The light catches the soft tremble of the fingers, the discipline it takes to hold something that wants to bloom. In a moment it will either steady or consume.",
-  8:  "Maelle stands alone with the weight of a name she did not choose, gilded against a dying sky. Her armor is too heavy for someone this young, but she wears it like it's already old. The painted world behind her keeps fading; the title doesn't.",
   9:  "A survivor kneels in the aftermath, blade lowered, lungs catching up with what just happened. Smoke threads quietly through the broken pillars around them, taking its time. They are not crying yet; they have not yet allowed themselves to.",
   11: "A silhouette walks toward a door of pure light, leaving a trail of fading pigment behind them. The painted world thins with every step, brushstrokes peeling off like late autumn leaves. Whatever waits on the other side isn't bothering to introduce itself.",
   54: "A scarlet memory bleeds across the canvas, a figure caught mid-reach for something the painted world refuses to render. The red pools where it shouldn't, defying perspective, defying gravity. Some memories don't ask permission to come back.",
@@ -369,9 +367,10 @@ function MasonryGrid({
     for (const p of photos) if (!pinnedSet.has(p.id)) ordered.push(p);
 
     // Walk the ordered list and emit rows in source order. Each landscape is
-    // its own full-width row; portraits batch into rows of columnCount and
-    // flush whenever the buffer fills, a landscape arrives, or we hit the end.
-    // This honors deliberate source ordering instead of bucketing by aspect.
+    // its own full-width row; portraits batch into rows of columnCount. When a
+    // landscape arrives mid-buffer, we look ahead in the queue and pull the
+    // next portraits forward to complete the row before emitting the landscape.
+    // This keeps rows visually tight while staying close to source order.
     type Row =
       | { kind: "L"; photo: Photo }
       | { kind: "P"; photos: Photo[] };
@@ -383,8 +382,17 @@ function MasonryGrid({
         buffer = [];
       }
     };
-    for (const p of ordered) {
+    const queue: Photo[] = ordered.slice();
+    while (queue.length > 0) {
+      const p = queue.shift()!;
       if (isLandscape(p)) {
+        // Try to top up the portrait buffer from the queue so we don't emit a
+        // partial row right before this landscape.
+        while (buffer.length > 0 && buffer.length < columnCount) {
+          const idx = queue.findIndex(q => !isLandscape(q));
+          if (idx < 0) break;
+          buffer.push(queue.splice(idx, 1)[0]);
+        }
         flushBuffer();
         rows.push({ kind: "L", photo: p });
       } else {
@@ -583,7 +591,6 @@ function GalleryCard({
   noMargin?: boolean;  // skip masonry marginBottom when used in a grid
   skipEntry?: boolean; // skip entry fade/slide animation (used inside game detail page)
 }) {
-  const [hovered, setHovered] = useState(false);
   const cardAspect = aspect ?? `${photo.w} / ${photo.h}`;
 
   return (
@@ -597,9 +604,9 @@ function GalleryCard({
         duration: 0.55,
         ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       }}
-      onMouseEnter={() => { setHovered(true); onCursorEnter(); }}
+      onMouseEnter={onCursorEnter}
       onMouseMove={onMouseMove}
-      onMouseLeave={() => { setHovered(false); onCursorLeave(); }}
+      onMouseLeave={onCursorLeave}
       onClick={() => { if (!isTouchDevice) onSelect(photo); }}
       onContextMenu={(e) => e.preventDefault()}
       onDragStart={(e) => e.preventDefault()}
@@ -638,43 +645,6 @@ function GalleryCard({
           />
         )}
 
-        {/* Glow on hover */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 48px rgba(255,255,255,0.07)",
-            opacity: hovered ? 1 : 0,
-            transition: "opacity 0.3s ease",
-          }}
-        />
-
-        {/* Bottom gradient */}
-        <div
-          className="absolute inset-x-0 bottom-0 pointer-events-none"
-          style={{
-            height: "65%",
-            background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%)",
-            opacity: hovered ? 1 : 0,
-            transition: "opacity 0.3s ease",
-          }}
-        />
-
-        {/* Title + category */}
-        <div
-          className="absolute inset-x-0 bottom-0 p-5 pointer-events-none"
-          style={{
-            opacity: hovered ? 1 : 0,
-            transform: hovered ? "translateY(0)" : "translateY(8px)",
-            transition: "opacity 0.3s ease, transform 0.3s ease",
-          }}
-        >
-          <p className="text-sm font-semibold mb-0.5" style={{ color: "#f5f5f7" }}>
-            {photo.title}
-          </p>
-          <p className="text-xs" style={{ color: "#a1a1a6" }}>
-            {photo.category}
-          </p>
-        </div>
       </div>
     </motion.div>
   );
@@ -1168,7 +1138,7 @@ export default function GalleryPage() {
         </AnimatePresence>
 
         {/* Two-tier photography: game cards → game detail. Illustrations stays as a single masonry. */}
-        <section className="px-8 sm:px-14 lg:px-20 pb-16">
+        <section className="px-8 sm:px-0 pb-16">
           <AnimatePresence mode="wait">
             {activeTab === "illustrations" ? (
               <motion.div
@@ -1234,7 +1204,7 @@ export default function GalleryPage() {
                   style={{ pointerEvents: isTransitioning ? "none" : undefined }}
                 >
                   {/* Heading row: back arrow at left, centered game title; byline centered below */}
-                  <div className="mb-20">
+                  <div className="mb-20 sm:px-14 lg:px-20">
                     <div className="relative">
                       <button
                         onClick={closeGame}
@@ -1302,7 +1272,7 @@ export default function GalleryPage() {
                   : "calc(100vw - 64px)";
                 const canvasMaxHeight = isPortrait
                   ? "calc(100vh - 64px)"
-                  : "calc(100vh - 64px - 160px)";
+                  : "calc(100vh - 64px - 240px)";
                 return (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.96, y: 16 }}
@@ -1371,8 +1341,8 @@ export default function GalleryPage() {
                     </div>
 
                     <div
-                      className={`p-6 shrink-0 ${isPortrait ? "flex flex-col overflow-y-auto" : ""}`}
-                      style={isPortrait ? { width: INFO_W } : undefined}
+                      className={`p-6 shrink-0 overflow-y-auto ${isPortrait ? "flex flex-col" : ""}`}
+                      style={isPortrait ? { width: INFO_W } : { maxHeight: 240 }}
                     >
                       <h2 className="text-lg font-semibold mb-1" style={{ color: "#f5f5f7" }}>
                         {selected.title}
