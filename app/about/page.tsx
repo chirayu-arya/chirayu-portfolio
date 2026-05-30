@@ -267,7 +267,7 @@ export default function AboutPage() {
 
       {/* ── Hero ── */}
       <section
-        className="relative pt-24 pb-8 px-8 sm:px-14 lg:px-20"
+        className="relative pt-36 pb-8 px-8 sm:px-14 lg:px-20"
       >
 
         <div ref={heroRef} className="relative" style={{ zIndex: 1 }}>

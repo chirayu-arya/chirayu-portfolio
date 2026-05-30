@@ -2,7 +2,6 @@
 
 import Nav from "../components/Nav";
 import Contact from "../components/Contact";
-import PageBlobs from "../components/PageBlobs";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef, useMemo, useLayoutEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -72,8 +71,8 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 75, tab: "photography", w: 2157, h: 2876, title: "The Offering",             category: "Hellblade: Senua's Sacrifice",               description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9650.JPG` },
   { id: 9,  tab: "photography", w: 2157, h: 3834, title: "After the Battle",         category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8381%203.JPG` },
   { id: 21, tab: "photography", w: 3840, h: 2160, title: "Roots of Pandora",         category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8204.JPG` },
-  { id: 84, tab: "photography", w: 3840, h: 2160, title: "Embers Over the Arches",   category: "Horizon Zero Dawn",            description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9723.JPG` },
-  { id: 83, tab: "photography", w: 3840, h: 2160, title: "Under Ancient Stars",      category: "Horizon Zero Dawn",            description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9722.JPG` },
+  { id: 84, tab: "photography", w: 3840, h: 2160, title: "Embers Over the Arches",   category: "Horizon Zero Dawn Remastered",            description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9723.JPG` },
+  { id: 83, tab: "photography", w: 3840, h: 2160, title: "Under Ancient Stars",      category: "Horizon Zero Dawn Remastered",            description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9722.JPG` },
   { id: 22, tab: "photography", w: 3840, h: 2160, title: "The Last Bloom",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8682.jpg` },
   { id: 23, tab: "photography", w: 2109, h: 2812, title: "Beneath the 33",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8690.JPG` },
   { id: 24, tab: "photography", w: 2160, h: 3840, title: "Bluebell Stand",           category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8869.JPG` },
@@ -121,19 +120,19 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 62, tab: "photography", w: 1495, h: 2492, title: "The Vessel",               category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9608.jpg` },
   { id: 68, tab: "photography", w: 2160, h: 3840, title: "Hearthfire",               category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9623.JPG` },
   { id: 70, tab: "photography", w: 1344, h: 2390, title: "Quiet Resolve",            category: "Hellblade: Senua's Sacrifice", description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9625.JPG` },
-  { id: 85, tab: "photography", w: 2160, h: 2880, title: "Red Bloom Country",        category: "Horizon Zero Dawn",            description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9724.JPG` },
+  { id: 85, tab: "photography", w: 2160, h: 2880, title: "Red Bloom Country",        category: "Horizon Zero Dawn Remastered",            description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9724.JPG` },
 ];
 
 const ILLUSTRATIONS: Photo[] = [
   { id: 1, tab: "illustrations", w: 2732, h: 2048, title: "Aurora",             category: ILLUS_TOOL, description: "A woman's face peers through a tropical canopy, framed by deep blues and warm coral leaves.", src: `${ILL}/Aurora%20-%20Chirayu%20Arya.PNG` },
   { id: 2, tab: "illustrations", w: 2048, h: 2732, title: "Chromatic Enigma",   category: ILLUS_TOOL, description: "A surreal kiss between two figures in violet and crimson, faces fragmented into bold colour blocks.", src: `${ILL}/Chromatic%20Enigma.PNG` },
-  { id: 3, tab: "illustrations", w: 2048, h: 2732, title: "Citrus Muse",        category: ILLUS_TOOL, description: "A woman cradling a sliced orange, eyelids painted with the same glowing pulp.", src: `${ILL}/Citrus%20Muse.PNG` },
-  { id: 4, tab: "illustrations", w: 2048, h: 2732, title: "Contour",            category: ILLUS_TOOL, description: "An upturned face caught mid-breath, eyes pooling with colour and light.", src: `${ILL}/Contour.PNG` },
+  { id: 9, tab: "illustrations", w: 2048, h: 2732, title: "Veiled Petals",      category: ILLUS_TOOL, description: "A blindfolded woman crowned in tangled flowers, lips parted toward the warm horizon.", src: `${ILL}/Veiled%20Petals.PNG` },
+  { id: 7, tab: "illustrations", w: 2048, h: 2732, title: "Scarlet Pout",       category: ILLUS_TOOL, description: "A close-up portrait, red sunglasses askew over glossy crimson lips.", src: `${ILL}/Scarlet%20Pout.PNG` },
   { id: 5, tab: "illustrations", w: 2048, h: 2732, title: "Emerald Reflections",category: ILLUS_TOOL, description: "A weathered green statue rendered in painterly strokes against a soft brown gradient.", src: `${ILL}/Emerald%20Reflections.png` },
   { id: 6, tab: "illustrations", w: 2048, h: 2732, title: "Golden Reverie",     category: ILLUS_TOOL, description: "A face dripping with molten honey, lips parted in quiet awe.", src: `${ILL}/Golden%20Reverie.PNG` },
-  { id: 7, tab: "illustrations", w: 2048, h: 2732, title: "Scarlet Pout",       category: ILLUS_TOOL, description: "A close-up portrait, red sunglasses askew over glossy crimson lips.", src: `${ILL}/Scarlet%20Pout.PNG` },
+  { id: 4, tab: "illustrations", w: 2048, h: 2732, title: "Contour",            category: ILLUS_TOOL, description: "An upturned face caught mid-breath, eyes pooling with colour and light.", src: `${ILL}/Contour.PNG` },
   { id: 8, tab: "illustrations", w: 2048, h: 2732, title: "Sunlit Chapters",    category: ILLUS_TOOL, description: "A woman lounging poolside, half-asleep behind a pink magazine titled 'All About Miami'.", src: `${ILL}/Sunlit%20Chapters.PNG` },
-  { id: 9, tab: "illustrations", w: 2048, h: 2732, title: "Veiled Petals",      category: ILLUS_TOOL, description: "A blindfolded woman crowned in tangled flowers, lips parted toward the warm horizon.", src: `${ILL}/Veiled%20Petals.PNG` },
+  { id: 3, tab: "illustrations", w: 2048, h: 2732, title: "Citrus Muse",        category: ILLUS_TOOL, description: "A woman cradling a sliced orange, eyelids painted with the same glowing pulp.", src: `${ILL}/Citrus%20Muse.PNG` },
 ];
 
 const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
@@ -143,13 +142,13 @@ const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http:
 // `coverId` optionally overrides the tier-1 cover photo (defaults to the first photo in source order).
 // `coverObjectPosition` shifts the visible region inside the 4:3 cover frame (CSS `object-position`).
 const GAMES: { category: string; studio: string; coverId?: number; coverObjectPosition?: string; pinTopIds?: number[] }[] = [
-  { category: "Clair Obscur: Expedition 33", studio: "Sandfall Interactive / Kepler Interactive", coverId: 22, pinTopIds: [57, 53] }, // The Last Bloom; pin Lampmaster + Great Wheel to top row
+  { category: "Clair Obscur: Expedition 33", studio: "Sandfall Interactive / Kepler Interactive", coverId: 53, pinTopIds: [57, 6] }, // The Great Wheel; pin Lampmaster + The First Spark to top row
   { category: "Ghost of Yōtei", studio: "Sucker Punch Productions / Sony Interactive Entertainment", coverId: 45, coverObjectPosition: "50% 62%" }, // Maple Strike
   { category: "Hellblade: Senua's Sacrifice", studio: "Ninja Theory / Xbox Game Studios", coverId: 65, coverObjectPosition: "50% 55%" }, // Crown of Memory
   { category: "Avatar: Frontiers of Pandora", studio: "Massive Entertainment / Ubisoft" },
   { category: "Ghost of Tsushima", studio: "Sucker Punch Productions / Sony Interactive Entertainment", coverObjectPosition: "50% 80%" },
   { category: "Marvel's Spider-Man 2", studio: "Insomniac Games / Sony Interactive Entertainment" },
-  { category: "Horizon Zero Dawn", studio: "Guerrilla Games / Sony Interactive Entertainment", coverId: 83 }, // Under Ancient Stars
+  { category: "Horizon Zero Dawn Remastered", studio: "Guerrilla Games / Sony Interactive Entertainment", coverId: 83 }, // Under Ancient Stars
   { category: "Horizon Forbidden West", studio: "Guerrilla Games / Sony Interactive Entertainment" },
   { category: "Real Photography", studio: "iPhone 16 Pro" },
 ];
@@ -314,6 +313,7 @@ function MasonryGrid({
   onCursorLeave,
   startDelayOffset = 0,
   pinTopIds,
+  landscapeThreshold = 1.7,
 }: {
   photos: Photo[];
   columnCount: number;
@@ -324,10 +324,15 @@ function MasonryGrid({
   onCursorLeave: () => void;
   startDelayOffset?: number;
   pinTopIds?: number[];
+  // Photos with w/h above this ratio go into their own full-width row. Default
+  // tuned for ultra-wide game stills (1.7); illustrations pass 1.0 so every
+  // true landscape gets a full row instead of being cropped to fit a portrait
+  // row's averaged height.
+  landscapeThreshold?: number;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const GAP = 6;
+  const GAP = 0;
 
   // Measure synchronously after first commit so the initial render has a real
   // width (height: 0 collapses the container, so we read width via getBCR rather
@@ -353,7 +358,7 @@ function MasonryGrid({
     if (!containerWidth || columnCount < 1) return { items: [], totalHeight: 0 };
     const colW = (containerWidth - GAP * (columnCount - 1)) / columnCount;
 
-    const isLandscape = (p: Photo) => p.w / p.h > 1.7;
+    const isLandscape = (p: Photo) => p.w / p.h > landscapeThreshold;
     const pinnedIds = pinTopIds ?? [];
     const pinnedSet = new Set(pinnedIds);
 
@@ -366,41 +371,48 @@ function MasonryGrid({
     }
     for (const p of photos) if (!pinnedSet.has(p.id)) ordered.push(p);
 
-    // Walk the ordered list and emit rows in source order. Each landscape is
-    // its own full-width row; portraits batch into rows of columnCount. When a
-    // landscape arrives mid-buffer, we look ahead in the queue and pull the
-    // next portraits forward to complete the row before emitting the landscape.
-    // This keeps rows visually tight while staying close to source order.
+    // Build rows by FIRST splitting the ordered list into portrait-rows and
+    // landscapes (each preserving source order), THEN evenly interleaving the
+    // two streams. Walking source order one-by-one wastes a landscape that
+    // appears early (e.g. Aurora at index 0) before any portrait rows exist
+    // to be separated. Bresenham-style distribution guarantees the minimum
+    // number of back-to-back rows possible given the available counts.
     type Row =
       | { kind: "L"; photo: Photo }
       | { kind: "P"; photos: Photo[] };
-    const rows: Row[] = [];
-    let buffer: Photo[] = [];
-    const flushBuffer = () => {
-      if (buffer.length > 0) {
-        rows.push({ kind: "P", photos: buffer });
-        buffer = [];
-      }
-    };
-    const queue: Photo[] = ordered.slice();
-    while (queue.length > 0) {
-      const p = queue.shift()!;
+
+    const pRows: Photo[][] = [];
+    const landscapes: Photo[] = [];
+    let buf: Photo[] = [];
+    for (const p of ordered) {
       if (isLandscape(p)) {
-        // Try to top up the portrait buffer from the queue so we don't emit a
-        // partial row right before this landscape.
-        while (buffer.length > 0 && buffer.length < columnCount) {
-          const idx = queue.findIndex(q => !isLandscape(q));
-          if (idx < 0) break;
-          buffer.push(queue.splice(idx, 1)[0]);
-        }
-        flushBuffer();
-        rows.push({ kind: "L", photo: p });
+        landscapes.push(p);
       } else {
-        buffer.push(p);
-        if (buffer.length === columnCount) flushBuffer();
+        buf.push(p);
+        if (buf.length === columnCount) {
+          pRows.push(buf);
+          buf = [];
+        }
       }
     }
-    flushBuffer();
+    if (buf.length > 0) pRows.push(buf);
+
+    // Interleave by perfectly alternating majority/minority until the minority
+    // stream is exhausted, then dump the leftover majority at the end. This
+    // pushes ALL unavoidable back-to-back rows to the tail of the layout
+    // instead of scattering them in the middle. Back-to-back count is still
+    // the math minimum (max(0, |L - P| - 1)); only the placement changes.
+    const pItems: Row[] = pRows.map(p => ({ kind: "P", photos: p }));
+    const lItems: Row[] = landscapes.map(p => ({ kind: "L", photo: p }));
+    const [majItems, minItems] =
+      pItems.length >= lItems.length ? [pItems, lItems] : [lItems, pItems];
+    const rows: Row[] = [];
+    let mi = 0, Mi = 0;
+    while (mi < minItems.length) {
+      rows.push(majItems[Mi++]);
+      rows.push(minItems[mi++]);
+    }
+    while (Mi < majItems.length) rows.push(majItems[Mi++]);
 
     // Render rows into absolute-positioned items. Landscape row = full width
     // at the photo's natural aspect. Portrait row = each portrait at colW with
@@ -433,7 +445,7 @@ function MasonryGrid({
 
     const totalHeight = y > 0 ? y - GAP : 0;
     return { items, totalHeight };
-  }, [containerWidth, columnCount, photos, pinTopIds]);
+  }, [containerWidth, columnCount, photos, pinTopIds, landscapeThreshold]);
 
   return (
     <div
@@ -617,6 +629,7 @@ function GalleryCard({
           position: "relative",
           overflow: "hidden",
           background: "#0a0a0a",
+          border: "12px solid #f5f1e6",
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -656,6 +669,7 @@ export default function GalleryPage() {
   const [selected, setSelected] = useState<Photo | null>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [cursorVisible, setCursorVisible] = useState(false);
+  const [cursorLabel, setCursorLabel] = useState<"View" | "View Collection">("View");
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [imgRect, setImgRect] = useState<{ w: number; h: number } | null>(null);
   const lightboxCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -712,7 +726,9 @@ export default function GalleryPage() {
   }, []);
 
   useEffect(() => {
-    setIsTouchDevice(window.matchMedia("(pointer: coarse)").matches);
+    // Phones only — tablets (iPad ≥ 768px) keep the desktop lightbox + cursor
+    // behavior even though they're touch devices.
+    setIsTouchDevice(window.matchMedia("(pointer: coarse) and (max-width: 767px)").matches);
   }, []);
 
   useEffect(() => {
@@ -1016,21 +1032,6 @@ export default function GalleryPage() {
         </p>
       </div>
 
-      <PageBlobs palette="magenta-orange" />
-
-      {/* Maroon blob — deep accent anchored at the very top of the gallery */}
-      <div
-        className="bg-blob absolute rounded-full pointer-events-none"
-        style={{
-          width: "90vmax",
-          height: "70vmax",
-          top: "-25vmax",
-          left: "50%",
-          transform: "translateX(-50%)",
-          background: "radial-gradient(ellipse, rgba(120,25,80,0.6) 0%, transparent 70%)",
-          zIndex: 0,
-        }}
-      />
 
       <div className="relative">
         <Nav />
@@ -1051,91 +1052,119 @@ export default function GalleryPage() {
               className="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap"
               style={{ background: "#f5f5f7", color: "#000" }}
             >
-              View
+              {cursorLabel}
             </div>
           </div>
         )}
 
-        {/* Page header + tab toggle — animates out smoothly when entering a game (tier 2) */}
+        {/* Editorial split-text toggle — fixed top-right, aligned with the Nav
+            at top-5. Two lowercase words separated by a hairline; active word
+            is bright, inactive is muted, an underline pill slides between
+            them via layoutId. Mobile gets a centered in-flow version. Fades
+            out on tier 2 (game detail). */}
         <AnimatePresence initial={false}>
-        {activeGame === null && (
-          <motion.div
-            key="gallery-header"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-            style={{ overflow: "hidden" }}
-          >
-        <section className="pt-24 pb-8 px-8 sm:px-14 lg:px-20">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
-            style={{ color: "#86868b" }}
-          >
-            Gallery
-          </motion.p>
-          <div className="flex items-end justify-between gap-8">
-            <motion.h1
-              initial={{ opacity: 0, x: -60 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.05 }}
-              className="font-black tracking-tight leading-[0.92]"
-              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
-            >
-              Take a deep dive.
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.3 }}
-              className="text-sm hidden sm:block"
-              style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "18rem", textAlign: "right" }}
-            >
-              A scrapbook for the chronically curious.
-            </motion.p>
-          </div>
-        </section>
-
-        {/* Toggle */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-          className="flex justify-center pb-10"
-        >
-          <div
-            className="flex items-center p-1 rounded-full"
-            style={{
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.09)",
-            }}
-          >
-            {(["photography", "illustrations"] as Tab[]).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => switchTab(tab)}
-                className="relative px-6 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer"
-                style={{ color: activeTab === tab ? "#000" : "rgba(255,255,255,0.5)" }}
+          {activeGame === null && (
+            <>
+              {/* Desktop: fixed top-right, vertically aligned with Nav */}
+              <motion.div
+                key="gallery-toggle-desktop"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                className="hidden md:flex fixed top-[28px] left-6 lg:left-10 z-50 items-center gap-5 py-2"
               >
-                {activeTab === tab && (
-                  <motion.div
-                    layoutId="tab-pill"
-                    className="absolute inset-0 rounded-full"
-                    style={{ background: "#f5f5f7" }}
-                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                  />
-                )}
-                <span className="relative z-10 capitalize">{tab}</span>
-              </button>
-            ))}
-          </div>
-        </motion.div>
-          </motion.div>
-        )}
+                {(["photography", "illustrations"] as Tab[]).map((tab, i) => (
+                  <div key={tab} className="flex items-center gap-5">
+                    {i > 0 && (
+                      <span
+                        aria-hidden
+                        style={{
+                          width: "1px",
+                          height: "18px",
+                          background: "rgba(245,245,247,0.18)",
+                        }}
+                      />
+                    )}
+                    <button
+                      onClick={() => switchTab(tab)}
+                      className="relative text-sm font-medium tracking-tight cursor-pointer transition-colors duration-200"
+                      style={{
+                        color: activeTab === tab ? "#f5f5f7" : "#515154",
+                        padding: "2px 0",
+                      }}
+                    >
+                      <span className="relative z-10 capitalize">{tab}</span>
+                      {activeTab === tab && (
+                        <motion.div
+                          layoutId="gallery-tab-underline"
+                          className="absolute left-0 right-0"
+                          style={{
+                            bottom: -2,
+                            height: 1,
+                            background: "#f5f5f7",
+                          }}
+                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                        />
+                      )}
+                    </button>
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* Mobile: centered in flow, sits below the mobile nav bar */}
+              <motion.div
+                key="gallery-toggle-mobile"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 12 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                className="md:hidden flex justify-center items-center gap-5 pt-24 pb-10"
+              >
+                {(["photography", "illustrations"] as Tab[]).map((tab, i) => (
+                  <div key={tab} className="flex items-center gap-5">
+                    {i > 0 && (
+                      <span
+                        aria-hidden
+                        style={{
+                          width: "1px",
+                          height: "18px",
+                          background: "rgba(245,245,247,0.18)",
+                        }}
+                      />
+                    )}
+                    <button
+                      onClick={() => switchTab(tab)}
+                      className="relative text-base font-medium tracking-tight cursor-pointer transition-colors duration-200"
+                      style={{
+                        color: activeTab === tab ? "#f5f5f7" : "#515154",
+                        padding: "2px 0",
+                      }}
+                    >
+                      <span className="relative z-10 capitalize">{tab}</span>
+                      {activeTab === tab && (
+                        <motion.div
+                          layoutId="gallery-tab-underline-mobile"
+                          className="absolute left-0 right-0"
+                          style={{
+                            bottom: -2,
+                            height: 1,
+                            background: "#f5f5f7",
+                          }}
+                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                        />
+                      )}
+                    </button>
+                  </div>
+                ))}
+              </motion.div>
+            </>
+          )}
         </AnimatePresence>
+
+        {/* Desktop spacer — the toggle is fixed-positioned and out of flow,
+            so we add top padding before the cards. */}
+        {activeGame === null && <div className="hidden md:block pt-36" />}
 
         {/* Two-tier photography: game cards → game detail. Illustrations stays as a single masonry. */}
         <section className="px-8 sm:px-0 pb-16">
@@ -1147,21 +1176,20 @@ export default function GalleryPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4"
-                style={{ columnGap: "6px", pointerEvents: isTransitioning ? "none" : undefined }}
+                style={{ pointerEvents: isTransitioning ? "none" : undefined }}
               >
-                {ILLUSTRATIONS.map((photo, i) => (
-                  <GalleryCard
-                    key={`illus-${photo.id}`}
-                    photo={photo}
-                    delay={Math.min(i * 0.025, 0.7)}
+                <div style={{ background: "#f5f1e6", padding: 12 }}>
+                  <MasonryGrid
+                    photos={ILLUSTRATIONS}
+                    columnCount={columnCount}
                     isTouchDevice={isTouchDevice}
                     onSelect={setSelected}
                     onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
                     onMouseMove={handleMouseMove}
                     onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
+                    landscapeThreshold={1.0}
                   />
-                ))}
+                </div>
               </motion.div>
             ) : activeGame === null ? (
               // Tier 1 — game cards grid
@@ -1171,7 +1199,7 @@ export default function GalleryPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-2"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-0"
               >
                 {PHOTOGRAPHY_GROUPS.map((group, gi) => {
                   return (
@@ -1182,9 +1210,17 @@ export default function GalleryPage() {
                       delay={gi * 0.06}
                       isTouchDevice={isTouchDevice}
                       onOpen={() => openGame(group.category)}
-                      onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
+                      onCursorEnter={() => {
+                        if (isTouchDevice) return;
+                        setCursorLabel("View Collection");
+                        setCursorVisible(true);
+                      }}
                       onMouseMove={handleMouseMove}
-                      onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
+                      onCursorLeave={() => {
+                        if (isTouchDevice) return;
+                        setCursorVisible(false);
+                        setCursorLabel("View");
+                      }}
                     />
                   );
                 })}
@@ -1227,16 +1263,18 @@ export default function GalleryPage() {
                       {group.studio} · {group.photos.length} {group.photos.length === 1 ? "shot" : "shots"}
                     </p>
                   </div>
-                  <MasonryGrid
-                    photos={group.photos}
-                    columnCount={columnCount}
-                    isTouchDevice={isTouchDevice}
-                    onSelect={setSelected}
-                    onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
-                    onMouseMove={handleMouseMove}
-                    onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
-                    pinTopIds={group.pinTopIds}
-                  />
+                  <div style={{ background: "#f5f1e6", padding: 12 }}>
+                    <MasonryGrid
+                      photos={group.photos}
+                      columnCount={columnCount}
+                      isTouchDevice={isTouchDevice}
+                      onSelect={setSelected}
+                      onCursorEnter={() => { if (!isTouchDevice) setCursorVisible(true); }}
+                      onMouseMove={handleMouseMove}
+                      onCursorLeave={() => { if (!isTouchDevice) setCursorVisible(false); }}
+                      pinTopIds={group.pinTopIds}
+                    />
+                  </div>
                 </motion.div>
               );
             })()}

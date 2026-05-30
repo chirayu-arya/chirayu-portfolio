@@ -479,7 +479,7 @@ export default function NewsletterPage() {
         </div>
 
         {/* CTA block — fills full viewport height */}
-        <div className="min-h-[100svh] flex flex-col justify-center pt-20 sm:pt-24 lg:pt-28 pb-10 sm:pb-12">
+        <div className="min-h-[100svh] flex flex-col justify-center pt-28 sm:pt-32 lg:pt-36 pb-10 sm:pb-12">
           {/* Eyebrow — centered */}
           <motion.p
             initial={{ opacity: 0, y: 8 }}
