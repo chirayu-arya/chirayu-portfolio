@@ -63,6 +63,7 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 88, tab: "photography", w: 2157, h: 2876, title: "Salute to the Sky",        category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9737.JPG` },
   { id: 12, tab: "photography", w: 1844, h: 3278, title: "Ginkgo Storm",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8858.JPG` },
   { id: 74, tab: "photography", w: 2152, h: 2869, title: "Runes and Embers",         category: "Hellblade: Senua's Sacrifice",               description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9648.JPG` },
+  { id: 95, tab: "photography", w: 1888, h: 2517, title: "Trailing the Glow",        category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9743.JPG` },
   { id: 54, tab: "photography", w: 1814, h: 3225, title: "Blood Memory",             category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9531.JPG` },
   { id: 51, tab: "photography", w: 1952, h: 2602, title: "Lunar Pilgrim",            category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9510.jpg` },
   { id: 55, tab: "photography", w: 3840, h: 2160, title: "Echoes of 33",             category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9542.JPG` },
@@ -95,6 +96,7 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 32, tab: "photography", w: 3840, h: 2160, title: "The Officer",              category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9332.JPG` },
   { id: 33, tab: "photography", w: 1601, h: 2135, title: "Camp at Dusk",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8871.JPG` },
   { id: 78, tab: "photography", w: 2157, h: 2876, title: "Trophy of the Slain",      category: "Hellblade: Senua's Sacrifice",               description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9656.JPG` },
+  { id: 94, tab: "photography", w: 1450, h: 1933, title: "Forge of the Horus",       category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9740.JPG` },
   { id: 91, tab: "photography", w: 1893, h: 2524, title: "Wading at Golden Hour",    category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9748.JPG` },
   { id: 34, tab: "photography", w: 1860, h: 2480, title: "Burning Forward",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9338.jpg` },
   { id: 35, tab: "photography", w: 3840, h: 2160, title: "Aerial Confrontation",     category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7743.JPG` },
@@ -111,6 +113,7 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 42, tab: "photography", w: 3840, h: 2160, title: "Wings of Dread",           category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7745.JPG` },
   { id: 80, tab: "photography", w: 2157, h: 2876, title: "Gramr in Her Hand",        category: "Hellblade: Senua's Sacrifice",               description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9661.JPG` },
   { id: 43, tab: "photography", w: 3840, h: 2160, title: "Behind the Mask",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9457.JPG` },
+  { id: 96, tab: "photography", w: 1531, h: 2041, title: "Daughter of the Hunt",     category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9750.JPG` },
   { id: 44, tab: "photography", w: 2157, h: 2876, title: "Pilgrim Mound",            category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9492.jpg` },
   { id: 45, tab: "photography", w: 1914, h: 3402, title: "Maple Strike",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8948.JPG` },
   { id: 46, tab: "photography", w: 2157, h: 2876, title: "The Last Embrace",         category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9497.jpg` },
@@ -134,13 +137,18 @@ const PHOTOGRAPHY: Photo[] = [
 const ILLUSTRATIONS: Photo[] = [
   { id: 1, tab: "illustrations", w: 2732, h: 2048, title: "Aurora",             category: ILLUS_TOOL, description: "A woman's face peers through a tropical canopy, framed by deep blues and warm coral leaves.", src: `${ILL}/Aurora%20-%20Chirayu%20Arya.PNG` },
   { id: 2, tab: "illustrations", w: 2048, h: 2732, title: "Chromatic Enigma",   category: ILLUS_TOOL, description: "A surreal kiss between two figures in violet and crimson, faces fragmented into bold colour blocks.", src: `${ILL}/Chromatic%20Enigma.PNG` },
+  { id: 10, tab: "illustrations", w: 2048, h: 2732, title: "Emilia Clarke",     category: ILLUS_TOOL, description: "A portrait of Emilia Clarke as Daenerys Targaryen, fair braided hair framing her face, a silver dragon clasp at her collar.", src: `${ILL}/Emilia%20Clarke.png` },
   { id: 9, tab: "illustrations", w: 2048, h: 2732, title: "Veiled Petals",      category: ILLUS_TOOL, description: "A blindfolded woman crowned in tangled flowers, lips parted toward the warm horizon.", src: `${ILL}/Veiled%20Petals.PNG` },
   { id: 7, tab: "illustrations", w: 2048, h: 2732, title: "Scarlet Pout",       category: ILLUS_TOOL, description: "A close-up portrait, red sunglasses askew over glossy crimson lips.", src: `${ILL}/Scarlet%20Pout.PNG` },
+  { id: 11, tab: "illustrations", w: 2732, h: 2048, title: "Eye",               category: ILLUS_TOOL, description: "An extreme close-up of a brown eye, the iris striated with amber and copper, the reflection of a window curving across the cornea.", src: `${ILL}/Eye.png` },
   { id: 5, tab: "illustrations", w: 2048, h: 2732, title: "Emerald Reflections",category: ILLUS_TOOL, description: "A weathered green statue rendered in painterly strokes against a soft brown gradient.", src: `${ILL}/Emerald%20Reflections.png` },
+  { id: 12, tab: "illustrations", w: 2048, h: 2732, title: "Maelle",            category: ILLUS_TOOL, description: "Maelle in profile against deep black, her hair scattering into a cascade of grey and coral petals, gold geometry framing the canvas.", src: `${ILL}/Maelle.png` },
   { id: 6, tab: "illustrations", w: 2048, h: 2732, title: "Golden Reverie",     category: ILLUS_TOOL, description: "A face dripping with molten honey, lips parted in quiet awe.", src: `${ILL}/Golden%20Reverie.PNG` },
   { id: 4, tab: "illustrations", w: 2048, h: 2732, title: "Contour",            category: ILLUS_TOOL, description: "An upturned face caught mid-breath, eyes pooling with colour and light.", src: `${ILL}/Contour.PNG` },
+  { id: 13, tab: "illustrations", w: 2048, h: 2732, title: "Roman III",         category: ILLUS_TOOL, description: "A classical marble bust reimagined in bold pop colour, blue planes carved through the face, pink and ochre curls dripping into the dark.", src: `${ILL}/Roman%20III.png` },
   { id: 8, tab: "illustrations", w: 2048, h: 2732, title: "Sunlit Chapters",    category: ILLUS_TOOL, description: "A woman lounging poolside, half-asleep behind a pink magazine titled 'All About Miami'.", src: `${ILL}/Sunlit%20Chapters.PNG` },
   { id: 3, tab: "illustrations", w: 2048, h: 2732, title: "Citrus Muse",        category: ILLUS_TOOL, description: "A woman cradling a sliced orange, eyelids painted with the same glowing pulp.", src: `${ILL}/Citrus%20Muse.PNG` },
+  { id: 14, tab: "illustrations", w: 2048, h: 2732, title: "Shimmer",           category: ILLUS_TOOL, description: "A woman's face caught in a wash of orange light and deep blue shadow, one hand raised across her brow, hair streaking through the frame.", src: `${ILL}/Shimmer.png` },
 ];
 
 const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
@@ -277,6 +285,9 @@ const PHOTO_DESCRIPTIONS: Record<number, string> = {
   91: "Aloy wades through a sunset cove, bow drawn low, the Snapmaw ahead unaware it has already been chosen. The water carries the warmth of the day and the cold of what's coming next. She breathes once, finds the line, and the world quiets down.",
   92: "Aloy looses an arrow against a sky of molten cloud, knee-deep in still water, her silhouette repeated in the surface. The reflection looks like a second hunter sharing the same breath. For a moment there is no machine, no quarry, just the curve of the bow and the sun coming down.",
   93: "Aloy rides her Charger through a shallow river at twilight, the machine's running lights cooling the dark to blue. A campfire burns small on the far bank, the only warm thing for a long way. She isn't going toward it; she's just keeping moving, the way the land seems to ask her to.",
+  94: "The carcass of a Horus catches in the dark, fire still bleeding through its plating from somewhere deep inside. The iron arc above looks less like architecture and more like a rib that forgot to fall. You stand at the edge of it and you can feel the heat the metal still carries.",
+  95: "Aloy stops at the tree line, the cultists below already lit blue by whatever ritual they're feeding. Her bow stays low; the snow is too quiet to break first. She picks her line through the trees and lets them keep singing for a moment longer.",
+  96: "Aloy stands waist-deep in the river at golden hour, war paint and quill catching the same light as the water. She isn't waiting for anything; the pose is just what's left when the hunt drops away for a breath. Behind her, the canyon walls hold the day a little longer than they should.",
 };
 
 // Lightbox description for any photo. Illustrations use their inline copy;
