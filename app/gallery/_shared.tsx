@@ -502,6 +502,9 @@ function GameCard({
   cover,
   delay,
   isTouchDevice,
+  isTablet,
+  previewed,
+  onPreview,
   onOpen,
   onCursorEnter,
   onMouseMove,
@@ -511,17 +514,30 @@ function GameCard({
   cover: Photo;
   delay: number;
   isTouchDevice: boolean;
+  isTablet: boolean;
+  previewed: boolean;
+  onPreview: () => void;
   onOpen: () => void;
   onCursorEnter: () => void;
   onMouseMove: (e: React.MouseEvent) => void;
   onCursorLeave: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
+  // Tablet two-tap pattern: first tap shows the editorial overlay (previewed),
+  // second tap actually opens the collection. Desktop falls through directly.
+  const isShown = hovered || previewed;
+  const handleClick = () => {
+    if (isTablet && !previewed) {
+      onPreview();
+      return;
+    }
+    onOpen();
+  };
 
   return (
     <motion.button
       type="button"
-      onClick={onOpen}
+      onClick={handleClick}
       onMouseEnter={() => { setHovered(true); onCursorEnter(); }}
       onMouseMove={onMouseMove}
       onMouseLeave={() => { setHovered(false); onCursorLeave(); }}
@@ -554,7 +570,7 @@ function GameCard({
             userSelect: "none",
             WebkitTouchCallout: "none",
             objectPosition: group.coverObjectPosition ?? "50% 50%",
-            transform: hovered ? "scale(1.05)" : "scale(1)",
+            transform: isShown ? "scale(1.05)" : "scale(1)",
             transition: "transform 0.7s ease",
             // @ts-expect-error vendor-prefixed property not in CSS types
             WebkitUserDrag: "none",
@@ -567,17 +583,17 @@ function GameCard({
           style={{
             inset: 0,
             background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 25%, rgba(0,0,0,0) 50%)",
-            opacity: hovered ? 1 : 0,
+            opacity: isShown ? 1 : 0,
             transition: "opacity 0.35s ease",
           }}
         />
 
-        {/* Editorial overlay — anchored to the bottom, hover only */}
+        {/* Editorial overlay — anchored to the bottom, hover (desktop) or first-tap (tablet) */}
         <div
           className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center px-6 pb-8 pointer-events-none"
           style={{
-            opacity: hovered ? 1 : 0,
-            transform: hovered ? "translateY(0)" : "translateY(8px)",
+            opacity: isShown ? 1 : 0,
+            transform: isShown ? "translateY(0)" : "translateY(8px)",
             transition: "opacity 0.35s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
@@ -687,6 +703,8 @@ export default function GalleryPage() {
   const [cursorVisible, setCursorVisible] = useState(false);
   const [cursorLabel, setCursorLabel] = useState<"View" | "View Collection">("View");
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+  const [previewedCategory, setPreviewedCategory] = useState<string | null>(null);
   const [imgRect, setImgRect] = useState<{ w: number; h: number } | null>(null);
   const lightboxCanvasRef = useRef<HTMLCanvasElement>(null);
   const loadedImgRef = useRef<HTMLImageElement | null>(null);
@@ -745,6 +763,7 @@ export default function GalleryPage() {
     // Phones only — tablets (iPad ≥ 768px) keep the desktop lightbox + cursor
     // behavior even though they're touch devices.
     setIsTouchDevice(window.matchMedia("(pointer: coarse) and (max-width: 767px)").matches);
+    setIsTablet(window.matchMedia("(pointer: coarse) and (min-width: 768px)").matches);
   }, []);
 
   useEffect(() => {
@@ -1225,7 +1244,10 @@ export default function GalleryPage() {
                       cover={group.cover}
                       delay={gi * 0.06}
                       isTouchDevice={isTouchDevice}
-                      onOpen={() => openGame(group.category)}
+                      isTablet={isTablet}
+                      previewed={previewedCategory === group.category}
+                      onPreview={() => setPreviewedCategory(group.category)}
+                      onOpen={() => { setPreviewedCategory(null); openGame(group.category); }}
                       onCursorEnter={() => {
                         if (isTouchDevice) return;
                         setCursorLabel("View Collection");
