@@ -48,6 +48,7 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 82, tab: "photography", w: 2157, h: 2876, title: "The Painted Hunter",       category: "Horizon Forbidden West",       description: VIRTUAL_DESC, src: `${VP}/Horizon%20Forbidden%20West/IMG_9716.jpg` },
   { id: 58, tab: "photography", w: 3840, h: 2160, title: "Runebearer",               category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9556%202.JPG` },
   { id: 1,  tab: "photography", w: 3840, h: 2160, title: "Together at 33",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/Gustave%20%26%20Sophie%20-%20Chirayu%20Arya.jpg` },
+  { id: 97, tab: "photography", w: 1246, h: 1661, title: "The Bearer",               category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9767.JPG` },
   { id: 2,  tab: "photography", w: 3840, h: 2160, title: "Lumière Glance",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_7685.jpg` },
   { id: 3,  tab: "photography", w: 3814, h: 2145, title: "Stillness Beneath the Falls", category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8199.JPG` },
   { id: 72, tab: "photography", w: 2157, h: 2876, title: "Inside the Ribcage",       category: "Hellblade: Senua's Sacrifice",               description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9643.JPG` },
@@ -57,6 +58,7 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 6,  tab: "photography", w: 2157, h: 2876, title: "The First Spark",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8255.jpg` },
   { id: 7,  tab: "photography", w: 3840, h: 2160, title: "Symbiote Showdown",        category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7733.JPG` },
   { id: 73, tab: "photography", w: 1916, h: 2554, title: "The Lorekeeper Kneels",    category: "Hellblade: Senua's Sacrifice",               description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9647.JPG` },
+  { id: 98, tab: "photography", w: 1620, h: 2160, title: "Marked Witness",           category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9768.JPG` },
   { id: 20, tab: "photography", w: 2157, h: 2876, title: "Petals at Midnight",       category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8652.jpg` },
   { id: 10, tab: "photography", w: 2305, h: 1297, title: "Plains Lily",              category: "Avatar: Frontiers of Pandora", description: VIRTUAL_DESC, src: `${VP}/Avatar/IMG_8200.JPG` },
   { id: 11, tab: "photography", w: 1683, h: 2992, title: "Into the Light",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8392%202.JPG` },
@@ -80,6 +82,7 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 83, tab: "photography", w: 3840, h: 2160, title: "Under Ancient Stars",      category: "Horizon Zero Dawn Remastered",            description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9722.JPG` },
   { id: 22, tab: "photography", w: 3840, h: 2160, title: "The Last Bloom",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8682.jpg` },
   { id: 23, tab: "photography", w: 2109, h: 2812, title: "Beneath the 33",           category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_8690.JPG` },
+  { id: 99, tab: "photography", w: 3840, h: 2160, title: "The Cauldron's Heart",     category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9769.JPG` },
   { id: 24, tab: "photography", w: 2160, h: 3840, title: "Bluebell Stand",           category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8869.JPG` },
   { id: 76, tab: "photography", w: 1605, h: 2852, title: "Half Made",                category: "Hellblade: Senua's Sacrifice",               description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9651.JPG` },
   { id: 52, tab: "photography", w: 2017, h: 2689, title: "Sundered Sky",             category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9519.JPG` },
@@ -110,12 +113,14 @@ const PHOTOGRAPHY: Photo[] = [
   { id: 39, tab: "photography", w: 1971, h: 3504, title: "Ember Stare",              category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9436.JPG` },
   { id: 40, tab: "photography", w: 1601, h: 2135, title: "Resting Companions",       category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8901.JPG` },
   { id: 41, tab: "photography", w: 2160, h: 2880, title: "First Meeting",            category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9452.jpg` },
+  { id: 100, tab: "photography", w: 1432, h: 1909, title: "Override",                 category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9770.JPG` },
   { id: 42, tab: "photography", w: 3840, h: 2160, title: "Wings of Dread",           category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7745.JPG` },
   { id: 80, tab: "photography", w: 2157, h: 2876, title: "Gramr in Her Hand",        category: "Hellblade: Senua's Sacrifice",               description: VIRTUAL_DESC, src: `${VP}/Hellblade%20Senua%27s%20Sacrifice/IMG_9661.JPG` },
   { id: 43, tab: "photography", w: 3840, h: 2160, title: "Behind the Mask",          category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9457.JPG` },
   { id: 96, tab: "photography", w: 1531, h: 2041, title: "Daughter of the Hunt",     category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9750.JPG` },
   { id: 44, tab: "photography", w: 2157, h: 2876, title: "Pilgrim Mound",            category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9492.jpg` },
   { id: 45, tab: "photography", w: 1914, h: 3402, title: "Maple Strike",             category: "Ghost of Yōtei",               description: VIRTUAL_DESC, src: `${VP}/Ghost%20of%20Yotei/IMG_8948.JPG` },
+  { id: 101, tab: "photography", w: 3840, h: 2160, title: "Through the Corruption",   category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9771.JPG` },
   { id: 46, tab: "photography", w: 2157, h: 2876, title: "The Last Embrace",         category: "Clair Obscur: Expedition 33",                description: VIRTUAL_DESC, src: `${VP}/Expedition%2033/IMG_9497.jpg` },
   { id: 47, tab: "photography", w: 3840, h: 2160, title: "The Final Grip",           category: "Marvel's Spider-Man 2",        description: VIRTUAL_DESC, src: `${VP}/Spider%20Man%202/IMG_7746.JPG` },
   { id: 93, tab: "photography", w: 1850, h: 2467, title: "Charger in Twilight",      category: "Horizon Zero Dawn Remastered", description: VIRTUAL_DESC, src: `${VP}/Horizon%20Zero%20Dawn/IMG_9752.JPG` },
@@ -164,7 +169,7 @@ const GAMES: { category: string; studio: string; coverId?: number; coverObjectPo
   { category: "Avatar: Frontiers of Pandora", studio: "Massive Entertainment / Ubisoft" },
   { category: "Ghost of Tsushima", studio: "Sucker Punch Productions / Sony Interactive Entertainment", coverObjectPosition: "50% 80%" },
   { category: "Marvel's Spider-Man 2", studio: "Insomniac Games / Sony Interactive Entertainment" },
-  { category: "Horizon Zero Dawn Remastered", studio: "Guerrilla Games / Sony Interactive Entertainment", coverId: 83, pinTopIds: [92, 86, 85, 93, 91, 88, 90, 89, 83, 84, 87] }, // Under Ancient Stars; pinned portrait order, then landscapes
+  { category: "Horizon Zero Dawn Remastered", studio: "Guerrilla Games / Sony Interactive Entertainment", coverId: 83, pinTopIds: [92, 86, 85, 93, 91, 88, 97, 98, 95, 94, 100, 96, 90, 89, 83, 101, 99, 84, 87] }, // All HZD pinned: portraits first (rows 1-4), then landscapes — trailing landscapes order: Cauldron, Embers, Aurora
   { category: "Horizon Forbidden West", studio: "Guerrilla Games / Sony Interactive Entertainment" },
   { category: "Real Photography", studio: "iPhone 16 Pro" },
 ];
@@ -288,6 +293,11 @@ const PHOTO_DESCRIPTIONS: Record<number, string> = {
   94: "The carcass of a Horus catches in the dark, fire still bleeding through its plating from somewhere deep inside. The iron arc above looks less like architecture and more like a rib that forgot to fall. You stand at the edge of it and you can feel the heat the metal still carries.",
   95: "Aloy stops at the tree line, the cultists below already lit blue by whatever ritual they're feeding. Her bow stays low; the snow is too quiet to break first. She picks her line through the trees and lets them keep singing for a moment longer.",
   96: "Aloy stands waist-deep in the river at golden hour, war paint and quill catching the same light as the water. She isn't waiting for anything; the pose is just what's left when the hunt drops away for a breath. Behind her, the canyon walls hold the day a little longer than they should.",
+  97: "Aloy stands inside a Cauldron, the blue cathedral light catching the gold of her armour. Behind her the machines that built her world hum in their old work. She wears the moment like she's already used to it.",
+  98: "An elder of the Banuk holds the camera with eyes that have seen more winters than most. The blood-smear war paint is fresh; the tracks across her cheeks are older. She does not look at you so much as through you.",
+  99: "Aloy faces the core at the bottom of a Cauldron, a glass sphere lit from inside by an old idea of progress. The walkways curve around her like ribs, the blue light too steady to be natural. She is here to take what she needs and leave it standing.",
+  100: "Aloy crouches mid-override, her spear locked into a machine's spine, the air around her tool spitting red and white. The world blurs out behind her; what matters is the timing. A few more seconds and this one is hers.",
+  101: "A hunter draws her bow through a curtain of corrupted purple shards, the light fracturing around her like broken glass. The Daemon-touched site warps the air; the arrow finds its line anyway. Out here, faith and aim are the same act.",
 };
 
 // Lightbox description for any photo. Illustrations use their inline copy;
