@@ -1,7 +1,7 @@
 "use client";
 
-import Nav from "../components/Nav";
-import Contact from "../components/Contact";
+import AppleNav from "../components/AppleNav";
+import AppleFooter from "../components/AppleFooter";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef, useMemo, useLayoutEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -577,16 +577,17 @@ function GameCard({
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-      className={`text-left ${isTouchDevice ? "" : "cursor-none"}`}
+      className={`text-left block w-full ${isTouchDevice ? "" : "cursor-none"}`}
       style={{ background: "transparent", padding: 0, border: "none" }}
     >
-      {/* Cover — image only by default; editorial overlay appears on hover */}
+      {/* Cover image — thin mat border matches page bg */}
       <div
         style={{
           aspectRatio: "4 / 3",
           position: "relative",
           overflow: "hidden",
           background: "#0a0a0a",
+          border: "4px solid #fbfbfd",
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -595,51 +596,29 @@ function GameCard({
           alt={group.category}
           loading="lazy"
           className="absolute inset-0 w-full h-full object-cover"
-          draggable={false}
-          onContextMenu={(e) => e.preventDefault()}
-          onDragStart={(e) => e.preventDefault()}
           style={{
-            WebkitUserSelect: "none",
-            userSelect: "none",
-            WebkitTouchCallout: "none",
             objectPosition: group.coverObjectPosition ?? "50% 50%",
-            transform: isShown ? "scale(1.05)" : "scale(1)",
-            transition: "transform 0.7s ease",
-            // @ts-expect-error vendor-prefixed property not in CSS types
-            WebkitUserDrag: "none",
+            transform: isShown ? "scale(1.04)" : "scale(1)",
+            transition: "transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         />
+      </div>
 
-        {/* Black tint — fades from opaque at the bottom to transparent at the top */}
-        <div
-          className="absolute pointer-events-none"
+      {/* Caption — always visible, beneath the image, Apple Photos album style */}
+      <div className="px-1 pt-4 pb-8 text-center">
+        <p
+          className="font-semibold leading-tight"
           style={{
-            inset: 0,
-            background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 25%, rgba(0,0,0,0) 50%)",
-            opacity: isShown ? 1 : 0,
-            transition: "opacity 0.35s ease",
-          }}
-        />
-
-        {/* Editorial overlay — anchored to the bottom, hover (desktop) or first-tap (tablet) */}
-        <div
-          className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center px-6 pb-8 pointer-events-none"
-          style={{
-            opacity: isShown ? 1 : 0,
-            transform: isShown ? "translateY(0)" : "translateY(8px)",
-            transition: "opacity 0.35s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
+            fontSize: "clamp(1.05rem, 1.4vw, 1.35rem)",
+            color: "#1d1d1f",
+            letterSpacing: "-0.02em",
           }}
         >
-          <p
-            className="font-black tracking-tight leading-[0.95]"
-            style={{ fontSize: "clamp(1.5rem, 2.6vw, 2.4rem)", color: "#f5f5f7" }}
-          >
-            {group.category}
-          </p>
-          <p className="text-sm mt-3" style={{ color: "rgba(245,245,247,0.7)" }}>
-            {group.studio}
-          </p>
-        </div>
+          {group.category}
+        </p>
+        <p className="mt-1.5" style={{ fontSize: 13, color: "#86868b" }}>
+          {group.studio}
+        </p>
       </div>
     </motion.button>
   );
@@ -685,8 +664,6 @@ function GalleryCard({
       onMouseMove={onMouseMove}
       onMouseLeave={onCursorLeave}
       onClick={() => { if (!isTouchDevice) onSelect(photo); }}
-      onContextMenu={(e) => e.preventDefault()}
-      onDragStart={(e) => e.preventDefault()}
     >
       <div
         style={{
@@ -694,7 +671,7 @@ function GalleryCard({
           position: "relative",
           overflow: "hidden",
           background: "#0a0a0a",
-          border: "12px solid #f5f1e6",
+          border: "4px solid #fbfbfd",
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -703,16 +680,6 @@ function GalleryCard({
           alt={photo.title}
           loading="lazy"
           className="absolute inset-0 w-full h-full object-cover"
-          draggable={false}
-          onContextMenu={(e) => e.preventDefault()}
-          onDragStart={(e) => e.preventDefault()}
-          style={{
-            WebkitUserSelect: "none",
-            userSelect: "none",
-            WebkitTouchCallout: "none",
-            // @ts-expect-error vendor-prefixed property not in CSS types
-            WebkitUserDrag: "none",
-          }}
         />
 
         {/* Noise texture on empty placeholder */}
@@ -1067,42 +1034,17 @@ export default function GalleryPage() {
 
   return (
     <main
-      className="gallery-protected gallery-no-print"
-      style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7", position: "relative", overflow: "hidden" }}
+      style={{ background: "#fbfbfd", minHeight: "100vh", color: "#1d1d1f", position: "relative", overflow: "hidden" }}
     >
-      <style>{`
-        .gallery-protected,
-        .gallery-protected * {
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
-        .gallery-protected img,
-        .gallery-protected canvas {
-          -webkit-user-drag: none;
-          user-drag: none;
-        }
-        @media print {
-          .gallery-no-print { visibility: hidden !important; }
-        }
-      `}</style>
-
-      <div
-        ref={blackoutOverlayRef}
-        className="fixed inset-0 items-center justify-center"
-        style={{ background: "#000", zIndex: 99999, display: "none" }}
-        aria-hidden
-      >
-        <p style={{ color: "#86868b", fontSize: "0.78rem", letterSpacing: "0.22em", textTransform: "uppercase", fontWeight: 500 }}>
-          Screenshot protection active
-        </p>
-      </div>
+      {/* Screenshot protection disabled per user request. To restore:
+          1. Add className="gallery-protected gallery-no-print" on this <main>
+          2. Re-add the <style> block (user-select, user-drag, print hide)
+          3. Re-add the blackout overlay <div ref={blackoutOverlayRef}>
+          4. Re-add onContextMenu / onDragStart / WebkitUserSelect on GameCard + GalleryCard imgs */}
 
 
       <div className="relative">
-        <Nav />
+        <AppleNav />
 
         {/* Custom "View" cursor pill */}
         {!isTouchDevice && (
@@ -1118,121 +1060,61 @@ export default function GalleryPage() {
           >
             <div
               className="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap"
-              style={{ background: "#f5f5f7", color: "#000" }}
+              style={{ background: "#1d1d1f", color: "#fbfbfd" }}
             >
               {cursorLabel}
             </div>
           </div>
         )}
 
-        {/* Editorial split-text toggle — fixed top-right, aligned with the Nav
-            at top-5. Two lowercase words separated by a hairline; active word
-            is bright, inactive is muted, an underline pill slides between
-            them via layoutId. Mobile gets a centered in-flow version. Fades
-            out on tier 2 (game detail). */}
+        {/* Sub-nav: centered Photography / Illustrations toggle, sits below the fixed AppleNav (h-12 = 48px). */}
         <AnimatePresence initial={false}>
           {activeGame === null && (
-            <>
-              {/* Desktop: fixed top-right, vertically aligned with Nav */}
-              <motion.div
-                key="gallery-toggle-desktop"
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                className="hidden md:flex fixed top-[28px] left-6 lg:left-10 z-50 items-center gap-5 py-2"
-              >
-                {(["photography", "illustrations"] as Tab[]).map((tab, i) => (
-                  <div key={tab} className="flex items-center gap-5">
-                    {i > 0 && (
-                      <span
-                        aria-hidden
-                        style={{
-                          width: "1px",
-                          height: "18px",
-                          background: "rgba(245,245,247,0.18)",
-                        }}
+            <motion.div
+              key="gallery-subnav"
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+              className="flex justify-center items-center gap-5 pt-20 pb-10"
+            >
+              {(["photography", "illustrations"] as Tab[]).map((tab, i) => (
+                <div key={tab} className="flex items-center gap-5">
+                  {i > 0 && (
+                    <span
+                      aria-hidden
+                      style={{ width: "1px", height: "16px", background: "rgba(0,0,0,0.18)" }}
+                    />
+                  )}
+                  <button
+                    onClick={() => switchTab(tab)}
+                    className="relative cursor-pointer transition-colors duration-200"
+                    style={{
+                      color: activeTab === tab ? "#1d1d1f" : "#86868b",
+                      fontSize: 14,
+                      fontWeight: 500,
+                      letterSpacing: "-0.01em",
+                      padding: "8px 2px",
+                    }}
+                  >
+                    <span className="relative z-10 capitalize">{tab}</span>
+                    {activeTab === tab && (
+                      <motion.div
+                        layoutId="gallery-tab-underline"
+                        className="absolute left-0 right-0"
+                        style={{ bottom: 2, height: 1, background: "#1d1d1f" }}
+                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
                       />
                     )}
-                    <button
-                      onClick={() => switchTab(tab)}
-                      className="relative text-sm font-medium tracking-tight cursor-pointer transition-colors duration-200"
-                      style={{
-                        color: activeTab === tab ? "#f5f5f7" : "#515154",
-                        padding: "2px 0",
-                      }}
-                    >
-                      <span className="relative z-10 capitalize">{tab}</span>
-                      {activeTab === tab && (
-                        <motion.div
-                          layoutId="gallery-tab-underline"
-                          className="absolute left-0 right-0"
-                          style={{
-                            bottom: -2,
-                            height: 1,
-                            background: "#f5f5f7",
-                          }}
-                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                        />
-                      )}
-                    </button>
-                  </div>
-                ))}
-              </motion.div>
-
-              {/* Mobile: centered in flow, sits below the mobile nav bar */}
-              <motion.div
-                key="gallery-toggle-mobile"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 12 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                className="md:hidden flex justify-center items-center gap-5 pt-24 pb-10"
-              >
-                {(["photography", "illustrations"] as Tab[]).map((tab, i) => (
-                  <div key={tab} className="flex items-center gap-5">
-                    {i > 0 && (
-                      <span
-                        aria-hidden
-                        style={{
-                          width: "1px",
-                          height: "18px",
-                          background: "rgba(245,245,247,0.18)",
-                        }}
-                      />
-                    )}
-                    <button
-                      onClick={() => switchTab(tab)}
-                      className="relative text-base font-medium tracking-tight cursor-pointer transition-colors duration-200"
-                      style={{
-                        color: activeTab === tab ? "#f5f5f7" : "#515154",
-                        padding: "2px 0",
-                      }}
-                    >
-                      <span className="relative z-10 capitalize">{tab}</span>
-                      {activeTab === tab && (
-                        <motion.div
-                          layoutId="gallery-tab-underline-mobile"
-                          className="absolute left-0 right-0"
-                          style={{
-                            bottom: -2,
-                            height: 1,
-                            background: "#f5f5f7",
-                          }}
-                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                        />
-                      )}
-                    </button>
-                  </div>
-                ))}
-              </motion.div>
-            </>
+                  </button>
+                </div>
+              ))}
+            </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Desktop spacer — the toggle is fixed-positioned and out of flow,
-            so we add top padding before the cards. */}
-        {activeGame === null && <div className="hidden md:block pt-36" />}
+        {/* When toggle is hidden (tier 2 detail), still clear the fixed AppleNav. */}
+        {activeGame !== null && <div className="pt-12" />}
 
         {/* Two-tier photography: game cards → game detail. Illustrations stays as a single masonry. */}
         <section className="px-8 sm:px-0 pb-16">
@@ -1246,7 +1128,7 @@ export default function GalleryPage() {
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
                 style={{ pointerEvents: isTransitioning ? "none" : undefined }}
               >
-                <div style={{ background: "#f5f1e6", padding: 12 }}>
+                <div style={{ background: "#fbfbfd", padding: 4 }}>
                   <MasonryGrid
                     photos={ILLUSTRATIONS}
                     columnCount={columnCount}
@@ -1268,6 +1150,7 @@ export default function GalleryPage() {
                 exit={{ opacity: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
                 className="grid grid-cols-1 sm:grid-cols-2 gap-0"
+                style={{ padding: 4 }}
               >
                 {PHOTOGRAPHY_GROUPS.map((group, gi) => {
                   return (
@@ -1307,34 +1190,34 @@ export default function GalleryPage() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                  className="pt-36"
+                  className="pt-20"
                   style={{ pointerEvents: isTransitioning ? "none" : undefined }}
                 >
                   {/* Heading row: back arrow at left, centered game title; byline centered below */}
-                  <div className="mb-20 sm:px-14 lg:px-20">
+                  <div className="mb-8 sm:px-14 lg:px-20">
                     <div className="relative">
                       <button
                         onClick={closeGame}
                         aria-label="Back to all projects"
                         className="absolute left-0 top-1/2 -translate-y-1/2 cursor-pointer leading-none transition-colors"
                         style={{ color: "#86868b", fontSize: "clamp(1.75rem, 2.4vw, 2.5rem)" }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = "#f5f5f7")}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = "#1d1d1f")}
                         onMouseLeave={(e) => (e.currentTarget.style.color = "#86868b")}
                       >
                         ←
                       </button>
                       <h2
-                        className="text-center font-black tracking-tight leading-[0.92] px-16 lg:whitespace-nowrap"
-                        style={{ fontSize: "clamp(2rem, 4vw, 4rem)", color: "#f5f5f7" }}
+                        className="text-center font-semibold tracking-tight leading-[1.02] px-16 lg:whitespace-nowrap"
+                        style={{ fontSize: "clamp(2rem, 4vw, 4rem)", color: "#1d1d1f", letterSpacing: "-0.035em" }}
                       >
                         {group.category}
                       </h2>
                     </div>
-                    <p className="text-center text-lg sm:text-xl mt-6" style={{ color: "#a1a1a6" }}>
-                      {group.studio} · {group.photos.length} {group.photos.length === 1 ? "shot" : "shots"}
+                    <p className="text-center text-base mt-3" style={{ color: "#6e6e73" }}>
+                      {group.studio}
                     </p>
                   </div>
-                  <div style={{ background: "#f5f1e6", padding: 12 }}>
+                  <div style={{ background: "#fbfbfd", padding: 4 }}>
                     <MasonryGrid
                       photos={group.photos}
                       columnCount={columnCount}
@@ -1480,7 +1363,7 @@ export default function GalleryPage() {
           )}
         </AnimatePresence>
 
-        <Contact />
+        <AppleFooter />
       </div>
     </main>
   );
