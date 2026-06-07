@@ -20,7 +20,9 @@ const DEFAULT_LINKS = [
   { label: "About", href: "/about" },
   { label: "Gallery", href: "/gallery" },
   { label: "Gaming", href: "/gaming" },
+  { label: "Cooking", href: "/cooking" },
   { label: "Bookshelf", href: "/bookshelf" },
+  { label: "Newsletter", href: "/newsletter" },
   { label: "Contact", href: "/#contact" },
 ];
 
