@@ -1,7 +1,7 @@
 "use client";
 
-import Nav from "../components/Nav";
-import PageBlobs from "../components/PageBlobs";
+import AppleNav from "../components/AppleNav";
+import AppleFooter from "../components/AppleFooter";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useCallback } from "react";
 
@@ -35,18 +35,33 @@ function BookCover({
   if (failed) {
     return (
       <div className={className} style={{ ...style, background: spineColor, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <span style={{ fontSize: "2rem", opacity: 0.5 }}>📖</span>
+        <span style={{ fontSize: "2rem", opacity: 0.55 }}>📖</span>
       </div>
     );
   }
   return <img src={src} alt={alt} className={className} style={style} onError={handleError} />;
 }
 
+// ── Design tokens (light Apple) ──────────────────────────────────────────────
+
+const C = {
+  page: "#fbfbfd",
+  alt: "#f5f5f7",
+  card: "#ffffff",
+  hairline: "rgba(0,0,0,0.08)",
+  hairlineSoft: "rgba(0,0,0,0.06)",
+  ink: "#1d1d1f",
+  ink2: "#6e6e73",
+  ink3: "#86868b",
+  amber: "#b08a2e",       // deeper gold for legibility on white
+  amberSoft: "rgba(176,138,46,0.12)",
+  amberBorder: "rgba(176,138,46,0.32)",
+};
+
+const SF = `-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif`;
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-const NOISE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
-
-// ── Types ─────────────────────────────────────────────────────────────────────
+// ── Types ────────────────────────────────────────────────────────────────────
 
 type BookCategory = "fiction" | "non-fiction" | "self-help" | "biography" | "psychology" | "classics" | "mystery";
 
@@ -66,7 +81,7 @@ type Book = {
   quote?: string;       // favourite line or personal take
 };
 
-// ── Book data ─────────────────────────────────────────────────────────────────
+// ── Book data ────────────────────────────────────────────────────────────────
 
 const BOOKS: Book[] = [
   // ── Currently Reading ──
@@ -201,53 +216,39 @@ const BOOKS: Book[] = [
 ];
 
 const CATEGORY_FILTERS: { key: BookCategory | "all"; label: string }[] = [
-  { key: "all",        label: "All" },
-  { key: "fiction",    label: "Fiction" },
-  { key: "non-fiction",label: "Non-Fiction" },
-  { key: "self-help",  label: "Self-Help" },
-  { key: "biography",  label: "Biography" },
-  { key: "psychology", label: "Psychology" },
-  { key: "classics",   label: "Classics" },
-  { key: "mystery",    label: "Mystery" },
+  { key: "all",         label: "All" },
+  { key: "fiction",     label: "Fiction" },
+  { key: "non-fiction", label: "Non-Fiction" },
+  { key: "self-help",   label: "Self-Help" },
+  { key: "biography",   label: "Biography" },
+  { key: "psychology",  label: "Psychology" },
+  { key: "classics",    label: "Classics" },
+  { key: "mystery",     label: "Mystery" },
 ];
 
-// ── Currently Reading Card ────────────────────────────────────────────────────
+// ── Currently Reading Card ───────────────────────────────────────────────────
 
 function CurrentlyReadingCard({ book, index }: { book: Book; index: number }) {
   const pct = book.pages && book.currentPage ? Math.round((book.currentPage / book.pages) * 100) : 0;
 
   return (
     <motion.div
-      className="relative rounded-3xl overflow-hidden"
-      style={{ border: "1px solid rgba(212,168,67,0.25)", cursor: "default" }}
+      className="relative rounded-2xl overflow-hidden"
+      style={{ background: C.card, border: `1px solid ${C.hairlineSoft}` }}
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: EASE, delay: 0.2 + index * 0.1 }}
-      whileHover={{ y: -6, borderColor: "rgba(212,168,67,0.5)" }}
+      whileHover={{ y: -4 }}
     >
-      {/* Blurred cover background */}
-      <div className="absolute inset-0">
-        <BookCover
-          src={book.cover} fallbackSrc={book.coverFallback}
-          alt="" spineColor={book.spineColor}
-          className="w-full h-full object-cover"
-          style={{ filter: "blur(32px) brightness(0.2) saturate(1.2)", transform: "scale(1.15)" }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: "linear-gradient(135deg, rgba(40,24,4,0.88) 0%, rgba(0,0,0,0.94) 100%)" }}
-        />
-      </div>
-
-      <div className="relative z-10 flex flex-col sm:flex-row gap-7 p-7 sm:p-9 items-start sm:items-stretch">
+      <div className="flex flex-col sm:flex-row gap-7 p-7 sm:p-8 items-start sm:items-stretch">
         {/* Cover */}
         <div className="flex-shrink-0 flex items-center">
           <div
             className="relative rounded-xl overflow-hidden"
             style={{
-              width: 96, height: 144,
-              border: `1px solid rgba(212,168,67,0.3)`,
-              boxShadow: `0 8px 32px rgba(0,0,0,0.6), 4px 4px 0 rgba(0,0,0,0.4)`,
+              width: 96,
+              height: 144,
+              boxShadow: "0 4px 16px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06)",
             }}
           >
             <BookCover
@@ -261,28 +262,29 @@ function CurrentlyReadingCard({ book, index }: { book: Book; index: number }) {
         {/* Info */}
         <div className="flex-1 flex flex-col justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#D4A843" }}>
-              Currently Reading
-            </p>
-            <h3 className="text-xl font-bold leading-tight mb-1" style={{ color: "#f5f5f7" }}>{book.title}</h3>
-            <p className="text-sm" style={{ color: "#86868b" }}>{book.author}</p>
+            <h3
+              className="text-xl font-semibold leading-tight mb-1"
+              style={{ color: C.ink, letterSpacing: "-0.02em" }}
+            >
+              {book.title}
+            </h3>
+            <p className="text-sm" style={{ color: C.ink2 }}>{book.author}</p>
           </div>
 
           <div className="flex flex-col gap-3">
             {book.quote && (
-              <p className="text-xs italic leading-relaxed" style={{ color: "#86868b" }}>
+              <p className="text-xs italic leading-relaxed" style={{ color: C.ink2 }}>
                 &ldquo;{book.quote}&rdquo;
               </p>
             )}
             <div className="flex flex-col gap-1.5">
               <div className="flex justify-between items-center">
-                <span className="text-xs" style={{ color: "#515154" }}>
+                <span className="text-xs" style={{ color: C.ink3 }}>
                   Page {book.currentPage} of {book.pages}
                 </span>
-                <span className="text-xs font-semibold" style={{ color: "#D4A843" }}>{pct}%</span>
+                <span className="text-xs font-semibold" style={{ color: C.amber }}>{pct}%</span>
               </div>
-              {/* Amber progress bar */}
-              <div className="w-full h-1 rounded-full" style={{ background: "rgba(212,168,67,0.15)" }}>
+              <div className="w-full h-1 rounded-full" style={{ background: "rgba(0,0,0,0.06)" }}>
                 <motion.div
                   className="h-1 rounded-full"
                   style={{ background: "linear-gradient(90deg, #C4773B, #D4A843)" }}
@@ -299,7 +301,7 @@ function CurrentlyReadingCard({ book, index }: { book: Book; index: number }) {
   );
 }
 
-// ── All-Time Card ─────────────────────────────────────────────────────────────
+// ── All-Time Card ────────────────────────────────────────────────────────────
 
 function AllTimeCard({ book, index }: { book: Book; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -309,27 +311,20 @@ function AllTimeCard({ book, index }: { book: Book; index: number }) {
     <motion.div
       ref={ref}
       className="relative rounded-2xl overflow-hidden flex flex-col"
-      style={{ background: "#0a0a0a", border: "1px solid rgba(212,168,67,0.18)", cursor: "default" }}
+      style={{ background: C.card, border: `1px solid ${C.hairlineSoft}` }}
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, ease: EASE, delay: index * 0.1 }}
-      whileHover={{ y: -6, borderColor: "rgba(212,168,67,0.4)" }}
+      whileHover={{ y: -4 }}
     >
-      {/* Noise texture */}
-      <div className="absolute inset-0 opacity-[0.12]" style={{ backgroundImage: NOISE, backgroundSize: "180px 180px" }} />
-
-      {/* Amber gradient */}
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "linear-gradient(135deg, rgba(212,168,67,0.1) 0%, transparent 60%)" }} />
-
-      <div className="relative z-10 p-6 flex gap-5 items-start">
+      <div className="p-6 flex gap-5 items-start">
         {/* Cover */}
         <div
           className="flex-shrink-0 rounded-lg overflow-hidden"
           style={{
-            width: 72, height: 108,
-            border: `1px solid rgba(212,168,67,0.25)`,
-            boxShadow: "3px 3px 0 rgba(0,0,0,0.5)",
+            width: 72,
+            height: 108,
+            boxShadow: "0 4px 14px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06)",
           }}
         >
           <BookCover
@@ -343,22 +338,27 @@ function AllTimeCard({ book, index }: { book: Book; index: number }) {
         <div className="flex flex-col gap-2 flex-1">
           <div
             className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold w-fit"
-            style={{ background: "rgba(212,168,67,0.15)", color: "#D4A843", border: "1px solid rgba(212,168,67,0.25)" }}
+            style={{ background: C.amberSoft, color: C.amber, border: `1px solid ${C.amberBorder}` }}
           >
             ★ All-Time
           </div>
-          <h3 className="text-base font-bold leading-snug" style={{ color: "#f5f5f7" }}>{book.title}</h3>
-          <p className="text-xs" style={{ color: "#86868b" }}>{book.author}</p>
+          <h3
+            className="text-base font-semibold leading-snug"
+            style={{ color: C.ink, letterSpacing: "-0.01em" }}
+          >
+            {book.title}
+          </h3>
+          <p className="text-xs" style={{ color: C.ink2 }}>{book.author}</p>
           {book.pages && (
-            <p className="text-xs" style={{ color: "#515154" }}>{book.pages.toLocaleString()} pages</p>
+            <p className="text-xs" style={{ color: C.ink3 }}>{book.pages.toLocaleString()} pages</p>
           )}
         </div>
       </div>
 
       {book.quote && (
-        <div className="relative z-10 px-6 pb-6">
-          <div className="pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-            <p className="text-xs italic leading-relaxed" style={{ color: "#86868b" }}>
+        <div className="px-6 pb-6">
+          <div className="pt-4" style={{ borderTop: `1px solid ${C.hairlineSoft}` }}>
+            <p className="text-xs italic leading-relaxed" style={{ color: C.ink2 }}>
               &ldquo;{book.quote}&rdquo;
             </p>
           </div>
@@ -368,7 +368,7 @@ function AllTimeCard({ book, index }: { book: Book; index: number }) {
   );
 }
 
-// ── Library Card ──────────────────────────────────────────────────────────────
+// ── Library Card ─────────────────────────────────────────────────────────────
 
 function LibraryBookCard({ book, index }: { book: Book; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -377,19 +377,18 @@ function LibraryBookCard({ book, index }: { book: Book; index: number }) {
   const col = index % 3;
 
   return (
-    <div ref={ref} className="library-card-wrap" style={{ cursor: "default" }}>
+    <div ref={ref} className="library-card-wrap">
       <motion.div
         className="relative rounded-2xl overflow-hidden flex flex-col"
-        style={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.06)" }}
+        style={{ background: C.card, border: `1px solid ${C.hairlineSoft}` }}
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5, ease: EASE, delay: (row + col) * 0.03 }}
       >
         {/* Cover image */}
-        <div className="relative w-full overflow-hidden" style={{ height: 180 }}>
-          {/* Spine color as bg fallback */}
-          <div className="absolute inset-0" style={{ background: book.spineColor, opacity: 0.4 }} />
-          <div className="absolute inset-0" style={{ backgroundImage: NOISE, backgroundSize: "180px 180px", opacity: 0.12 }} />
+        <div className="relative w-full overflow-hidden" style={{ height: 180, background: C.alt }}>
+          {/* Spine color subtle bg fallback */}
+          <div className="absolute inset-0" style={{ background: book.spineColor, opacity: 0.25 }} />
 
           <BookCover
             src={book.cover} fallbackSrc={book.coverFallback}
@@ -398,26 +397,38 @@ function LibraryBookCard({ book, index }: { book: Book; index: number }) {
             style={{ display: "block" }}
           />
 
-          {/* Gradient overlay — before tags in DOM so tags paint on top */}
-          <div className="absolute inset-0" style={{ background: "linear-gradient(to top, #0a0a0a 0%, transparent 55%)" }} />
+          {/* Soft white gradient at bottom for legibility */}
+          <div
+            className="absolute inset-x-0 bottom-0"
+            style={{
+              height: "55%",
+              background: "linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0) 100%)",
+            }}
+          />
 
           {/* Tags */}
           <div className="absolute bottom-2 left-2 flex gap-1.5 flex-wrap">
             {book.reading && (
-              <span className="px-2 py-0.5 rounded-full text-xs font-semibold"
-                style={{ background: "rgba(212,168,67,0.25)", color: "#D4A843", border: "1px solid rgba(212,168,67,0.3)" }}>
+              <span
+                className="px-2 py-0.5 rounded-full text-xs font-semibold"
+                style={{ background: C.amberSoft, color: C.amber, border: `1px solid ${C.amberBorder}` }}
+              >
                 Reading
               </span>
             )}
             {book.allTime && (
-              <span className="px-2 py-0.5 rounded-full text-xs font-semibold"
-                style={{ background: "rgba(212,168,67,0.15)", color: "#D4A843", border: "1px solid rgba(212,168,67,0.25)" }}>
+              <span
+                className="px-2 py-0.5 rounded-full text-xs font-semibold"
+                style={{ background: C.amberSoft, color: C.amber, border: `1px solid ${C.amberBorder}` }}
+              >
                 ★ All-Time
               </span>
             )}
             {book.bookCount && (
-              <span className="px-2 py-0.5 rounded-full text-xs font-medium"
-                style={{ background: "rgba(0,0,0,0.65)", color: "#f5f5f7" }}>
+              <span
+                className="px-2 py-0.5 rounded-full text-xs font-medium"
+                style={{ background: "rgba(255,255,255,0.92)", color: C.ink, border: `1px solid ${C.hairlineSoft}` }}
+              >
                 {book.bookCount} books
               </span>
             )}
@@ -426,10 +437,12 @@ function LibraryBookCard({ book, index }: { book: Book; index: number }) {
 
         {/* Info */}
         <div className="p-4 flex flex-col gap-1.5">
-          <p className="text-sm font-semibold leading-snug" style={{ color: "#f5f5f7" }}>{book.title}</p>
-          <p className="text-xs" style={{ color: "#86868b" }}>{book.author}</p>
+          <p className="text-sm font-semibold leading-snug" style={{ color: C.ink, letterSpacing: "-0.01em" }}>
+            {book.title}
+          </p>
+          <p className="text-xs" style={{ color: C.ink2 }}>{book.author}</p>
           {book.quote && (
-            <p className="text-xs italic leading-relaxed mt-1" style={{ color: "#515154" }}>
+            <p className="text-xs italic leading-relaxed mt-1" style={{ color: C.ink3 }}>
               &ldquo;{book.quote}&rdquo;
             </p>
           )}
@@ -439,7 +452,7 @@ function LibraryBookCard({ book, index }: { book: Book; index: number }) {
   );
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+// ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function BookshelfPage() {
   const [activeCategory, setActiveCategory] = useState<BookCategory | "all">("all");
@@ -452,27 +465,26 @@ export default function BookshelfPage() {
   );
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden" style={{ background: "#000" }}>
-      <Nav />
-      <PageBlobs palette="amber" />
+    <main
+      className="relative min-h-screen overflow-x-hidden"
+      style={{ background: C.page, fontFamily: SF }}
+    >
+      <AppleNav />
 
       <div className="relative z-10 px-8 sm:px-14 lg:px-20">
 
         {/* ── Hero ─────────────────────────────────────────────────────────── */}
-        <section className="pt-36 pb-12">
-          <motion.p
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
-            style={{ color: "#86868b" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, ease: EASE }}
-          >
-            Bookshelf
-          </motion.p>
-          <div className="flex items-end justify-between gap-8">
+        <section className="pt-32 pb-12">
+          <div className="flex items-end justify-between gap-8 flex-wrap">
             <motion.h1
-              className="font-black tracking-tight leading-[0.92]"
-              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
+              className="font-semibold"
+              style={{
+                fontSize: "clamp(3rem, 7vw, 7rem)",
+                color: C.ink,
+                letterSpacing: "-0.04em",
+                lineHeight: 1.1,
+                padding: "0.1em 0",
+              }}
               initial={{ opacity: 0, x: -60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1.1, ease: EASE, delay: 0.05 }}
@@ -481,7 +493,7 @@ export default function BookshelfPage() {
             </motion.h1>
             <motion.p
               className="text-sm hidden sm:block"
-              style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "20rem", textAlign: "right" }}
+              style={{ color: C.ink2, paddingBottom: "0.4rem", maxWidth: "26rem", textAlign: "right" }}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
@@ -491,14 +503,11 @@ export default function BookshelfPage() {
           </div>
         </section>
 
-        <div className="flex flex-col gap-12 pb-20">
+        <div className="flex flex-col gap-16 pb-24">
 
           {/* ── Currently Reading ──────────────────────────────────────────── */}
           {currentlyReading.length > 0 && (
             <section>
-              <p className="text-xs tracking-[0.22em] uppercase font-medium mb-10" style={{ color: "#86868b" }}>
-                Currently Reading
-              </p>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {currentlyReading.map((book, i) => (
                   <CurrentlyReadingCard key={book.id} book={book} index={i} />
@@ -510,16 +519,19 @@ export default function BookshelfPage() {
           {/* ── All-Time Favourites ────────────────────────────────────────── */}
           {allTimeFavs.length > 0 && (
             <section>
-              <p className="text-xs tracking-[0.22em] uppercase font-medium mb-6" style={{ color: "#86868b" }}>
-                All-Time Favourites
-              </p>
               <motion.h2
                 initial={{ opacity: 0, x: -40 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-8%" }}
                 transition={{ duration: 1.0, ease: EASE }}
-                className="font-black tracking-tight leading-[0.92] mb-10"
-                style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)", color: "#f5f5f7" }}
+                className="font-semibold mb-10"
+                style={{
+                  fontSize: "clamp(2.4rem, 5vw, 4.5rem)",
+                  color: C.ink,
+                  letterSpacing: "-0.035em",
+                  lineHeight: 1.1,
+                  padding: "0.1em 0",
+                }}
               >
                 The hall of fame.
               </motion.h2>
@@ -533,17 +545,20 @@ export default function BookshelfPage() {
 
           {/* ── Library ───────────────────────────────────────────────────── */}
           <section>
-            <p className="text-xs tracking-[0.22em] uppercase font-medium mb-6" style={{ color: "#86868b" }}>
-              Library
-            </p>
-            <div className="flex items-end justify-between gap-8 mb-10">
+            <div className="flex items-end justify-between gap-8 mb-10 flex-wrap">
               <motion.h2
                 initial={{ opacity: 0, x: -40 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-8%" }}
                 transition={{ duration: 1.0, ease: EASE }}
-                className="font-black tracking-tight leading-[0.92]"
-                style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)", color: "#f5f5f7" }}
+                className="font-semibold"
+                style={{
+                  fontSize: "clamp(2.4rem, 5vw, 4.5rem)",
+                  color: C.ink,
+                  letterSpacing: "-0.035em",
+                  lineHeight: 1.1,
+                  padding: "0.1em 0",
+                }}
               >
                 The full shelf.
               </motion.h2>
@@ -553,7 +568,7 @@ export default function BookshelfPage() {
                 viewport={{ once: true, margin: "-8%" }}
                 transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
                 className="text-sm hidden sm:block"
-                style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "16rem", textAlign: "right" }}
+                style={{ color: C.ink2, paddingBottom: "0.4rem", maxWidth: "22rem", textAlign: "right" }}
               >
                 {libraryBooks.length} of {BOOKS.length} books, by category.
               </motion.p>
@@ -561,25 +576,30 @@ export default function BookshelfPage() {
 
             {/* Category filter */}
             <div className="flex gap-1.5 flex-wrap mb-8">
-              {CATEGORY_FILTERS.map(({ key, label }) => (
-                <button
-                  key={key}
-                  onClick={() => setActiveCategory(key)}
-                  className="px-4 py-1.5 rounded-full text-xs font-medium"
-                  style={{
-                    background: activeCategory === key ? "rgba(212,168,67,0.18)" : "rgba(255,255,255,0.05)",
-                    color: activeCategory === key ? "#D4A843" : "#86868b",
-                    border: activeCategory === key ? "1px solid rgba(212,168,67,0.35)" : "1px solid rgba(255,255,255,0.08)",
-                    cursor: "pointer",
-                  }}
-                >
-                  {label}
-                </button>
-              ))}
+              {CATEGORY_FILTERS.map(({ key, label }) => {
+                const active = activeCategory === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setActiveCategory(key)}
+                    className="px-4 py-1.5 rounded-full text-xs font-medium cursor-pointer"
+                    style={{
+                      background: active ? C.amberSoft : C.card,
+                      color: active ? C.amber : C.ink2,
+                      border: `1px solid ${active ? C.amberBorder : C.hairlineSoft}`,
+                      transition: "background 0.15s ease, color 0.15s ease, border-color 0.15s ease",
+                    }}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
 
             {libraryBooks.length === 0 ? (
-              <p className="text-sm py-16 text-center" style={{ color: "#515154" }}>No books in this category yet.</p>
+              <p className="text-sm py-16 text-center" style={{ color: C.ink3 }}>
+                No books in this category yet.
+              </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {libraryBooks.map((book, i) => (
@@ -591,6 +611,8 @@ export default function BookshelfPage() {
 
         </div>
       </div>
+
+      <AppleFooter />
     </main>
   );
 }

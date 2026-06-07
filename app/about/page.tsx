@@ -1,12 +1,23 @@
 "use client";
 
-import Nav from "../components/Nav";
-import Contact from "../components/Contact";
-import PageBlobs from "../components/PageBlobs";
+import AppleNav from "../components/AppleNav";
+import AppleFooter from "../components/AppleFooter";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
+// Light Apple palette (proof page, will be codified into design system later)
+const COLORS = {
+  page: "#fbfbfd",
+  surfaceAlt: "#f5f5f7",
+  card: "#ffffff",
+  hairline: "rgba(0,0,0,0.08)",
+  hairlineSoft: "rgba(0,0,0,0.06)",
+  textPrimary: "#1d1d1f",
+  textSecondary: "#6e6e73",
+  textTertiary: "#86868b",
+};
 
 const interests = [
   { label: "Photography", emoji: "📷" },
@@ -147,21 +158,19 @@ function PillItem({ item, delay }: { item: { label: string; emoji: string }; del
       animate={{ opacity: 1, y: 0 }}
       transition={entered ? { duration: 0.15, ease: "easeOut" } : { duration: 0.55, ease: EASE, delay }}
       onAnimationComplete={() => setEntered(true)}
-      whileHover={{ y: -4 }}
-      className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm cursor-pointer font-medium"
+      whileHover={{ y: -3 }}
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm cursor-pointer font-medium"
       style={{
-        background: "rgba(255,255,255,0.06)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        color: "#f5f5f7",
-        transition: "background 0.18s ease, border-color 0.18s ease",
+        background: COLORS.card,
+        border: `1px solid ${COLORS.hairline}`,
+        color: COLORS.textPrimary,
+        transition: "border-color 0.18s ease, background 0.18s ease",
       }}
       onMouseEnter={e => {
-        (e.currentTarget as HTMLElement).style.background = "rgba(220,20,60,0.12)";
-        (e.currentTarget as HTMLElement).style.borderColor = "rgba(220,20,60,0.35)";
+        (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,0,0,0.18)";
       }}
       onMouseLeave={e => {
-        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)";
-        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
+        (e.currentTarget as HTMLElement).style.borderColor = COLORS.hairline;
       }}
     >
       <span style={{ fontSize: "0.9em" }}>{item.emoji}</span>
@@ -173,9 +182,9 @@ function PillItem({ item, delay }: { item: { label: string; emoji: string }; del
 type Tag = { label: string };
 
 function EditorialRow({
-  year, title, subtitle, dates, description, inView, delay, tag, logo,
+  year, title, subtitle, dates, description, inView, delay, tag,
 }: {
-  year: string; title: string; subtitle: string; dates: string; description: string; inView: boolean; delay: number; tag?: Tag; logo?: string;
+  year: string; title: string; subtitle: string; dates: string; description: string; inView: boolean; delay: number; tag?: Tag;
 }) {
   return (
     <motion.div
@@ -183,12 +192,12 @@ function EditorialRow({
       animate={inView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 1.0, ease: EASE, delay }}
       className="flex items-start gap-6 sm:gap-12 py-8 sm:py-10"
-      style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+      style={{ borderBottom: `1px solid ${COLORS.hairlineSoft}` }}
     >
       {/* Year */}
       <span
-        className="font-black tracking-tight select-none shrink-0 pt-1"
-        style={{ fontSize: "clamp(0.75rem, 1vw, 0.85rem)", color: "#515154", minWidth: "3.2rem" }}
+        className="font-semibold tracking-tight select-none shrink-0 pt-2"
+        style={{ fontSize: "clamp(0.75rem, 1vw, 0.85rem)", color: COLORS.textTertiary, minWidth: "3.2rem" }}
       >
         {year}
       </span>
@@ -196,57 +205,60 @@ function EditorialRow({
       {/* Title + subtitle + description */}
       <div className="flex-1 min-w-0">
         <h3
-          className="font-black tracking-tight leading-[0.96] mb-2"
-          style={{ fontSize: "clamp(1.4rem, 2.6vw, 2.2rem)", color: "#f5f5f7" }}
+          className="font-semibold tracking-tight leading-[1.05] mb-2"
+          style={{ fontSize: "clamp(1.4rem, 2.6vw, 2.2rem)", color: COLORS.textPrimary, letterSpacing: "-0.02em" }}
         >
           {title}
         </h3>
-        <p className="text-sm font-medium mb-1" style={{ color: "#a1a1a6" }}>
+        <p className="text-sm font-medium mb-1" style={{ color: COLORS.textSecondary }}>
           {subtitle}
         </p>
-        <p className="text-xs mb-4" style={{ color: "#515154" }}>
+        <p className="text-xs mb-4" style={{ color: COLORS.textTertiary }}>
           {dates}
         </p>
-        <p className="text-sm leading-relaxed" style={{ color: "#86868b", maxWidth: "44rem" }}>
+        <p className="text-[15px] leading-relaxed" style={{ color: COLORS.textSecondary, maxWidth: "72rem" }}>
           {description}
         </p>
       </div>
 
       {/* Tag */}
       {tag && (
-        <div className="hidden sm:flex shrink-0 pt-1.5">
+        <div className="hidden sm:flex shrink-0 pt-2">
           <span
             className="text-xs uppercase tracking-[0.16em] font-medium"
-            style={{ color: "#515154" }}
+            style={{ color: COLORS.textTertiary }}
           >
             {tag.label}
           </span>
         </div>
       )}
-
-      {/* Logo */}
-      {logo && (
-        <div
-          className="hidden sm:flex shrink-0 items-center justify-center overflow-hidden rounded-xl"
-          style={{
-            width: 72,
-            height: 72,
-            background: "#fff",
-            border: "1px solid rgba(255,255,255,0.07)",
-            padding: 8,
-          }}
-        >
-          <img
-            src={logo}
-            alt=""
-            style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).style.display = "none";
-            }}
-          />
-        </div>
-      )}
     </motion.div>
+  );
+}
+
+// Light-mode CTA button: white bg, black text, soft drop shadow
+function LightCTA({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a
+      href={href}
+      className="inline-flex items-center justify-center px-7 py-3.5 rounded-full font-medium text-[15px] cursor-pointer"
+      style={{
+        background: "#ffffff",
+        color: COLORS.textPrimary,
+        boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 6px 20px rgba(0,0,0,0.08)",
+        transition: "transform 0.2s ease, box-shadow 0.2s ease",
+      }}
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 4px rgba(0,0,0,0.06), 0 12px 28px rgba(0,0,0,0.12)";
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 1px 2px rgba(0,0,0,0.04), 0 6px 20px rgba(0,0,0,0.08)";
+      }}
+    >
+      {children}
+    </a>
   );
 }
 
@@ -261,35 +273,27 @@ export default function AboutPage() {
   const eduInView = useInView(eduRef, { once: true, margin: "-8%" });
 
   return (
-    <main className="relative overflow-x-hidden" style={{ background: "#000", minHeight: "100vh", color: "#f5f5f7" }}>
-      <Nav />
-      <PageBlobs palette="navy" />
+    <main
+      className="relative overflow-x-hidden"
+      style={{ background: COLORS.page, minHeight: "100vh", color: COLORS.textPrimary }}
+    >
+      <AppleNav />
 
       {/* ── Hero ── */}
-      <section
-        className="relative pt-36 pb-8 px-8 sm:px-14 lg:px-20"
-      >
-
+      <section className="relative pt-36 pb-8 px-8 sm:px-14 lg:px-20">
         <div ref={heroRef} className="relative" style={{ zIndex: 1 }}>
 
-          {/* Eyebrow */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={heroInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
-            style={{ color: "#86868b" }}
-          >
-            About
-          </motion.p>
-
-          {/* Headline */}
+          {/* Headline — semibold, tighter tracking, near-black */}
           <motion.h1
             initial={{ opacity: 0, x: -60 }}
             animate={heroInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 1.1, ease: EASE, delay: 0.05 }}
-            className="font-black tracking-tight leading-[0.92] mb-16 lg:mb-20"
-            style={{ fontSize: "clamp(3rem, 7.5vw, 7.5rem)", color: "#f5f5f7" }}
+            className="font-semibold leading-[1.02] mb-16 lg:mb-20"
+            style={{
+              fontSize: "clamp(3rem, 7.5vw, 7.5rem)",
+              color: COLORS.textPrimary,
+              letterSpacing: "-0.035em",
+            }}
           >
             <span style={{ display: "block" }}>I believe in</span>
             <span style={{ display: "block" }}>infinite possibilities.</span>
@@ -303,8 +307,8 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 28 }}
               animate={heroInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 1.0, ease: EASE, delay: 0.5 }}
-              className="order-2 lg:order-1 lg:col-span-7 flex flex-col gap-5 text-base leading-relaxed"
-              style={{ color: "#f5f5f7" }}
+              className="order-2 lg:order-1 lg:col-span-7 flex flex-col gap-5 text-[17px] leading-[1.6]"
+              style={{ color: COLORS.textPrimary }}
             >
               <p>I grew up in India, in a fairly traditional environment where the path ahead often feels predefined. But my parents gave me something different, they gave me the space to choose. They trusted me to carve my own path, even when it didn&apos;t look conventional, and stood behind me with a kind of quiet strength that never wavered.</p>
               <p>Maybe that&apos;s where it started, the belief that you don&apos;t have to stay on a path.<br /><em><strong>You can carve your own path.</strong></em></p>
@@ -329,7 +333,11 @@ export default function AboutPage() {
                 { src: "/Chirayu Square.png", pos: "center" },
                 { src: "/Chirayu Reveal.png", pos: "center" },
               ].map((img, i) => (
-                <div key={i} className="w-full flex-1 min-h-0 overflow-hidden">
+                <div
+                  key={i}
+                  className="w-full flex-1 min-h-0 overflow-hidden rounded-2xl"
+                  style={{ background: COLORS.surfaceAlt }}
+                >
                   <img
                     src={img.src}
                     alt="Chirayu Arya"
@@ -343,16 +351,10 @@ export default function AboutPage() {
           </div>
 
           {/* Things I love */}
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "2.5rem" }} className="flex flex-col items-center text-center">
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={heroInView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.5, delay: 0.7 }}
-              className="text-xs tracking-[0.22em] uppercase font-medium mb-6"
-              style={{ color: "#86868b" }}
-            >
-              Things I love
-            </motion.p>
+          <div
+            style={{ borderTop: `1px solid ${COLORS.hairlineSoft}`, paddingTop: "2.5rem" }}
+            className="flex flex-col items-center text-center"
+          >
             <div className="flex flex-wrap justify-center gap-2">
               {interests.map((item, i) => (
                 <PillItem key={item.label} item={item} delay={0.75 + i * 0.04} />
@@ -365,33 +367,27 @@ export default function AboutPage() {
 
       {/* ── Marquee ── */}
       <section
-        className="py-10 overflow-hidden"
+        className="py-12 overflow-hidden mt-10"
         style={{
-          borderTop: "1px solid rgba(255,255,255,0.07)",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
+          borderTop: `1px solid ${COLORS.hairlineSoft}`,
+          borderBottom: `1px solid ${COLORS.hairlineSoft}`,
+          background: COLORS.surfaceAlt,
         }}
       >
-        <p
-          className="text-xs tracking-[0.22em] uppercase font-medium text-center mb-10"
-          style={{ color: "#86868b" }}
-        >
-          Associations
-        </p>
         <div className="flex overflow-hidden">
           <div className="animate-marquee flex items-center gap-12">
             {[...logos, ...logos].map((logo, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 flex items-center justify-center"
+                className="flex-shrink-0 flex items-center justify-center rounded-xl"
                 style={{
                   width: 140,
                   height: 56,
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  color: "#515154",
+                  background: COLORS.card,
+                  border: `1px solid ${COLORS.hairlineSoft}`,
+                  color: COLORS.textTertiary,
                   fontSize: 12,
                   fontWeight: 500,
-                  borderRadius: 12,
                 }}
               >
                 {logo}
@@ -402,26 +398,19 @@ export default function AboutPage() {
       </section>
 
       {/* ── Experience ── */}
-      <section
-        className="relative pt-12 pb-10 px-8 sm:px-14 lg:px-20"
-      >
+      <section className="relative pt-20 pb-10 px-8 sm:px-14 lg:px-20">
         <div ref={expRef} className="relative">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={expInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
-            style={{ color: "#86868b" }}
-          >
-            Experience
-          </motion.p>
           <div className="flex items-end justify-between gap-8 mb-10">
             <motion.h2
               initial={{ opacity: 0, x: -60 }}
               animate={expInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 1.1, ease: EASE, delay: 0.05 }}
-              className="font-black tracking-tight leading-[0.92]"
-              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
+              className="font-semibold leading-[1.02]"
+              style={{
+                fontSize: "clamp(3rem, 7vw, 7rem)",
+                color: COLORS.textPrimary,
+                letterSpacing: "-0.035em",
+              }}
             >
               Roles I&apos;ve owned.
             </motion.h2>
@@ -430,13 +419,13 @@ export default function AboutPage() {
               animate={expInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
               className="text-sm hidden sm:block"
-              style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "16rem", textAlign: "right" }}
+              style={{ color: COLORS.textSecondary, paddingBottom: "0.4rem", maxWidth: "30rem", textAlign: "right" }}
             >
               Nine roles, five industries, one obsession.
             </motion.p>
           </div>
 
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+          <div style={{ borderTop: `1px solid ${COLORS.hairlineSoft}` }}>
             {experience.map((item, i) => (
               <EditorialRow
                 key={i}
@@ -455,26 +444,19 @@ export default function AboutPage() {
       </section>
 
       {/* ── Education ── */}
-      <section
-        className="relative pt-16 pb-20 px-8 sm:px-14 lg:px-20"
-      >
+      <section className="relative pt-16 pb-24 px-8 sm:px-14 lg:px-20">
         <div ref={eduRef} className="relative">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={eduInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
-            style={{ color: "#86868b" }}
-          >
-            Education
-          </motion.p>
           <div className="flex items-end justify-between gap-8 mb-10">
             <motion.h2
               initial={{ opacity: 0, x: -60 }}
               animate={eduInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 1.1, ease: EASE, delay: 0.05 }}
-              className="font-black tracking-tight leading-[0.92]"
-              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
+              className="font-semibold leading-[1.02]"
+              style={{
+                fontSize: "clamp(3rem, 7vw, 7rem)",
+                color: COLORS.textPrimary,
+                letterSpacing: "-0.035em",
+              }}
             >
               Where I&apos;ve learned.
             </motion.h2>
@@ -483,13 +465,13 @@ export default function AboutPage() {
               animate={eduInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
               className="text-sm hidden sm:block"
-              style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "16rem", textAlign: "right" }}
+              style={{ color: COLORS.textSecondary, paddingBottom: "0.4rem", maxWidth: "30rem", textAlign: "right" }}
             >
               Five schools, four countries.
             </motion.p>
           </div>
 
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+          <div style={{ borderTop: `1px solid ${COLORS.hairlineSoft}` }}>
             {education.map((item, i) => (
               <EditorialRow
                 key={i}
@@ -506,8 +488,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <Contact />
-
+      {/* ── Light-mode footer / CTA ── */}
+      <AppleFooter />
     </main>
   );
 }

@@ -1,9 +1,8 @@
 "use client";
 
-import Nav from "../components/Nav";
-import Contact from "../components/Contact";
-import PageBlobs from "../components/PageBlobs";
-import { motion, useInView, useAnimation, useMotionValue } from "framer-motion";
+import AppleNav from "../components/AppleNav";
+import AppleFooter from "../components/AppleFooter";
+import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -57,9 +56,35 @@ type PSNData = {
   totalLibraryCount: number;
 };
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── Design tokens (light Apple) ──────────────────────────────────────────────
 
+const C = {
+  page: "#fbfbfd",
+  alt: "#f5f5f7",
+  card: "#ffffff",
+  hairline: "rgba(0,0,0,0.08)",
+  hairlineSoft: "rgba(0,0,0,0.06)",
+  ink: "#1d1d1f",
+  ink2: "#6e6e73",
+  ink3: "#86868b",
+  link: "#0066cc",
+};
+
+const SF = `-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif`;
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+// Trophy tier colors retuned for light theme (deeper variants of the originals).
+const TROPHY_COLORS: Record<keyof TrophyCounts, string> = {
+  platinum: "#5a6a82",
+  gold: "#b08a2e",
+  silver: "#6e6e73",
+  bronze: "#9c5a2c",
+};
+const TROPHY_ICONS: Record<keyof TrophyCounts, string> = {
+  platinum: "🏆", gold: "🥇", silver: "🥈", bronze: "🥉",
+};
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
 
 function parseDuration(iso: string | undefined): string {
   if (!iso) return "";
@@ -71,7 +96,6 @@ function parseDuration(iso: string | undefined): string {
   if (m === 0) return `${h}h`;
   return `${h}h ${m}m`;
 }
-
 
 function gameImage(g: LibraryGame): string {
   const conceptImg = g.concept?.media?.images?.find(
@@ -87,193 +111,22 @@ function platformLabel(category: string): string {
   return category.toUpperCase().replace("_GAME", "").replace("_", " ");
 }
 
-// ── Physics PS buttons ────────────────────────────────────────────────────────
-
-type PhysBall = { x: number; y: number; vx: number; vy: number; r: number; size: number };
-
-const PS_BUTTON_CONFIGS = [
-  {
-    size: 280, r: 140, color: "#6B8ED6", glow: "rgba(107,142,214,0.45)",
-    svg: (
-      <svg width="280" height="280" viewBox="0 0 28 28" fill="none">
-        <circle cx="14" cy="14" r="13" stroke="#6B8ED6" strokeWidth="1" fill="rgba(91,127,217,0.12)"/>
-        <line x1="9" y1="9" x2="19" y2="19" stroke="#6B8ED6" strokeWidth="2.4" strokeLinecap="round"/>
-        <line x1="19" y1="9" x2="9" y2="19" stroke="#6B8ED6" strokeWidth="2.4" strokeLinecap="round"/>
-      </svg>
-    ),
-  },
-  {
-    size: 240, r: 120, color: "#C44B4B", glow: "rgba(196,75,75,0.4)",
-    svg: (
-      <svg width="240" height="240" viewBox="0 0 28 28" fill="none">
-        <circle cx="14" cy="14" r="13" stroke="#C44B4B" strokeWidth="1" fill="rgba(196,75,75,0.1)"/>
-        <circle cx="14" cy="14" r="5.5" stroke="#C44B4B" strokeWidth="2.4" fill="none"/>
-      </svg>
-    ),
-  },
-  {
-    size: 200, r: 100, color: "#4BAE8A", glow: "rgba(75,174,138,0.38)",
-    svg: (
-      <svg width="200" height="200" viewBox="0 0 28 28" fill="none">
-        <circle cx="14" cy="14" r="13" stroke="#4BAE8A" strokeWidth="1" fill="rgba(75,174,138,0.1)"/>
-        <polygon points="14,8 20.5,20 7.5,20" stroke="#4BAE8A" strokeWidth="2.4" fill="none" strokeLinejoin="round" strokeLinecap="round"/>
-      </svg>
-    ),
-  },
-  {
-    size: 160, r: 80, color: "#BA7CC4", glow: "rgba(186,124,196,0.38)",
-    svg: (
-      <svg width="160" height="160" viewBox="0 0 28 28" fill="none">
-        <circle cx="14" cy="14" r="13" stroke="#BA7CC4" strokeWidth="1" fill="rgba(186,124,196,0.1)"/>
-        <rect x="8.5" y="8.5" width="11" height="11" rx="1.5" stroke="#BA7CC4" strokeWidth="2.4" fill="none"/>
-      </svg>
-    ),
-  },
-];
-
-function PhysicsPSButtons() {
-  const x0 = useMotionValue(100);  const y0 = useMotionValue(80);
-  const x1 = useMotionValue(800);  const y1 = useMotionValue(300);
-  const x2 = useMotionValue(500);  const y2 = useMotionValue(600);
-  const x3 = useMotionValue(250);  const y3 = useMotionValue(400);
-
-  const mvs = [
-    { x: x0, y: y0 }, { x: x1, y: y1 },
-    { x: x2, y: y2 }, { x: x3, y: y3 },
-  ];
-
-  const balls = useRef<PhysBall[]>([
-    { x: 100, y: 80,  vx: 1.54, vy: 1.12, r: 140, size: 280 },
-    { x: 800, y: 300, vx: -1.4, vy: 1.68, r: 120, size: 240 },
-    { x: 500, y: 600, vx: 1.26, vy: -1.4, r: 100, size: 200 },
-    { x: 250, y: 400, vx: -1.68, vy: -1.26, r: 80, size: 160 },
-  ]);
-
-  useEffect(() => {
-    // Skip physics loop entirely on touch devices — rAF at 60fps kills mobile performance
-    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
-
-    let raf: number;
-    const tick = () => {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const b = balls.current;
-
-      // Move
-      for (let i = 0; i < b.length; i++) {
-        b[i].x += b[i].vx;
-        b[i].y += b[i].vy;
-        // Wall bounce — use radius for circular boundary
-        if (b[i].x < 0)              { b[i].x = 0;                  b[i].vx =  Math.abs(b[i].vx); }
-        if (b[i].x + b[i].size > vw) { b[i].x = vw - b[i].size;    b[i].vx = -Math.abs(b[i].vx); }
-        if (b[i].y < 0)              { b[i].y = 0;                  b[i].vy =  Math.abs(b[i].vy); }
-        if (b[i].y + b[i].size > vh) { b[i].y = vh - b[i].size;    b[i].vy = -Math.abs(b[i].vy); }
-      }
-
-      // Circle-circle elastic collisions
-      for (let i = 0; i < b.length; i++) {
-        for (let j = i + 1; j < b.length; j++) {
-          const cx_a = b[i].x + b[i].r, cy_a = b[i].y + b[i].r;
-          const cx_b = b[j].x + b[j].r, cy_b = b[j].y + b[j].r;
-          const dx = cx_b - cx_a, dy = cy_b - cy_a;
-          const dist = Math.hypot(dx, dy);
-          const minDist = b[i].r + b[j].r;
-          if (dist < minDist && dist > 0.01) {
-            const nx = dx / dist, ny = dy / dist;
-            // Relative velocity along collision normal
-            const dot = (b[i].vx - b[j].vx) * nx + (b[i].vy - b[j].vy) * ny;
-            if (dot > 0) {
-              // Equal-mass elastic swap along normal
-              b[i].vx -= dot * nx; b[i].vy -= dot * ny;
-              b[j].vx += dot * nx; b[j].vy += dot * ny;
-            }
-            // Separate overlapping circles
-            const overlap = (minDist - dist) / 2;
-            b[i].x -= nx * overlap; b[i].y -= ny * overlap;
-            b[j].x += nx * overlap; b[j].y += ny * overlap;
-          }
-        }
-      }
-
-      // Push positions to motion values
-      mvs[0].x.set(b[0].x); mvs[0].y.set(b[0].y);
-      mvs[1].x.set(b[1].x); mvs[1].y.set(b[1].y);
-      mvs[2].x.set(b[2].x); mvs[2].y.set(b[2].y);
-      mvs[3].x.set(b[3].x); mvs[3].y.set(b[3].y);
-
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return (
-    <>
-      {PS_BUTTON_CONFIGS.map((cfg, i) => (
-        <motion.div
-          key={i}
-          className="absolute pointer-events-none select-none"
-          style={{ top: 0, left: 0, x: mvs[i].x, y: mvs[i].y }}
-        >
-          <div style={{ opacity: 0.38, filter: `drop-shadow(0 0 16px ${cfg.color}) drop-shadow(0 0 40px ${cfg.glow})` }}>
-            {cfg.svg}
-          </div>
-        </motion.div>
-      ))}
-    </>
-  );
-}
-
-// ── Sub-components ───────────────────────────────────────────────────────────
-
-function PSButtons({ opacity = 0.2 }: { opacity?: number }) {
-  return (
-    <div className="flex gap-3 select-none" style={{ opacity }} aria-hidden>
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <circle cx="14" cy="14" r="13" fill="rgba(91,127,217,0.15)" stroke="rgba(91,127,217,0.4)" strokeWidth="1"/>
-        <line x1="9" y1="9" x2="19" y2="19" stroke="#6B8ED6" strokeWidth="2.2" strokeLinecap="round"/>
-        <line x1="19" y1="9" x2="9" y2="19" stroke="#6B8ED6" strokeWidth="2.2" strokeLinecap="round"/>
-      </svg>
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <circle cx="14" cy="14" r="13" fill="rgba(196,75,75,0.15)" stroke="rgba(196,75,75,0.4)" strokeWidth="1"/>
-        <circle cx="14" cy="14" r="5.5" stroke="#C44B4B" strokeWidth="2.2" fill="none"/>
-      </svg>
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <circle cx="14" cy="14" r="13" fill="rgba(75,174,138,0.15)" stroke="rgba(75,174,138,0.4)" strokeWidth="1"/>
-        <polygon points="14,8 20.5,20 7.5,20" stroke="#4BAE8A" strokeWidth="2.2" fill="none" strokeLinejoin="round" strokeLinecap="round"/>
-      </svg>
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <circle cx="14" cy="14" r="13" fill="rgba(186,124,196,0.15)" stroke="rgba(186,124,196,0.4)" strokeWidth="1"/>
-        <rect x="8.5" y="8.5" width="11" height="11" rx="1.5" stroke="#BA7CC4" strokeWidth="2.2" fill="none"/>
-      </svg>
-    </div>
-  );
-}
+// ── Small UI bits ────────────────────────────────────────────────────────────
 
 function TrophyPip({ type, count }: { type: keyof TrophyCounts; count: number }) {
-  const colors: Record<keyof TrophyCounts, string> = {
-    platinum: "#B8C5D6",
-    gold: "#D4A843",
-    silver: "#A8A8B0",
-    bronze: "#C87A40",
-  };
-  const icons: Record<keyof TrophyCounts, string> = {
-    platinum: "🏆", gold: "🥇", silver: "🥈", bronze: "🥉",
-  };
   return (
-    <span className="flex items-center gap-1 text-xs font-medium" style={{ color: colors[type] }}>
-      <span>{icons[type]}</span>
+    <span className="flex items-center gap-1 text-xs font-medium" style={{ color: TROPHY_COLORS[type] }}>
+      <span>{TROPHY_ICONS[type]}</span>
       <span>{count}</span>
     </span>
   );
 }
 
-function ProgressBar({ value, color = "#dc143c" }: { value: number; color?: string }) {
+function ProgressBar({ value, color = "#1d1d1f" }: { value: number; color?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
   return (
-    <div ref={ref} className="w-full h-1 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }}>
+    <div ref={ref} className="w-full h-1 rounded-full" style={{ background: "rgba(0,0,0,0.06)" }}>
       <motion.div
         className="h-1 rounded-full"
         style={{ background: color }}
@@ -285,119 +138,98 @@ function ProgressBar({ value, color = "#dc143c" }: { value: number; color?: stri
   );
 }
 
-// ── Trophy Dashboard ──────────────────────────────────────────────────────────
+// ── Trophy Dashboard ─────────────────────────────────────────────────────────
 
 function TrophyDashboard({ summary }: { summary: TrophySummary }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
 
   const tiers = [
-    { type: "platinum" as const, label: "Platinum", color: "#B8C5D6", glow: "rgba(184,197,214,0.45)" },
-    { type: "gold" as const,     label: "Gold",     color: "#D4A843", glow: "rgba(212,168,67,0.5)" },
-    { type: "silver" as const,   label: "Silver",   color: "#A8A8B0", glow: "rgba(168,168,176,0.4)" },
-    { type: "bronze" as const,   label: "Bronze",   color: "#C87A40", glow: "rgba(200,122,64,0.45)" },
+    { type: "platinum" as const, label: "Platinum" },
+    { type: "gold" as const,     label: "Gold" },
+    { type: "silver" as const,   label: "Silver" },
+    { type: "bronze" as const,   label: "Bronze" },
   ];
 
   const counts = tiers.map((t) => summary.earnedTrophies[t.type]);
   const total = counts.reduce((s, c) => s + c, 0);
   const maxCount = Math.max(...counts);
 
-  // Circular ring for trophy level
   const R = 66;
   const circum = 2 * Math.PI * R;
-  // Use level mod 100 as progress within tier (PSN doesn't expose next-level threshold via this API)
   const levelProgress = (summary.trophyLevel % 100) / 100;
 
   return (
-    <motion.div ref={ref} className="relative rounded-2xl overflow-hidden"
-      style={{ background: "#0a0a0a", border: "1px solid rgba(212,168,67,0.15)" }}
-      transition={{ duration: 0.3, ease: EASE }}>
-      {/* Amber gradient overlay — mirrors the blue in Currently Playing */}
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "linear-gradient(135deg, rgba(212,168,67,0.13) 0%, transparent 55%)" }} />
+    <motion.div
+      ref={ref}
+      className="relative rounded-2xl overflow-hidden"
+      style={{ background: C.card, border: `1px solid ${C.hairlineSoft}` }}
+    >
       <div className="flex flex-col lg:flex-row">
-
-        {/* Left: level ring */}
-        <div className="flex flex-col items-center justify-center gap-3 p-8 lg:p-10 lg:w-64 flex-shrink-0"
-          style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
-          // On desktop use right border instead
+        {/* Level ring */}
+        <div
+          className="flex flex-col items-center justify-center gap-3 p-8 lg:p-10 lg:w-64 flex-shrink-0"
+          style={{ borderBottom: `1px solid ${C.hairlineSoft}` }}
         >
           <svg width="160" height="160" viewBox="0 0 160 160" style={{ overflow: "visible" }}>
             <defs>
-              <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#B8C5D6"/>
-                <stop offset="50%" stopColor="#D4A843"/>
-                <stop offset="100%" stopColor="#C87A40"/>
+              <linearGradient id="ringGradLight" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#5a6a82" />
+                <stop offset="50%" stopColor="#b08a2e" />
+                <stop offset="100%" stopColor="#9c5a2c" />
               </linearGradient>
-              <filter id="ringGlow">
-                <feGaussianBlur stdDeviation="3" result="blur"/>
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
             </defs>
-            {/* Track */}
-            <circle cx="80" cy="80" r={R} fill="none"
-              stroke="rgba(255,255,255,0.07)" strokeWidth="9"/>
-            {/* Glow copy */}
+            <circle cx="80" cy="80" r={R} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="9" />
             <motion.circle
               cx="80" cy="80" r={R} fill="none"
-              stroke="url(#ringGrad)" strokeWidth="9" strokeLinecap="round"
-              strokeDasharray={circum}
-              initial={{ strokeDashoffset: circum }}
-              animate={inView ? { strokeDashoffset: circum * (1 - levelProgress) } : {}}
-              transition={{ duration: 1.8, ease: EASE, delay: 0.2 }}
-              style={{ rotate: "-90deg", transformOrigin: "80px 80px", opacity: 0.35, filter: "blur(6px)" }}
-            />
-            {/* Main arc */}
-            <motion.circle
-              cx="80" cy="80" r={R} fill="none"
-              stroke="url(#ringGrad)" strokeWidth="9" strokeLinecap="round"
+              stroke="url(#ringGradLight)" strokeWidth="9" strokeLinecap="round"
               strokeDasharray={circum}
               initial={{ strokeDashoffset: circum }}
               animate={inView ? { strokeDashoffset: circum * (1 - levelProgress) } : {}}
               transition={{ duration: 1.8, ease: EASE, delay: 0.2 }}
               style={{ rotate: "-90deg", transformOrigin: "80px 80px" }}
             />
-            {/* Level number — group centered at (80,80) */}
             <text x="80" y="75" textAnchor="middle" dominantBaseline="middle"
-              style={{ fill: "#f5f5f7", fontSize: "38px", fontWeight: "800", fontFamily: "inherit" }}>
+              style={{ fill: C.ink, fontSize: "38px", fontWeight: 600, letterSpacing: "-0.02em", fontFamily: "inherit" }}>
               {summary.trophyLevel}
             </text>
             <text x="80" y="98" textAnchor="middle" dominantBaseline="middle"
-              style={{ fill: "#515154", fontSize: "9px", fontWeight: "600", letterSpacing: "0.18em", fontFamily: "inherit" }}>
+              style={{ fill: C.ink3, fontSize: "9px", fontWeight: 500, letterSpacing: "0.18em", fontFamily: "inherit" }}>
               LEVEL
             </text>
           </svg>
-          <p className="text-xs uppercase tracking-widest text-center" style={{ color: "#515154" }}>Trophy Level</p>
+          <p className="text-xs uppercase tracking-widest text-center" style={{ color: C.ink3 }}>Trophy Level</p>
         </div>
 
-        {/* Right: bars */}
-        <div className="flex-1 p-8 lg:p-10 flex flex-col justify-center gap-5"
-          style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
+        {/* Bars */}
+        <div
+          className="flex-1 p-8 lg:p-10 flex flex-col justify-center gap-5"
+          style={{ borderLeft: `1px solid ${C.hairlineSoft}` }}
+        >
           <div className="flex items-baseline gap-2 mb-1">
             <span className="text-2xl" style={{ lineHeight: 1 }}>🏆</span>
             <motion.span
-              className="text-3xl font-bold"
-              style={{ color: "#f5f5f7" }}
+              className="text-3xl font-semibold"
+              style={{ color: C.ink, letterSpacing: "-0.02em" }}
               initial={{ opacity: 0, y: 8 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, ease: EASE }}
             >
               {total.toLocaleString()}
             </motion.span>
-            <span className="text-sm" style={{ color: "#515154" }}>trophies earned</span>
+            <span className="text-sm" style={{ color: C.ink3 }}>trophies earned</span>
           </div>
 
-          {tiers.map(({ type, label, color, glow }, i) => {
+          {tiers.map(({ type, label }, i) => {
             const count = summary.earnedTrophies[type];
             const barPct = maxCount > 0 ? (count / maxCount) * 100 : 0;
+            const color = TROPHY_COLORS[type];
             return (
               <div key={type} className="flex items-center gap-4">
-                <span className="text-xs font-semibold uppercase tracking-wider w-16 text-right flex-shrink-0"
-                  style={{ color }}>
+                <span className="text-xs font-semibold uppercase tracking-wider w-16 text-right flex-shrink-0" style={{ color }}>
                   {label}
                 </span>
-                <div className="flex-1 relative h-2.5 rounded-full"
-                  style={{ background: "rgba(255,255,255,0.05)" }}>
+                <div className="flex-1 relative h-2.5 rounded-full" style={{ background: "rgba(0,0,0,0.05)" }}>
                   <motion.div
                     className="absolute inset-y-0 left-0 rounded-full"
                     style={{ background: color }}
@@ -405,17 +237,9 @@ function TrophyDashboard({ summary }: { summary: TrophySummary }) {
                     animate={inView ? { width: `${barPct}%` } : { width: 0 }}
                     transition={{ duration: 1.1, ease: EASE, delay: 0.25 + i * 0.07 }}
                   />
-                  {/* Glow layer */}
-                  <motion.div
-                    className="absolute inset-y-0 left-0 rounded-full"
-                    style={{ background: color, filter: `blur(6px)`, opacity: 0.5 }}
-                    initial={{ width: 0 }}
-                    animate={inView ? { width: `${barPct}%` } : { width: 0 }}
-                    transition={{ duration: 1.1, ease: EASE, delay: 0.25 + i * 0.07 }}
-                  />
                 </div>
                 <motion.span
-                  className="text-sm font-bold w-10 flex-shrink-0"
+                  className="text-sm font-semibold w-10 flex-shrink-0"
                   style={{ color }}
                   initial={{ opacity: 0 }}
                   animate={inView ? { opacity: 1 } : {}}
@@ -432,7 +256,7 @@ function TrophyDashboard({ summary }: { summary: TrophySummary }) {
   );
 }
 
-// ── Currently Playing ─────────────────────────────────────────────────────────
+// ── Currently Playing ────────────────────────────────────────────────────────
 
 function CurrentlyPlaying({ game }: { game: LibraryGame }) {
   const pct = game.trophy?.progress ?? 0;
@@ -441,61 +265,54 @@ function CurrentlyPlaying({ game }: { game: LibraryGame }) {
 
   return (
     <div
-      className="relative rounded-3xl overflow-hidden"
-      style={{ border: "1px solid rgba(220,20,60,0.35)" }}
+      className="relative rounded-2xl overflow-hidden"
+      style={{ background: C.card, border: `1px solid ${C.hairlineSoft}` }}
     >
-      {img && (
-        <div className="absolute inset-0">
-          <img src={img} alt="" className="w-full h-full object-cover"
-            style={{ filter: "blur(32px) brightness(0.25) saturate(1.4)", transform: "scale(1.15)" }} />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(40,0,12,0.85) 0%, rgba(0,0,0,0.92) 100%)" }} />
-        </div>
-      )}
-      <div className="relative z-10 flex flex-col lg:flex-row gap-8 p-8 lg:p-10 items-start lg:items-stretch">
+      <div className="flex flex-col lg:flex-row gap-8 p-8 items-start lg:items-stretch">
         <div className="flex-shrink-0 flex items-center">
-          <div className="relative w-36 h-36 lg:w-40 lg:h-40 rounded-2xl overflow-hidden"
-            style={{ border: "1px solid rgba(220,20,60,0.45)" }}>
-            {img
-              ? <img src={img} alt={game.name} className="w-full h-full object-cover" />
-              : <div className="w-full h-full flex items-center justify-center" style={{ background: "#111" }}><span className="text-5xl">🎮</span></div>
-            }
+          <div
+            className="relative w-36 h-36 lg:w-40 lg:h-40 rounded-xl overflow-hidden"
+            style={{ border: `1px solid ${C.hairlineSoft}` }}
+          >
+            {img ? (
+              <img src={img} alt={game.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center" style={{ background: C.alt }}>
+                <span className="text-5xl">🎮</span>
+              </div>
+            )}
           </div>
         </div>
         <div className="flex-1 flex flex-col justify-between gap-4">
-          {/* Top: eyebrow + title — always pinned to the top */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#dc143c" }}>
-              Currently Playing
-            </p>
-            <h2 className="text-xl lg:text-2xl font-bold leading-tight" style={{ color: "#f5f5f7" }}>
+            <h3 className="text-xl lg:text-2xl font-semibold leading-tight" style={{ color: C.ink, letterSpacing: "-0.02em" }}>
               {game.name}
-            </h2>
+            </h3>
           </div>
-          {/* Bottom: stats + progress — always pinned to the bottom */}
           <div className="flex flex-col gap-4">
             <div className="flex flex-wrap gap-6">
               {duration && (
                 <div>
-                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "#515154" }}>Play Time</p>
-                  <p className="text-lg font-semibold" style={{ color: "#f5f5f7" }}>{duration}</p>
+                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: C.ink3 }}>Play Time</p>
+                  <p className="text-lg font-semibold" style={{ color: C.ink }}>{duration}</p>
                 </div>
               )}
               {game.playCount > 0 && (
                 <div>
-                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "#515154" }}>Sessions</p>
-                  <p className="text-lg font-semibold" style={{ color: "#f5f5f7" }}>{game.playCount}</p>
+                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: C.ink3 }}>Sessions</p>
+                  <p className="text-lg font-semibold" style={{ color: C.ink }}>{game.playCount}</p>
                 </div>
               )}
               {game.trophy && (
                 <div>
-                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "#515154" }}>Trophy Progress</p>
-                  <p className="text-lg font-semibold" style={{ color: "#f5f5f7" }}>{pct}%</p>
+                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: C.ink3 }}>Trophy Progress</p>
+                  <p className="text-lg font-semibold" style={{ color: C.ink }}>{pct}%</p>
                 </div>
               )}
             </div>
             {game.trophy && (
               <div className="flex flex-col gap-2 max-w-sm">
-                <ProgressBar value={pct} color="#dc143c" />
+                <ProgressBar value={pct} color={C.ink} />
                 <div className="flex gap-4">
                   {(["platinum", "gold", "silver", "bronze"] as const).map((t) => (
                     <TrophyPip key={t} type={t} count={game.trophy!.earnedTrophies[t]} />
@@ -510,7 +327,7 @@ function CurrentlyPlaying({ game }: { game: LibraryGame }) {
   );
 }
 
-// ── Recently Played Strip ─────────────────────────────────────────────────────
+// ── Recently Played Strip ────────────────────────────────────────────────────
 
 function RecentCard({ game, index }: { game: LibraryGame; index: number }) {
   const img = gameImage(game);
@@ -525,40 +342,54 @@ function RecentCard({ game, index }: { game: LibraryGame; index: number }) {
       viewport={{ once: true, margin: "-8%" }}
       transition={{ duration: 0.5, ease: EASE, delay: index * 0.05 }}
     >
-      <div className="relative w-full aspect-square rounded-xl overflow-hidden"
-        style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
-        {img
-          ? <img src={img} alt={game.name} className="w-full h-full object-cover" />
-          : <div className="w-full h-full flex items-center justify-center" style={{ background: "#111" }}><span className="text-3xl">🎮</span></div>
-        }
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)" }} />
-        <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded text-xs font-medium"
-          style={{ background: "rgba(0,0,0,0.65)", color: "#f5f5f7", backdropFilter: "blur(8px)" }}>
+      <div
+        className="relative w-full aspect-square rounded-xl overflow-hidden"
+        style={{ border: `1px solid ${C.hairlineSoft}`, background: C.alt }}
+      >
+        {img ? (
+          <img src={img} alt={game.name} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center"><span className="text-3xl">🎮</span></div>
+        )}
+        <div
+          className="absolute top-2 right-2 px-1.5 py-0.5 rounded text-xs font-medium"
+          style={{
+            background: "rgba(255,255,255,0.85)",
+            color: C.ink,
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+          }}
+        >
           {platformLabel(game.category)}
         </div>
-        <div className="absolute bottom-2 left-2 right-2">
-          {pct !== null && (
-            <div className="w-full h-0.5 rounded-full mb-1" style={{ background: "rgba(255,255,255,0.15)" }}>
-              <div className="h-0.5 rounded-full" style={{ width: `${pct}%`, background: pct === 100 ? "#B8C5D6" : "#dc143c" }} />
+        {pct !== null && (
+          <div className="absolute bottom-2 left-2 right-2">
+            <div className="w-full h-0.5 rounded-full" style={{ background: "rgba(0,0,0,0.18)" }}>
+              <div
+                className="h-0.5 rounded-full"
+                style={{ width: `${pct}%`, background: pct === 100 ? TROPHY_COLORS.platinum : C.ink }}
+              />
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-      <p className="text-xs font-semibold leading-snug line-clamp-2" style={{ color: "#f5f5f7" }}>{game.name}</p>
-      {duration && <p className="text-xs" style={{ color: "#515154" }}>{duration}</p>}
+      <p className="text-sm font-semibold leading-snug line-clamp-2" style={{ color: C.ink, letterSpacing: "-0.01em" }}>
+        {game.name}
+      </p>
+      {duration && <p className="text-xs" style={{ color: C.ink3 }}>{duration}</p>}
     </motion.div>
   );
 }
 
-// ── Skeleton ──────────────────────────────────────────────────────────────────
+// ── Skeleton ─────────────────────────────────────────────────────────────────
 
 function Skeleton() {
   return (
     <div className="flex flex-col gap-6 animate-pulse">
-      <div className="rounded-3xl h-64" style={{ background: "#111" }} />
+      <div className="rounded-2xl h-64" style={{ background: C.alt }} />
       <div className="flex gap-4">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="flex-shrink-0 w-44 h-56 rounded-xl" style={{ background: "#111" }} />
+          <div key={i} className="flex-shrink-0 w-44 h-56 rounded-xl" style={{ background: C.alt }} />
         ))}
       </div>
     </div>
@@ -583,40 +414,29 @@ export default function GamingPage() {
 
   const currentlyPlayingGames = data?.recentlyPlayed?.slice(0, 2) ?? [];
   const recentlyPlayed = data?.recentlyPlayed?.slice(2) ?? [];
-
   const summary = data?.trophySummary;
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden" style={{ background: "#000" }}>
-      <Nav />
-      <PageBlobs palette="ps-blue" />
+    <main
+      className="relative min-h-screen overflow-x-hidden"
+      style={{ background: C.page, fontFamily: SF }}
+    >
+      <AppleNav />
 
-      {/* Physics-driven PS buttons — hidden on mobile via CSS, rAF skipped on touch */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-        <div className="physics-ps-buttons">
-          <PhysicsPSButtons />
-        </div>
-      </div>
-
-      <div className="relative z-10 px-8 sm:px-14 lg:px-20 pt-36 pb-32">
+      <div className="relative z-10 px-8 sm:px-14 lg:px-20 pt-32 pb-24">
 
         {/* Header */}
         <div className="mb-16">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, ease: EASE }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
-            style={{ color: "#86868b" }}
-          >
-            <span className="sm:hidden">Gaming</span>
-            <span className="hidden sm:inline">Gaming · PlayStation</span>
-          </motion.p>
-
-          <div className="flex items-end justify-between gap-8">
+          <div className="flex items-end justify-between gap-8 flex-wrap">
             <motion.h1
-              className="font-black tracking-tight leading-[0.92] flex items-end gap-3 sm:gap-5"
-              style={{ fontSize: "clamp(3rem, 7vw, 7rem)", color: "#f5f5f7" }}
+              className="font-semibold flex items-end gap-3 sm:gap-5"
+              style={{
+                fontSize: "clamp(3rem, 7vw, 7rem)",
+                color: C.ink,
+                letterSpacing: "-0.04em",
+                lineHeight: 1.1,
+                padding: "0.1em 0",
+              }}
               initial={{ opacity: 0, x: -60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1.1, ease: EASE, delay: 0.05 }}
@@ -634,17 +454,25 @@ export default function GamingPage() {
               href="https://instagram.com/technonaut.frames"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-2 flex-shrink-0 px-5 py-2.5 rounded-xl text-sm font-semibold"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium cursor-pointer"
               style={{
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                color: "#f5f5f7",
-                cursor: "pointer",
+                background: C.card,
+                color: C.ink,
+                boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 6px 20px rgba(0,0,0,0.08)",
+                transition: "transform 0.2s ease, box-shadow 0.2s ease",
                 marginBottom: "0.4rem",
               }}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, ease: EASE, delay: 0.05 }}
+              transition={{ duration: 0.7, ease: EASE, delay: 0.1 }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 4px rgba(0,0,0,0.06), 0 12px 28px rgba(0,0,0,0.12)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 1px 2px rgba(0,0,0,0.04), 0 6px 20px rgba(0,0,0,0.08)";
+              }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -653,28 +481,6 @@ export default function GamingPage() {
               Photo Mode
             </motion.a>
           </div>
-
-          {/* Mobile Photo Mode */}
-          <motion.a
-            href="https://instagram.com/technonaut.frames"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="sm:hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold mt-6"
-            style={{
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#f5f5f7",
-            }}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-              <circle cx="12" cy="13" r="4"/>
-            </svg>
-            Photo Mode
-          </motion.a>
         </div>
 
         {/* Trophy Dashboard */}
@@ -691,9 +497,11 @@ export default function GamingPage() {
 
         {/* Content */}
         {error ? (
-          <div className="rounded-2xl p-8 text-center"
-            style={{ background: "#0a0a0a", border: "1px solid rgba(255,255,255,0.06)", color: "#86868b" }}>
-            <p className="text-lg mb-1" style={{ color: "#f5f5f7" }}>Could not load PSN data</p>
+          <div
+            className="rounded-2xl p-8 text-center"
+            style={{ background: C.card, border: `1px solid ${C.hairlineSoft}`, color: C.ink3 }}
+          >
+            <p className="text-lg mb-1" style={{ color: C.ink, fontWeight: 600 }}>Could not load PSN data</p>
             <p className="text-sm">{error}</p>
           </div>
         ) : !data ? (
@@ -704,16 +512,19 @@ export default function GamingPage() {
             {/* Currently Playing */}
             {currentlyPlayingGames.length > 0 && (
               <div>
-                <p className="text-xs tracking-[0.22em] uppercase font-medium mb-6" style={{ color: "#86868b" }}>
-                  Currently Playing
-                </p>
                 <motion.h2
                   initial={{ opacity: 0, x: -40 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-8%" }}
                   transition={{ duration: 1.0, ease: EASE }}
-                  className="font-black tracking-tight leading-[0.92] mb-10"
-                  style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)", color: "#f5f5f7" }}
+                  className="font-semibold mb-10"
+                  style={{
+                    fontSize: "clamp(2.4rem, 5vw, 4.5rem)",
+                    color: C.ink,
+                    letterSpacing: "-0.035em",
+                    lineHeight: 1.1,
+                    padding: "0.1em 0",
+                  }}
                 >
                   What&apos;s on right now.
                 </motion.h2>
@@ -734,20 +545,26 @@ export default function GamingPage() {
             {/* Recently Played */}
             {recentlyPlayed.length > 0 && (
               <div>
-                <p className="text-xs tracking-[0.22em] uppercase font-medium mb-6" style={{ color: "#86868b" }}>
-                  Recently Played
-                </p>
                 <motion.h2
                   initial={{ opacity: 0, x: -40 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-8%" }}
                   transition={{ duration: 1.0, ease: EASE }}
-                  className="font-black tracking-tight leading-[0.92] mb-10"
-                  style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)", color: "#f5f5f7" }}
+                  className="font-semibold mb-10"
+                  style={{
+                    fontSize: "clamp(2.4rem, 5vw, 4.5rem)",
+                    color: C.ink,
+                    letterSpacing: "-0.035em",
+                    lineHeight: 1.1,
+                    padding: "0.1em 0",
+                  }}
                 >
                   Lately on the controller.
                 </motion.h2>
-                <div className="flex gap-4 overflow-x-auto" style={{ scrollbarWidth: "none", paddingTop: "4px", paddingBottom: "2px", alignItems: "flex-start" }}>
+                <div
+                  className="flex gap-4 overflow-x-auto"
+                  style={{ scrollbarWidth: "none", paddingTop: "4px", paddingBottom: "2px", alignItems: "flex-start" }}
+                >
                   {recentlyPlayed.map((g, i) => (
                     <RecentCard key={g.titleId} game={g} index={i} />
                   ))}
@@ -759,8 +576,7 @@ export default function GamingPage() {
         )}
       </div>
 
-      <Contact />
-
+      <AppleFooter />
     </main>
   );
 }
