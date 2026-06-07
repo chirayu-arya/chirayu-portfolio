@@ -713,7 +713,7 @@ export default function GalleryPage() {
   const lensCanvasRef = useRef<HTMLCanvasElement>(null);
   const [lensPos, setLensPos] = useState<{ x: number; y: number } | null>(null);
   const LENS_SIZE = 300;
-  const LENS_ZOOM = 2.5;
+  const LENS_ZOOM = 1.6;
 
   // Two-tier photography is now driven by the URL: /gallery shows tier-1, and
   // /gallery/[slug] resolves a game category for tier-2. Navigating between

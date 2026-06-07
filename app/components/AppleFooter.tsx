@@ -77,16 +77,6 @@ export default function AppleFooter() {
       <div>
         {/* Big CTA */}
         <div ref={ref} className="text-center mb-20">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.5 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-6"
-            style={{ color: C.ink3 }}
-          >
-            Connect With Me
-          </motion.p>
-
           <h2
             className="font-semibold mx-auto"
             style={{

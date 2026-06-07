@@ -283,17 +283,6 @@ export default function AboutPage() {
       <section className="relative pt-36 pb-8 px-8 sm:px-14 lg:px-20">
         <div ref={heroRef} className="relative" style={{ zIndex: 1 }}>
 
-          {/* Eyebrow */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={heroInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
-            style={{ color: COLORS.textTertiary }}
-          >
-            About
-          </motion.p>
-
           {/* Headline — semibold, tighter tracking, near-black */}
           <motion.h1
             initial={{ opacity: 0, x: -60 }}
@@ -366,15 +355,6 @@ export default function AboutPage() {
             style={{ borderTop: `1px solid ${COLORS.hairlineSoft}`, paddingTop: "2.5rem" }}
             className="flex flex-col items-center text-center"
           >
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={heroInView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.5, delay: 0.7 }}
-              className="text-xs tracking-[0.22em] uppercase font-medium mb-6"
-              style={{ color: COLORS.textTertiary }}
-            >
-              Things I love
-            </motion.p>
             <div className="flex flex-wrap justify-center gap-2">
               {interests.map((item, i) => (
                 <PillItem key={item.label} item={item} delay={0.75 + i * 0.04} />
@@ -394,12 +374,6 @@ export default function AboutPage() {
           background: COLORS.surfaceAlt,
         }}
       >
-        <p
-          className="text-xs tracking-[0.22em] uppercase font-medium text-center mb-10"
-          style={{ color: COLORS.textTertiary }}
-        >
-          Associations
-        </p>
         <div className="flex overflow-hidden">
           <div className="animate-marquee flex items-center gap-12">
             {[...logos, ...logos].map((logo, i) => (
@@ -426,15 +400,6 @@ export default function AboutPage() {
       {/* ── Experience ── */}
       <section className="relative pt-20 pb-10 px-8 sm:px-14 lg:px-20">
         <div ref={expRef} className="relative">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={expInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
-            style={{ color: COLORS.textTertiary }}
-          >
-            Experience
-          </motion.p>
           <div className="flex items-end justify-between gap-8 mb-10">
             <motion.h2
               initial={{ opacity: 0, x: -60 }}
@@ -481,15 +446,6 @@ export default function AboutPage() {
       {/* ── Education ── */}
       <section className="relative pt-16 pb-24 px-8 sm:px-14 lg:px-20">
         <div ref={eduRef} className="relative">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={eduInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-xs tracking-[0.22em] uppercase font-medium mb-10"
-            style={{ color: COLORS.textTertiary }}
-          >
-            Education
-          </motion.p>
           <div className="flex items-end justify-between gap-8 mb-10">
             <motion.h2
               initial={{ opacity: 0, x: -60 }}
