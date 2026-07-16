@@ -141,7 +141,7 @@ const MobileWorkDropdownContent = ({ onClose }: { onClose?: () => void }) => (
     <div className="h-px self-stretch" style={{ background: "rgba(255,255,255,0.07)" }} />
     <div className="flex justify-end pt-1">
       <motion.a
-        href="/Resume%20-%20Chirayu%20Arya.pdf"
+        href="/Chirayu%20Arya%20Resume.pdf"
         target="_blank"
         rel="noopener noreferrer"
         initial={{ opacity: 0, x: 6 }}
@@ -234,7 +234,7 @@ export default function Nav() {
           </div>
 
           <a
-            href="/Resume%20-%20Chirayu%20Arya.pdf"
+            href="/Chirayu%20Arya%20Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="px-5 py-2 rounded-full text-sm font-semibold cursor-pointer transition-opacity duration-200 hover:opacity-85"
