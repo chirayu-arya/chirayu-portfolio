@@ -173,7 +173,7 @@ export default function Photography() {
             className="text-sm hidden sm:block"
             style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "16rem", textAlign: "right" }}
           >
-            Shot on a camera. Or a television. The best shots don&apos;t ask which world they&apos;re from.
+            Shot on a camera. Or on PS5. The best shots don&apos;t ask which world they&apos;re from.
           </motion.p>
         </div>
       </div>

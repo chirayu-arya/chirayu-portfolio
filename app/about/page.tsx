@@ -22,25 +22,27 @@ const interests = [
   { label: "Vibe-coding", emoji: "🧑‍💻" },
 ];
 
-const logos = ["Logo 1", "Logo 2", "Logo 3", "Logo 4", "Logo 5", "Logo 6", "Logo 7", "Logo 8"];
+const logos = [
+  { name: "SiteMarker", src: "/logos/sitemarker-logo.svg" },
+  { name: "Scalis", src: "/logos/scalis.png" },
+  { name: "Duke University", src: "/logos/duke-university.png" },
+  { name: "NatureServe", src: "/logos/natureserve.png" },
+  { name: "Matchain", src: "/logos/matchain.png" },
+  { name: "Harrisburg University", src: "/logos/harrisburg-university.png" },
+  { name: "Harvard Business School", src: "/logos/harvard-business-school.png" },
+  { name: "National University of Singapore", src: "/logos/nus.png", scale: 1.6 },
+  { name: "The Heritage School", src: "/logos/heritage-school.png" },
+];
 
 
 const experience = [
   {
-    year: "2026",
-    role: "Marketing Manager",
-    company: "SiteMarker",
-    dates: "Jan 2026 - Present  |  Charleston, USA",
-    description: "Building and scaling marketing systems for a SaaS construction tech platform. Connecting product, sales, and marketing through full-funnel strategies, UX improvements, and structured processes that turn demand into measurable growth.",
-    tag: { label: "Construction | SaaS" },
-  },
-  {
     year: "2025",
     role: "Marketing Manager",
-    company: "Enso Homes",
-    dates: "May 2025 - Jan 2026  |  Austin, USA",
-    description: "Worked closely with founders to shape the brand and growth engine of a wellness-focused homebuilding company. From website experience to paid ads and SEO, focused on making the product more compelling, leading to meaningful increases in leads and engagement.",
-    tag: { label: "Construction | Real Estate" },
+    company: "SiteMarker",
+    dates: "May 2025 - Present  |  Charleston, USA",
+    description: "Building and scaling marketing systems for a SaaS construction tech platform. Connecting product, sales, and marketing through full-funnel strategies, UX improvements, and structured processes that turn demand into measurable growth.",
+    tag: { label: "Construction | SaaS" },
   },
   {
     year: "2024",
@@ -101,6 +103,13 @@ const experience = [
 ];
 
 const education = [
+  {
+    year: "2028*",
+    degree: "Master of Science, Information Systems Engineering & Management",
+    school: "Harrisburg University of Science & Technology",
+    dates: "June 2026 - May 2028  |  Harrisburg, USA",
+    description: "Majoring in Artificial Intelligence for Business, with a focus on cybersecurity and digital transformation, deepening the technical side of my product and marketing background.",
+  },
   {
     year: "2023",
     degree: "Master's in Management Studies (MMS)",
@@ -227,14 +236,8 @@ function EditorialRow({
       {/* Logo */}
       {logo && (
         <div
-          className="hidden sm:flex shrink-0 items-center justify-center overflow-hidden rounded-xl"
-          style={{
-            width: 72,
-            height: 72,
-            background: "#fff",
-            border: "1px solid rgba(255,255,255,0.07)",
-            padding: 8,
-          }}
+          className="hidden sm:flex shrink-0 items-center justify-center"
+          style={{ width: 72, height: 72 }}
         >
           <img
             src={logo}
@@ -316,28 +319,20 @@ export default function AboutPage() {
               <p>I&apos;m still figuring things out. But if there&apos;s one thing I&apos;ve learned, it&apos;s this:<br /><em><strong>There&apos;s always more than one path.</strong></em></p>
             </motion.div>
 
-            {/* Photo stack */}
+            {/* Photo */}
             <motion.div
               initial={{ opacity: 0, x: 60 }}
               animate={heroInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 1.1, ease: EASE, delay: 0.05 }}
-              className="order-1 lg:order-2 lg:col-span-5 flex flex-col gap-4"
+              className="order-1 lg:order-2 lg:col-span-5 w-full overflow-hidden"
               style={{ height: "clamp(420px, 70vh, 720px)" }}
             >
-              {[
-                { src: "/Chirayu Full.png", pos: "center top" },
-                { src: "/Chirayu Square.png", pos: "center" },
-                { src: "/Chirayu Reveal.png", pos: "center" },
-              ].map((img, i) => (
-                <div key={i} className="w-full flex-1 min-h-0 overflow-hidden">
-                  <img
-                    src={img.src}
-                    alt="Chirayu Arya"
-                    className="w-full h-full object-cover"
-                    style={{ objectPosition: img.pos }}
-                  />
-                </div>
-              ))}
+              <img
+                src="/work-work.jpg"
+                alt="Chirayu's creative setup"
+                className="w-full h-full object-cover"
+                style={{ objectPosition: "center 65%" }}
+              />
             </motion.div>
 
           </div>
@@ -378,23 +373,28 @@ export default function AboutPage() {
           Associations
         </p>
         <div className="flex overflow-hidden">
-          <div className="animate-marquee flex items-center gap-12">
+          <div className="animate-marquee flex items-center gap-16">
             {[...logos, ...logos].map((logo, i) => (
               <div
                 key={i}
                 className="flex-shrink-0 flex items-center justify-center"
-                style={{
-                  width: 140,
-                  height: 56,
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  color: "#515154",
-                  fontSize: 12,
-                  fontWeight: 500,
-                  borderRadius: 12,
-                }}
+                style={{ height: 48, maxWidth: 170 }}
               >
-                {logo}
+                <img
+                  src={logo.src}
+                  alt={logo.name}
+                  style={{
+                    height: `${48 * (logo.scale ?? 1)}px`,
+                    maxWidth: 170,
+                    width: "auto",
+                    objectFit: "contain",
+                    opacity: 0.85,
+                    display: "block",
+                  }}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = "none";
+                  }}
+                />
               </div>
             ))}
           </div>
@@ -403,6 +403,7 @@ export default function AboutPage() {
 
       {/* ── Experience ── */}
       <section
+        id="experience"
         className="relative pt-12 pb-10 px-8 sm:px-14 lg:px-20"
       >
         <div ref={expRef} className="relative">
@@ -485,7 +486,7 @@ export default function AboutPage() {
               className="text-sm hidden sm:block"
               style={{ color: "#86868b", paddingBottom: "0.4rem", maxWidth: "16rem", textAlign: "right" }}
             >
-              Five schools, four countries.
+              Six schools, four countries.
             </motion.p>
           </div>
 

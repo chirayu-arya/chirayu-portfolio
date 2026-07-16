@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
 const professionalItems = [
-  { label: "Branding & Marketing", href: "#brand-marketing" },
-  { label: "UI & UX", href: "#ui-ux" },
+  { label: "Branding & Marketing", href: "/#work" },
+  { label: "UI & UX", href: "/#work" },
   { label: "Visual Arts", href: "/gallery" },
 ];
 

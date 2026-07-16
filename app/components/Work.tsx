@@ -258,6 +258,38 @@ export default function Work() {
           </motion.div>
         </div>
 
+        {/* Under construction note */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: EASE, delay: 0.55 }}
+          className="text-center pt-10 pb-2 px-4"
+        >
+          <p className="text-sm sm:text-base leading-relaxed" style={{ color: "#86868b" }}>
+            Working on user experience for this section. Turns out real projects take longer to showcase with thought process and results.
+            <br />
+            <span style={{ color: "#f5f5f7" }}>Until it&apos;s ready, take your pick:</span>{" "}
+            <a
+              href="https://drive.google.com/file/d/1-thkBboE1k8rT2KPpuIRFKq_IW46Sgmt/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer"
+              style={{ color: "rgba(220,20,60,1)", textDecoration: "underline", textUnderlineOffset: "3px" }}
+            >
+              see my work
+            </a>
+            {" "}or{" "}
+            <a
+              href="/about#experience"
+              className="cursor-pointer"
+              style={{ color: "rgba(220,20,60,1)", textDecoration: "underline", textUnderlineOffset: "3px" }}
+            >
+              read through it
+            </a>
+            .
+          </p>
+        </motion.div>
+
         {/* Stats */}
         <div
           ref={statsRef}
