@@ -497,7 +497,7 @@ export default function AboutPage() {
                   src={logo.src}
                   alt={logo.name}
                   style={{
-                    height: `${48 * (logo.scale ?? 1)}px`,
+                    height: "100%",
                     maxWidth: 170,
                     width: "auto",
                     objectFit: "contain",
