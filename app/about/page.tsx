@@ -30,7 +30,6 @@ const logos = [
   { name: "Matchain", src: "/logos/matchain.png" },
   { name: "Harrisburg University", src: "/logos/harrisburg-university.png" },
   { name: "Harvard Business School", src: "/logos/harvard-business-school.png" },
-  { name: "National University of Singapore", src: "/logos/nus.png", scale: 1.6 },
   { name: "The Heritage School", src: "/logos/heritage-school.png" },
 ];
 
@@ -38,25 +37,33 @@ const logos = [
 const experience = [
   {
     year: "2025",
-    role: "Marketing Manager",
+    role: "Marketing and Design Manager",
     company: "SiteMarker",
-    dates: "May 2025 - Present  |  Charleston, USA",
+    dates: "May 2025 - Present  |  Charleston, SC, USA",
     description: "Building and scaling marketing systems for a SaaS construction tech platform. Connecting product, sales, and marketing through full-funnel strategies, UX improvements, and structured processes that turn demand into measurable growth.",
     tag: { label: "Construction | SaaS" },
   },
   {
     year: "2024",
-    role: "Marketing Lead",
+    role: "Marketing Manager",
     company: "Scalis",
-    dates: "Feb 2024 - Apr 2025  |  Miami / Durham, USA",
+    dates: "Feb 2024 - Apr 2025  |  Miami, FL, USA",
     description: "Built Apex, a student newsletter supporting 200K+ students, through content, campaigns, and community. Evolved from consulting on growth to leading marketing, expanding audience and turning content into a strong distribution channel. Helped build a $1.47M sales pipeline in under 6 months.",
     tag: { label: "HR Tech | SaaS" },
   },
   {
     year: "2023",
-    role: "Marketing Manager",
+    role: "Account Marketing Manager",
+    company: "Electriq (Drinks)",
+    dates: "Jun 2023 - Jan 2024  |  Los Angeles, CA, USA",
+    description: "Designed brand and content creative for a portfolio of 8 D2C brands on a SaaS e-commerce Shopify platform, building each brand's visual story and landing experience around its audience. Rebuilt the SEO content and search strategy behind a 120% lift in organic traffic over six months.",
+    tag: { label: "E-commerce | SaaS" },
+  },
+  {
+    year: "2023",
+    role: "Brand and Marketing Lead",
     company: "Gain Ventures",
-    dates: "Jun 2023 - Jan 2024  |  Durham, USA",
+    dates: "Jun 2023 - Jan 2024  |  Durham, NC, USA",
     description: "Led marketing and growth across paid channels and outbound for clients. Worked on UI/UX design for ICAREUM, creating wireframes and interactive components while collaborating with engineering and product teams to make complex, emerging tech feel intuitive.",
     tag: { label: "Crypto | Web 3 | Venture Capital" },
   },
@@ -64,7 +71,7 @@ const experience = [
     year: "2023",
     role: "Research Assistant",
     company: "Duke University",
-    dates: "2023  |  Durham, USA",
+    dates: "2023  |  Durham, NC, USA",
     description: "Researched innovation and crypto ventures under Prof. Campbell Harvey, collaborating on blockchain applications in emerging technologies and exploring how new technologies translate into real-world use cases.",
     tag: { label: "Crypto | Web 3" },
   },
@@ -72,7 +79,7 @@ const experience = [
     year: "2023",
     role: "Product Marketing Analyst Intern",
     company: "NatureServe",
-    dates: "Jan 2023 - Apr 2023  |  Durham, USA",
+    dates: "Jan 2023 - Apr 2023  |  Durham, NC, USA",
     description: "Conducted market research and worked on positioning for a SaaS product. Focused on customer segments, demand analysis, and competitive landscape to help shape go-to-market strategy.",
     tag: { label: "Environmental Science | SaaS" },
   },
@@ -86,7 +93,7 @@ const experience = [
   },
   {
     year: "2021",
-    role: "Social Media Manager",
+    role: "Digital Marketing and Social Media Manager",
     company: "Matchain",
     dates: "Jul 2021 - Mar 2022  |  Lisbon, Portugal (Remote)",
     description: "Worked on global launch campaigns in the Web3 space. Helped position the product, simplify complex ideas, and create content that made blockchain more accessible to a wider audience.",
@@ -107,14 +114,14 @@ const education = [
     year: "2028*",
     degree: "Master of Science, Information Systems Engineering & Management",
     school: "Harrisburg University of Science & Technology",
-    dates: "June 2026 - May 2028  |  Harrisburg, USA",
+    dates: "June 2026 - May 2028  |  Harrisburg, PA, USA",
     description: "Majoring in Artificial Intelligence for Business, with a focus on cybersecurity and digital transformation, deepening the technical side of my product and marketing background.",
   },
   {
     year: "2023",
     degree: "Master's in Management Studies (MMS)",
     school: "Duke University, The Fuqua School of Business",
-    dates: "July 2022 - May 2023  |  Durham, USA",
+    dates: "July 2022 - May 2023  |  Durham, NC, USA",
     description: "Spent the year building a strong foundation in business while working on hands-on projects across marketing, product, and emerging tech, with a focus on how ideas translate into real-world execution.",
   },
   {
@@ -358,49 +365,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Marquee ── */}
-      <section
-        className="py-10 overflow-hidden"
-        style={{
-          borderTop: "1px solid rgba(255,255,255,0.07)",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
-        }}
-      >
-        <p
-          className="text-xs tracking-[0.22em] uppercase font-medium text-center mb-10"
-          style={{ color: "#86868b" }}
-        >
-          Associations
-        </p>
-        <div className="flex overflow-hidden">
-          <div className="animate-marquee flex items-center gap-16">
-            {[...logos, ...logos].map((logo, i) => (
-              <div
-                key={i}
-                className="flex-shrink-0 flex items-center justify-center"
-                style={{ height: 48, maxWidth: 170 }}
-              >
-                <img
-                  src={logo.src}
-                  alt={logo.name}
-                  style={{
-                    height: `${48 * (logo.scale ?? 1)}px`,
-                    maxWidth: 170,
-                    width: "auto",
-                    objectFit: "contain",
-                    opacity: 0.85,
-                    display: "block",
-                  }}
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).style.display = "none";
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Experience ── */}
       <section
         id="experience"
@@ -502,6 +466,49 @@ export default function AboutPage() {
                 inView={eduInView}
                 delay={0.4 + i * 0.08}
               />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Marquee ── */}
+      <section
+        className="py-10 overflow-hidden"
+        style={{
+          borderTop: "1px solid rgba(255,255,255,0.07)",
+          borderBottom: "1px solid rgba(255,255,255,0.07)",
+        }}
+      >
+        <p
+          className="text-xs tracking-[0.22em] uppercase font-medium text-center mb-10"
+          style={{ color: "#86868b" }}
+        >
+          Associations
+        </p>
+        <div className="flex overflow-hidden">
+          <div className="animate-marquee flex items-center gap-16">
+            {[...logos, ...logos].map((logo, i) => (
+              <div
+                key={i}
+                className="flex-shrink-0 flex items-center justify-center"
+                style={{ height: 48, maxWidth: 170 }}
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.name}
+                  style={{
+                    height: `${48 * (logo.scale ?? 1)}px`,
+                    maxWidth: 170,
+                    width: "auto",
+                    objectFit: "contain",
+                    opacity: 0.85,
+                    display: "block",
+                  }}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = "none";
+                  }}
+                />
+              </div>
             ))}
           </div>
         </div>
