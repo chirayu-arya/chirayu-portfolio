@@ -139,7 +139,17 @@ const MobileWorkDropdownContent = ({ onClose }: { onClose?: () => void }) => (
     <div className="h-px self-stretch" style={{ background: "rgba(255,255,255,0.07)" }} />
     <MobileNavColumn label="Community" items={communityItems} startDelay={0.12} onClose={onClose} />
     <div className="h-px self-stretch" style={{ background: "rgba(255,255,255,0.07)" }} />
-    <div className="flex justify-end pt-1">
+    <div className="flex justify-end items-center gap-3 pt-1">
+      <motion.a
+        href="/store"
+        initial={{ opacity: 0, x: 6 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.16, duration: 0.2 }}
+        className="px-3 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-150 cursor-pointer whitespace-nowrap"
+        onClick={onClose}
+      >
+        Store
+      </motion.a>
       <motion.a
         href="/Chirayu%20Arya%20Resume.pdf"
         target="_blank"
@@ -232,6 +242,22 @@ export default function Nav() {
               )}
             </AnimatePresence>
           </div>
+
+          {/* Faint divider — separates the Work group from the Store + Resume group */}
+          <span
+            aria-hidden
+            className="mx-2"
+            style={{ width: "1px", height: "20px", background: "rgba(255,255,255,0.14)" }}
+          />
+
+          <a
+            href="/store"
+            className="px-4 py-2 rounded-full text-sm font-medium text-white/65 hover:text-white transition-colors duration-200 cursor-pointer"
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+          >
+            Store
+          </a>
 
           <a
             href="/Chirayu%20Arya%20Resume.pdf"
